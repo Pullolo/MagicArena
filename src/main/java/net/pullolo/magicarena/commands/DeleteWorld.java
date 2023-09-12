@@ -1,5 +1,6 @@
 package net.pullolo.magicarena.commands;
 
+import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,7 +20,7 @@ public class DeleteWorld implements CommandExecutor {
             return false;
         }
         try {
-            if (sender instanceof Player){
+            if ((sender instanceof Player) && ((Player) sender).getWorld().equals(Bukkit.getWorld(args[0]))){
                 ((Player) sender).teleport(Bukkit.getWorld("world").getSpawnLocation());
             }
             removeWorld(Bukkit.getWorld(args[0]));

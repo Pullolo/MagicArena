@@ -1,5 +1,6 @@
 package net.pullolo.magicarena.commands;
 
+import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,6 +29,7 @@ public class CreateWorld implements CommandExecutor {
         });
 
         World world = creator.createWorld();
+        WorldManager.saveWorld(world);
         sender.sendMessage(ChatColor.GREEN + "Successfully created world " + args[0] + "!");
         new Location(world, 0, 60, 0).getBlock().setType(Material.BEDROCK);
         if (sender instanceof Player){

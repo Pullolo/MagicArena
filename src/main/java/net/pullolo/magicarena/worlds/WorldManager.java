@@ -3,6 +3,7 @@ package net.pullolo.magicarena.worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.util.FileUtil;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class WorldManager {
         return world!=null && Bukkit.getServer().unloadWorld(world, false);
     }
     public static boolean removeWorld(World world){
-        return unloadWorld(world) && world.getWorldFolder().delete();
+        return unloadWorld(world) && deleteDirectory(world.getWorldFolder());
     }
     private static void copyFileStructure(File source, File target){
         try {
@@ -48,5 +49,14 @@ public class WorldManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean deleteDirectory(File file) {
+        String[] entries = file.list();
+        for(String s: entries){
+            File currentFile = new File(file.getPath(),s);
+            currentFile.delete();
+        }
+        return file.delete();
     }
 }

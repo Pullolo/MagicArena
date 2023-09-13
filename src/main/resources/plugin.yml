@@ -12,3 +12,6 @@ commands:
   copyworld:
     usage: /<command> <worldName> <newWorldName>
     permission: ma.worlds
+  worlds:
+    usage: /<command> <list/tp> <worldName>
+    permission: ma.worlds

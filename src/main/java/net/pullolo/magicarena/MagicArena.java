@@ -3,10 +3,13 @@ package net.pullolo.magicarena;
 import net.pullolo.magicarena.commands.CopyWorld;
 import net.pullolo.magicarena.commands.CreateWorld;
 import net.pullolo.magicarena.commands.DeleteWorld;
+import net.pullolo.magicarena.commands.Worlds;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.Plugin;
@@ -35,9 +38,10 @@ public final class MagicArena extends JavaPlugin {
         WorldManager.init(this);
         config = getConfig();
         setMainWorld();
-        getCommand("createworld").setExecutor(new CreateWorld());
-        getCommand("deleteworld").setExecutor(new DeleteWorld());
-        getCommand("copyworld").setExecutor(new CopyWorld());
+        registerCommand(new CreateWorld(), "createworld");
+        registerCommand(new DeleteWorld(), "deleteworld");
+        registerCommand(new CopyWorld(), "copyworld");
+        registerCommand(new Worlds(), "worlds");
         loadSavedWorlds();
     }
 
@@ -55,6 +59,15 @@ public final class MagicArena extends JavaPlugin {
                 new WorldCreator(s).createWorld();
                 log.info(prefix + "Loaded world " + s);
             }
+        }
+    }
+
+    private void registerCommand(Object cmd, String cmdName){
+        if ((cmd instanceof CommandExecutor) && (cmd instanceof TabCompleter)){
+            getCommand(cmdName).setExecutor((CommandExecutor) cmd);
+            getCommand(cmdName).setTabCompleter((TabCompleter) cmd);
+        } else {
+            throw new RuntimeException("Provided object is not a command executor and a tab completer at the same time!");
         }
     }
 

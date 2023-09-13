@@ -5,12 +5,14 @@ import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
 
+import java.util.List;
 import java.util.Random;
 
-public class CreateWorld implements CommandExecutor {
+public class CreateWorld implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -37,5 +39,10 @@ public class CreateWorld implements CommandExecutor {
             ((Player) sender).teleport(new Location(world, 0, 61, 0));
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command cmd, String s, String[] strings) {
+        return null;
     }
 }

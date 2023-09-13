@@ -20,6 +20,7 @@ public class CreateWorld implements CommandExecutor {
         if (args.length<1){
             return false;
         }
+        sender.sendMessage(ChatColor.GREEN + "Generating world...");
         WorldCreator creator = new WorldCreator(args[0]);
         creator.generateStructures(false);
         creator.generator(new ChunkGenerator() {
@@ -29,7 +30,7 @@ public class CreateWorld implements CommandExecutor {
         });
 
         World world = creator.createWorld();
-        WorldManager.saveWorld(world);
+        WorldManager.saveWorld(world, false);
         sender.sendMessage(ChatColor.GREEN + "Successfully created world " + args[0] + "!");
         new Location(world, 0, 60, 0).getBlock().setType(Material.BEDROCK);
         if (sender instanceof Player){

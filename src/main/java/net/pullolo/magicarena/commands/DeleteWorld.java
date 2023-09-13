@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static net.pullolo.magicarena.MagicArena.mainWorld;
 import static net.pullolo.magicarena.worlds.WorldManager.removeWorld;
 
 public class DeleteWorld implements CommandExecutor {
@@ -21,7 +22,7 @@ public class DeleteWorld implements CommandExecutor {
         }
         try {
             if ((sender instanceof Player) && ((Player) sender).getWorld().equals(Bukkit.getWorld(args[0]))){
-                ((Player) sender).teleport(Bukkit.getWorld("world").getSpawnLocation());
+                ((Player) sender).teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
             }
             removeWorld(Bukkit.getWorld(args[0]));
             sender.sendMessage(ChatColor.GREEN + "Successfully deleted world " + args[0] + "!");

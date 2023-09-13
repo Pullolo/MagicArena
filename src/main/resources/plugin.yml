@@ -4,8 +4,11 @@ main: net.pullolo.magicarena.MagicArena
 api-version: 1.20
 commands:
   createworld:
-    usage: /<command> <worldname>
+    usage: /<command> <worldName>
     permission: ma.worlds
   deleteworld:
-    usage: /<command> <worldname>
+    usage: /<command> <worldName>
+    permission: ma.worlds
+  copyworld:
+    usage: /<command> <worldName> <newWorldName>
     permission: ma.worlds

@@ -34,9 +34,10 @@ public class CreateWorld implements CommandExecutor, TabCompleter {
         World world = creator.createWorld();
         WorldManager.saveWorld(world, false);
         sender.sendMessage(ChatColor.GREEN + "Successfully created world " + args[0] + "!");
+        world.setSpawnLocation(new Location(world, 0.5, 61, 0.5));
         new Location(world, 0, 60, 0).getBlock().setType(Material.BEDROCK);
         if (sender instanceof Player){
-            ((Player) sender).teleport(new Location(world, 0, 61, 0));
+            ((Player) sender).teleport(world.getSpawnLocation());
         }
         return true;
     }

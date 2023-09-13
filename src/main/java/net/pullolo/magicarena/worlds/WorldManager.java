@@ -12,6 +12,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 import static net.pullolo.magicarena.MagicArena.mainWorld;
 
@@ -27,21 +28,26 @@ public class WorldManager {
         }
     }
     public static void copyActiveWorld(World originalWorld, String newWorldName) {
+        unloadWorld(originalWorld, true);
         copyFileStructure(originalWorld.getWorldFolder(), new File(Bukkit.getWorldContainer(), newWorldName));
+        new WorldCreator(originalWorld.getName()).createWorld();
         new WorldCreator(newWorldName).createWorld();
     }
     public static void copyWorld(File worldFile, String newWorldName) {
         copyFileStructure(worldFile, new File(Bukkit.getWorldContainer(), newWorldName));
         new WorldCreator(newWorldName).createWorld();
     }
-    public static boolean unloadWorld(World world) {
+    public static boolean unloadWorld(World world, boolean save) {
+        if (world.getName().equals(mainWorld)){
+            return false;
+        }
         for (Player p : world.getPlayers()){
             p.teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
         }
-        return world!=null && Bukkit.getServer().unloadWorld(world, false);
+        return world!=null && Bukkit.getServer().unloadWorld(world, save);
     }
     public static void removeWorld(World world){
-        unloadWorld(world);
+        unloadWorld(world, false);
         try {
             FileUtils.deleteDirectory(world.getWorldFolder());
             deleteWorld(world.getName());
@@ -58,40 +64,29 @@ public class WorldManager {
             throw new RuntimeException(e);
         }
     }
-    private static void copyFileStructure(File source, File target){
-        Thread copy = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    ArrayList<String> ignore = new ArrayList<>(Arrays.asList("uid.dat", "session.lock"));
-                    if(!ignore.contains(source.getName())) {
-                        if(source.isDirectory()) {
-                            if(!target.exists())
-                                if (!target.mkdirs())
-                                    throw new IOException("Couldn't create world directory!");
-                            String files[] = source.list();
-                            for (String file : files) {
-                                File srcFile = new File(source, file);
-                                File destFile = new File(target, file);
-                                copyFileStructure(srcFile, destFile);
-                            }
-                        } else {
-                            InputStream in = new FileInputStream(source);
-                            OutputStream out = new FileOutputStream(target);
-                            byte[] buffer = new byte[1024];
-                            int length;
-                            while ((length = in.read(buffer)) > 0)
-                                out.write(buffer, 0, length);
-                            in.close();
-                            out.close();
-                        }
+    private static void copyFileStructure(File oldWorldFile, File newWorldFile){
+        try {
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        FileUtils.copyDirectory(oldWorldFile, newWorldFile);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
+            });
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                // do nothing
             }
-        });
-        copy.start();
+            File uidFile = new File(newWorldFile, "uid.dat");
+            uidFile.delete();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ArrayList<String> getSavedWorlds(){

@@ -1,9 +1,7 @@
 package net.pullolo.magicarena;
 
-import net.pullolo.magicarena.commands.CopyWorld;
-import net.pullolo.magicarena.commands.CreateWorld;
-import net.pullolo.magicarena.commands.DeleteWorld;
-import net.pullolo.magicarena.commands.Worlds;
+import net.pullolo.magicarena.commands.*;
+import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -31,10 +29,12 @@ public final class MagicArena extends JavaPlugin {
 
     private static final String prefix = "[MagicArena] ";
     public static String mainWorld;
+    private static GuiManager guiManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        guiManager = new GuiManager(this);
         saveDefaultConfig();
         WorldManager.init(this);
         config = getConfig();
@@ -43,6 +43,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new DeleteWorld(), "deleteworld");
         registerCommand(new CopyWorld(), "copyworld");
         registerCommand(new Worlds(), "worlds");
+        registerCommand(new Gui(guiManager), "gui");
         loadSavedWorlds();
     }
 

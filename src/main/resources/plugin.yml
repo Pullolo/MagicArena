@@ -15,3 +15,6 @@ commands:
   worlds:
     usage: /<command> <list/tp> <worldName>
     permission: ma.worlds
+  gui:
+    usage: /<gui> <open> <guiName>
+    permission: ma.guis

@@ -22,6 +22,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import static net.pullolo.magicarena.worlds.WorldManager.*;
+import static org.bukkit.Bukkit.getPluginManager;
 
 public final class MagicArena extends JavaPlugin {
 

@@ -26,10 +26,13 @@ public class DeleteWorld implements CommandExecutor, TabCompleter {
             return false;
         }
         try {
+            if (args[0].equals(mainWorld)){
+                throw new RuntimeException("Don't remove main world!");
+            }
+            removeWorld(Bukkit.getWorld(args[0]));
             if ((sender instanceof Player) && ((Player) sender).getWorld().equals(Bukkit.getWorld(args[0]))){
                 ((Player) sender).teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
             }
-            removeWorld(Bukkit.getWorld(args[0]));
             sender.sendMessage(ChatColor.GREEN + "Successfully deleted world " + args[0] + "!");
         } catch (Exception e){
             sender.sendMessage(ChatColor.RED + "Could not remove world " + args[0] + "!");

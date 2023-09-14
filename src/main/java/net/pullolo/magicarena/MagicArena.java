@@ -1,6 +1,7 @@
 package net.pullolo.magicarena;
 
 import net.pullolo.magicarena.commands.*;
+import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -9,18 +10,14 @@ import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import static net.pullolo.magicarena.worlds.WorldManager.*;
-import static org.bukkit.Bukkit.getPluginManager;
 
 public final class MagicArena extends JavaPlugin {
 
@@ -29,12 +26,12 @@ public final class MagicArena extends JavaPlugin {
 
     private static final String prefix = "[MagicArena] ";
     public static String mainWorld;
-    private static GuiManager guiManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-        guiManager = new GuiManager(this);
+        GuiManager guiManager = new GuiManager(this);
+        AnimationManager animationManager = new AnimationManager(this, guiManager);
         saveDefaultConfig();
         WorldManager.init(this);
         config = getConfig();
@@ -43,7 +40,8 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new DeleteWorld(), "deleteworld");
         registerCommand(new CopyWorld(), "copyworld");
         registerCommand(new Worlds(), "worlds");
-        registerCommand(new Gui(guiManager), "gui");
+        registerCommand(new Gui(guiManager, animationManager), "gui");
+
         loadSavedWorlds();
     }
 

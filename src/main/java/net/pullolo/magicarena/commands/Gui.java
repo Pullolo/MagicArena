@@ -1,8 +1,11 @@
 package net.pullolo.magicarena.commands;
 
+import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +21,11 @@ import java.util.List;
 public class Gui implements CommandExecutor, TabCompleter {
 
     private final GuiManager guiManager;
+    private final AnimationManager guiAnimations;
 
-    public Gui(GuiManager guiManager){
+    public Gui(GuiManager guiManager, AnimationManager guiAnimations){
         this.guiManager = guiManager;
+        this.guiAnimations = guiAnimations;
     }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -40,6 +46,11 @@ public class Gui implements CommandExecutor, TabCompleter {
                     guiManager.createWishGui((Player) sender).show((HumanEntity) sender);
                 } else sender.sendMessage(ChatColor.RED + "Invalid gui!");
             }
+            if (args[0].equalsIgnoreCase("anim")){
+                if (args[1].equalsIgnoreCase("wish")){
+                    guiAnimations.playWishAnim((Player) sender, WishSystem.WishRarity.MYTHIC, WishSystem.WishType.WEAPON_WISH, 5, new ItemStack(Material.NETHERITE_SWORD), 10);
+                } else sender.sendMessage(ChatColor.RED + "Invalid gui!");
+            }
         }
         return true;
     }
@@ -55,11 +66,17 @@ public class Gui implements CommandExecutor, TabCompleter {
         if (args.length == 1){
             List<String> completion = new ArrayList<>();
             addToCompletion("open", args[0], completion);
+            addToCompletion("anim", args[0], completion);
             return completion;
         }
-        if (args.length == 2){
+        if (args.length == 2 && args[0].equalsIgnoreCase("open")){
             List<String> completion = new ArrayList<>();
             addToCompletion("gameSelect", args[1], completion);
+            addToCompletion("wish", args[1], completion);
+            return completion;
+        }
+        if (args.length == 2 && args[0].equalsIgnoreCase("anim")){
+            List<String> completion = new ArrayList<>();
             addToCompletion("wish", args[1], completion);
             return completion;
         }

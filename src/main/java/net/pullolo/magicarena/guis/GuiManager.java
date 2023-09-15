@@ -3,21 +3,24 @@ package net.pullolo.magicarena.guis;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import net.pullolo.magicarena.items.ItemClass;
 import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.MagicArena.getWishSystem;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
 
 public class GuiManager {
@@ -54,29 +57,31 @@ public class GuiManager {
                 "  a   w  ",
                 "    n    "
         };
-        InventoryGui gui = new InventoryGui(this.plugin, player, "Select Game", guiSetup);
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Wish!", guiSetup);
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         gui.addElement(new StaticGuiElement('a', new ItemStack(Material.NETHERITE_INGOT),
                 click -> {
-                    click.getGui().close();
+                    if (getWishSystem().wish((Player) click.getWhoClicked(), WishSystem.WishType.ARMOR_WISH)) click.getGui().close();
                     return true;
                 },
                 ChatColor.translateAlternateColorCodes('&', "&r&3Wish for Armor! &a1 ✧")));
         gui.addElement(new StaticGuiElement('w', new ItemStack(Material.BLAZE_ROD),
                 click -> {
-                    click.getGui().close();
+                    if (getWishSystem().wish((Player) click.getWhoClicked(), WishSystem.WishType.WEAPON_WISH)) click.getGui().close();
                     return true;
                 },
                 ChatColor.translateAlternateColorCodes('&', "&r&cWish for Weapons! &a1 ✧")));
         gui.addElement(new DynamicGuiElement('n', (viewer)->{
             return new StaticGuiElement('n', new ItemStack(Material.NETHER_STAR),
-                    ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + "10" + " ✧"));
+                    //todo temp set wishes to player level
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + player.getLevel() + " ✧"));
+                    //todo temp end
         }));
 
         return gui;
     }
 
-    public ArrayList<InventoryGui> createWishAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemStack finalItem){
+    public ArrayList<InventoryGui> createWishAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemClass itemClass, ItemStack finalItem){
         ArrayList<InventoryGui> finishedList = new ArrayList<>();
         int rarity = getWishRarityAsInt(wishRarity);
 
@@ -143,12 +148,12 @@ public class GuiManager {
 
             finishedList.add(gui);
         }
-        finishedList.addAll(createPulloutAnim(player, wishRarity, wishType, stars, finalItem));
+        finishedList.addAll(createPulloutAnim(player, wishRarity, wishType, stars, itemClass, finalItem));
         return finishedList;
     }
 
     //todo add item class
-    private ArrayList<InventoryGui> createPulloutAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemStack finalItem){
+    private ArrayList<InventoryGui> createPulloutAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemClass itemClass, ItemStack finalItem){
         ArrayList<InventoryGui> finishedList = new ArrayList<>();
         String[] gui1 = {
                 "         ",
@@ -200,14 +205,14 @@ public class GuiManager {
         InventoryGui gui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), gui1);
         gui.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
         gui.addElement(new DynamicGuiElement('c', (viewer)->{
-            return new StaticGuiElement('c', new ItemStack(Material.IRON_SWORD), ChatColor.translateAlternateColorCodes('&', "&7Class: &aDPS"));
+            return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
         }));
         finishedList.add(gui);
 
         InventoryGui guiSecond = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), gui2);
         guiSecond.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
         guiSecond.addElement(new DynamicGuiElement('c', (viewer)->{
-            return new StaticGuiElement('c', new ItemStack(Material.IRON_SWORD), ChatColor.translateAlternateColorCodes('&', "&7Class: &aDPS"));
+            return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
         }));
         guiSecond.addElement(new DynamicGuiElement('a', (viewer)->{
             return new StaticGuiElement('a', new ItemStack(Material.AIR));
@@ -215,20 +220,32 @@ public class GuiManager {
         finishedList.add(guiSecond);
 
         for (int i = 0; i<stars; i++){
-            final int iteration = i+1;
             InventoryGui g = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), starList.get(i));
             g.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
             g.addElement(new DynamicGuiElement('c', (viewer)->{
-                return new StaticGuiElement('c', new ItemStack(Material.IRON_SWORD), ChatColor.translateAlternateColorCodes('&', "&7Class: &aDPS"));
+                return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
             }));
             g.addElement(new DynamicGuiElement('a', (viewer)->{
                 return new StaticGuiElement('a', new ItemStack(Material.AIR));
             }));
             g.addElement(new DynamicGuiElement('s', (viewer)->{
-                return new StaticGuiElement('s', new ItemStack(Material.NETHER_STAR), ChatColor.translateAlternateColorCodes('&', "&r&6Star " + iteration));
+                return new StaticGuiElement('s', new ItemStack(Material.NETHER_STAR), ChatColor.translateAlternateColorCodes('&', "&r&6Star"));
             }));
             finishedList.add(g);
         }
+
+        InventoryGui g = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), starList.get(stars-1));
+        g.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
+        g.addElement(new DynamicGuiElement('c', (viewer)->{
+            return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
+        }));
+        g.addElement(new DynamicGuiElement('a', (viewer)->{
+            return new StaticGuiElement('a', new ItemStack(Material.AIR));
+        }));
+        g.addElement(new DynamicGuiElement('s', (viewer)->{
+            return new StaticGuiElement('s', new ItemStack(Material.NETHER_STAR), ChatColor.translateAlternateColorCodes('&', "&r&6Star"));
+        }));
+        finishedList.add(g);
 
         InventoryGui finalgui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), guiFinal);
         finalgui.setCloseAction(close -> {
@@ -237,14 +254,14 @@ public class GuiManager {
         });
         finalgui.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
         finalgui.addElement(new DynamicGuiElement('c', (viewer)->{
-            return new StaticGuiElement('c', new ItemStack(Material.IRON_SWORD), ChatColor.translateAlternateColorCodes('&', "&7Class: &aDPS"));
+            return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
         }));
         finalgui.addElement(new DynamicGuiElement('i', (viewer)->{
             return new StaticGuiElement('i', finalItem, click -> {
                 click.getWhoClicked().sendMessage("wohoooo");
                 click.getGui().close();
                 return true;
-            });
+            }, getItemAsString(finalItem));
         }));
         addClosePrevention(finalgui);
 
@@ -263,5 +280,49 @@ public class GuiManager {
             }.runTaskLater(plugin, 1);
             return false;
         });
+    }
+
+    private ItemStack getClassItem(ItemClass itemClass){
+        ItemStack item;
+        if (itemClass == ItemClass.DPS){
+            item = new ItemStack(Material.IRON_SWORD);
+            ItemMeta im = item.getItemMeta();
+            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&7Class: &aDPS"));
+            item.setItemMeta(im);
+        } else if (itemClass == ItemClass.ARCHER) {
+            item = new ItemStack(Material.BOW);
+            ItemMeta im = item.getItemMeta();
+            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&7Class: &aARCHER"));
+            item.setItemMeta(im);
+        } else if (itemClass == ItemClass.TANK) {
+            item = new ItemStack(Material.IRON_CHESTPLATE);
+            ItemMeta im = item.getItemMeta();
+            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&7Class: &aTANK"));
+            item.setItemMeta(im);
+        } else {
+            item = new ItemStack(Material.POTION);
+            PotionMeta pm = (PotionMeta) item.getItemMeta();
+            pm.setBasePotionData(new PotionData(PotionType.INSTANT_HEAL));
+            pm.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&7Class: &aHEALER"));
+            item.setItemMeta(pm);
+        }
+
+        getLog().warning(item.getItemMeta().getDisplayName());
+        return item;
+    }
+
+    private String getItemAsString(ItemStack item){
+        String finalString = "";
+        getLog().warning(finalString);
+        finalString = item.getItemMeta().getDisplayName();
+
+        if (item.getItemMeta().hasLore()){
+            for (String s : item.getItemMeta().getLore()){
+                finalString+="\n" + s;
+            }
+        }
+
+        getLog().warning(finalString);
+        return finalString;
     }
 }

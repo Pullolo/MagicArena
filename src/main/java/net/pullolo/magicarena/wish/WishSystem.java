@@ -2,9 +2,18 @@ package net.pullolo.magicarena.wish;
 
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.items.ItemClass;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static net.pullolo.magicarena.MagicArena.getLog;
 
 public class WishSystem {
 
@@ -29,10 +38,87 @@ public class WishSystem {
 
     public boolean wish(Player player, WishType wishType){
 
-        //todo add a proper wishing system
-        WishRarity wishRarity = WishRarity.MYTHIC;
+        //todo temp code to make wishes cost smth
+        if (player.getLevel()<1){
+            return false;
+        } else player.setLevel(player.getLevel()-1);
+        //todo temp end
 
-        anims.playWishAnim(player, wishRarity, wishType, 5, new ItemStack(Material.NETHERITE_SWORD), 10);
+        ItemStack finalItem;
+        Random r = new Random();
+        String starsStr = ChatColor.translateAlternateColorCodes('&', " &f✪");
+        int stars = 1;
+        int rarityChance = r.nextInt(100)+1;
+        WishRarity wishRarity;
+        if (rarityChance>99){
+            wishRarity = WishRarity.MYTHIC;
+        } else if (rarityChance>97) {
+            wishRarity = WishRarity.LEGENDARY;
+        } else if (rarityChance>90) {
+            wishRarity = WishRarity.EPIC;
+        } else if (rarityChance>80) {
+            wishRarity = WishRarity.RARE;
+        } else {
+            wishRarity = WishRarity.UNCOMMON;
+        }
+
+        for (int i= 0; i<4; i++){
+            if (r.nextBoolean()){
+                starsStr+="✪";
+                stars++;
+            }
+        }
+
+        String quality = "&7Quality: ";
+        float q = ((float)((int) (r.nextFloat()*1000)))/10;
+        if (q>90){
+            quality += "&dPerfect - " + q;
+        } else if (q>70) {
+            quality += "&6Undamaged - " + q;
+        } else if (q>40) {
+            quality += "&cDamaged - " + q;
+        } else {
+            quality += "&4Highly Damaged - " + q;
+        }
+
+        ItemClass itemClass;
+        int randItemClass = r.nextInt(4)+1;
+        if (randItemClass == 1){
+            itemClass = ItemClass.DPS;
+        } else if (randItemClass == 2) {
+            itemClass = ItemClass.ARCHER;
+        } else if (randItemClass == 3) {
+            itemClass = ItemClass.TANK;
+        } else {
+            itemClass = ItemClass.HEALER;
+        }
+
+        //todo add a proper wishing system (getItem(itemClass, rarity))
+
+        if (wishType == WishType.WEAPON_WISH){
+            finalItem = new ItemStack(Material.NETHERITE_SWORD);
+        } else finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        ItemMeta im = finalItem.getItemMeta();
+
+        //todo temp
+        if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
+            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&7" + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
+        }
+
+        im.setDisplayName(im.getDisplayName() + starsStr);
+
+        List<String> lore;
+        if (finalItem.getItemMeta().getLore()==null){
+            lore = new ArrayList<>();
+        } else {
+            //todo possibly move it 2nd to last
+            lore = finalItem.getItemMeta().getLore();
+        }
+        lore.add(quality);
+        im.setLore(lore);
+        finalItem.setItemMeta(im);
+
+        anims.playWishAnim(player, wishRarity, wishType, stars, itemClass, finalItem, 10);
         return true;
     }
 

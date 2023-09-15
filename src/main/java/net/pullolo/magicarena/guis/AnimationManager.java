@@ -1,6 +1,7 @@
 package net.pullolo.magicarena.guis;
 
 import de.themoep.inventorygui.InventoryGui;
+import net.pullolo.magicarena.items.ItemClass;
 import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,9 +22,9 @@ public class AnimationManager {
         this.guis = guis;
     }
 
-    public void playWishAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemStack finalItem, int animPeriod){
+    public void playWishAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemClass itemClass, ItemStack finalItem, int animPeriod){
         addPlayerToAnimation(player);
-        ArrayList<InventoryGui> animGuis = guis.createWishAnim(player, wishRarity, wishType, stars, finalItem);
+        ArrayList<InventoryGui> animGuis = guis.createWishAnim(player, wishRarity, wishType, stars, itemClass, finalItem);
         //todo add animation
         new BukkitRunnable() {
             int i = 0;

@@ -2,6 +2,7 @@ package net.pullolo.magicarena.commands;
 
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.items.ItemClass;
 import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -48,7 +49,7 @@ public class Gui implements CommandExecutor, TabCompleter {
             }
             if (args[0].equalsIgnoreCase("anim")){
                 if (args[1].equalsIgnoreCase("wish")){
-                    guiAnimations.playWishAnim((Player) sender, WishSystem.WishRarity.MYTHIC, WishSystem.WishType.WEAPON_WISH, 5, new ItemStack(Material.NETHERITE_SWORD), 10);
+                    guiAnimations.playWishAnim((Player) sender, WishSystem.WishRarity.MYTHIC, WishSystem.WishType.WEAPON_WISH, 5, ItemClass.DPS, new ItemStack(Material.NETHERITE_SWORD), 10);
                 } else sender.sendMessage(ChatColor.RED + "Invalid gui!");
             }
         }

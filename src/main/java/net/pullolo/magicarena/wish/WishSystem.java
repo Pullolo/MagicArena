@@ -114,7 +114,7 @@ public class WishSystem {
             //todo possibly move it 2nd to last
             lore = finalItem.getItemMeta().getLore();
         }
-        lore.add(quality);
+        lore.add(ChatColor.translateAlternateColorCodes('&', quality));
         im.setLore(lore);
         finalItem.setItemMeta(im);
 

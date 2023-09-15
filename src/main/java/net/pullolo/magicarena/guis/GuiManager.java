@@ -259,7 +259,9 @@ public class GuiManager {
         }));
         finalgui.addElement(new DynamicGuiElement('i', (viewer)->{
             return new StaticGuiElement('i', finalItem, click -> {
-                click.getWhoClicked().sendMessage("wohoooo");
+                //todo temp open classes gui and add item there add db support
+                click.getWhoClicked().getInventory().addItem(finalItem);
+                //todo temp end
                 click.getGui().close();
                 return true;
             }, getItemAsString(finalItem));
@@ -308,13 +310,11 @@ public class GuiManager {
             item.setItemMeta(pm);
         }
 
-        getLog().warning(item.getItemMeta().getDisplayName());
         return item;
     }
 
     private String getItemAsString(ItemStack item){
         String finalString = "";
-        getLog().warning(finalString);
         finalString = item.getItemMeta().getDisplayName();
 
         if (item.getItemMeta().hasLore()){
@@ -323,7 +323,6 @@ public class GuiManager {
             }
         }
 
-        getLog().warning(finalString);
         return finalString;
     }
 }

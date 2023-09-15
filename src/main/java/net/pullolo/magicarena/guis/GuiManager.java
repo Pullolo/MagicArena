@@ -21,6 +21,7 @@ import java.util.List;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.MagicArena.getWishSystem;
+import static net.pullolo.magicarena.wish.WishSystem.getRarityColorChar;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
 
 public class GuiManager {
@@ -125,7 +126,7 @@ public class GuiManager {
         rarities.add(guiMythic);
 
         for (int i = 0; i<=rarity; i++){
-            InventoryGui gui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + wishType.toString().toLowerCase().split("_")[0]), rarities.get(i));
+            InventoryGui gui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&8Wishing for " + wishType.toString().toLowerCase().split("_")[0].replace(String.valueOf(wishType.toString().toLowerCase().split("_")[0].toCharArray()[0]), String.valueOf(wishType.toString().toLowerCase().split("_")[0].toCharArray()[0]).toUpperCase())), rarities.get(i));
             gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
             gui.addElement(new DynamicGuiElement('b', (viewer)->{
                 return new StaticGuiElement('b', new ItemStack(Material.BLACK_STAINED_GLASS_PANE), "");
@@ -201,15 +202,15 @@ public class GuiManager {
                 "c   i    ",
                 "         "
         };
-        String s = wishType.toString().toLowerCase().split("_")[0];
-        InventoryGui gui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), gui1);
+        String s = "&r&" + getRarityColorChar(wishRarity) + "Wishing for " + wishType.toString().toLowerCase().split("_")[0].replace(String.valueOf(wishType.toString().toLowerCase().split("_")[0].toCharArray()[0]), String.valueOf(wishType.toString().toLowerCase().split("_")[0].toCharArray()[0]).toUpperCase());
+        InventoryGui gui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', s), gui1);
         gui.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
         gui.addElement(new DynamicGuiElement('c', (viewer)->{
             return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
         }));
         finishedList.add(gui);
 
-        InventoryGui guiSecond = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), gui2);
+        InventoryGui guiSecond = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', s), gui2);
         guiSecond.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
         guiSecond.addElement(new DynamicGuiElement('c', (viewer)->{
             return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
@@ -220,7 +221,7 @@ public class GuiManager {
         finishedList.add(guiSecond);
 
         for (int i = 0; i<stars; i++){
-            InventoryGui g = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), starList.get(i));
+            InventoryGui g = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', s), starList.get(i));
             g.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
             g.addElement(new DynamicGuiElement('c', (viewer)->{
                 return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
@@ -234,7 +235,7 @@ public class GuiManager {
             finishedList.add(g);
         }
 
-        InventoryGui g = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), starList.get(stars-1));
+        InventoryGui g = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', s), starList.get(stars-1));
         g.setFiller(new ItemStack(WishSystem.getWishRarityAsGlassPane(wishRarity), 1));
         g.addElement(new DynamicGuiElement('c', (viewer)->{
             return new StaticGuiElement('c', getClassItem(itemClass), getItemAsString(getClassItem(itemClass)));
@@ -247,7 +248,7 @@ public class GuiManager {
         }));
         finishedList.add(g);
 
-        InventoryGui finalgui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', "&r&5Wishing for " + s), guiFinal);
+        InventoryGui finalgui = new InventoryGui(this.plugin, player, ChatColor.translateAlternateColorCodes('&', s), guiFinal);
         finalgui.setCloseAction(close -> {
             close.getGui().show(close.getPlayer());
             return false;

@@ -102,7 +102,7 @@ public class WishSystem {
 
         //todo temp
         if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
-            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&7" + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
+            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
         }
 
         im.setDisplayName(im.getDisplayName() + starsStr);
@@ -163,6 +163,30 @@ public class WishSystem {
                 break;
             case MYTHIC:
                 rarity=Material.PINK_STAINED_GLASS_PANE;
+                break;
+            default:
+                break;
+        }
+        return rarity;
+    }
+
+    public static char getRarityColorChar(WishRarity wishRarity){
+        char rarity = ' ';
+        switch (wishRarity){
+            case UNCOMMON:
+                rarity='a';
+                break;
+            case RARE:
+                rarity='9';
+                break;
+            case EPIC:
+                rarity='5';
+                break;
+            case LEGENDARY:
+                rarity='6';
+                break;
+            case MYTHIC:
+                rarity='d';
                 break;
             default:
                 break;

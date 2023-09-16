@@ -1,4 +1,7 @@
 indev: true
 main-world: world
 main-menu-item-disabled-worlds:
-  - copy
+  - arena1
+arenas-spawn-x: 0.5
+arenas-spawn-y: 61.0
+arenas-spawn-z: 27.5

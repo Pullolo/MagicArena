@@ -43,7 +43,7 @@ public class MainMenuItemManager implements Listener {
 
     @EventHandler
     public void onPlayerSwitchWorlds(PlayerChangedWorldEvent event){
-        if (config.getList("main-menu-item-disabled-worlds").contains(event.getPlayer().getWorld().getName())){
+        if (config.getList("main-menu-item-disabled-worlds").contains(event.getPlayer().getWorld().getName()) || event.getPlayer().getWorld().getName().contains("temp")){
             if (event.getPlayer().getInventory().contains(getMainMenuItem())) {
                 event.getPlayer().getInventory().remove(getMainMenuItem());
             }

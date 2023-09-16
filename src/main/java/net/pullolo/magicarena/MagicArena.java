@@ -3,6 +3,7 @@ package net.pullolo.magicarena;
 import net.pullolo.magicarena.commands.*;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.items.MainMenuItemManager;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new CopyWorld(), "copyworld");
         registerCommand(new Worlds(), "worlds");
         registerCommand(new Gui(guiManager, animationManager), "gui");
+        getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
 
         loadSavedWorlds();
     }

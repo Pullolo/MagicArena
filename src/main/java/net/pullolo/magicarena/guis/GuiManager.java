@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
@@ -33,6 +34,43 @@ public class GuiManager {
         this.plugin = plugin;
     }
 
+    public InventoryGui createMainMenuGui(Player player){
+        String[] guiSetup = {
+                "         ",
+                "r g p w i",
+                "         "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Main Menu", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+        gui.addElement(new StaticGuiElement('g', new ItemStack (Material.COMPASS),
+                click -> {
+                    click.getGui().close();
+                    createGameSelectGui((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&a➼ Play")));
+        gui.addElement(new StaticGuiElement('w', new ItemStack (Material.NETHER_STAR),
+                click -> {
+                    click.getGui().close();
+                    createWishGui((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&3✧ Wish")));
+        gui.addElement(new DynamicGuiElement('p', (viewer)->{
+            return new StaticGuiElement('p', getPlayerSkull(player),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7✉ Your Profile"));
+        }));
+        gui.addElement(new StaticGuiElement('r', new ItemStack (Material.BEACON),
+                click -> {
+                    click.getGui().close();
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&6⚡ Ranks")));
+        gui.addElement(new StaticGuiElement('i', new ItemStack (Material.CRAFTING_TABLE),
+                click -> {
+                    click.getGui().close();
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Your Items")));
+
+        return gui;
+    }
     public InventoryGui createGameSelectGui(Player player){
         String[] guiSetup = {
                 "         ",
@@ -324,5 +362,13 @@ public class GuiManager {
         }
 
         return finalString;
+    }
+
+    private ItemStack getPlayerSkull(Player p){
+        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta sm = (SkullMeta) skull.getItemMeta();
+        sm.setOwningPlayer(p);
+        skull.setItemMeta(sm);
+        return skull;
     }
 }

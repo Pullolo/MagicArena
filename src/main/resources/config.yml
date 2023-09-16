@@ -1,2 +1,4 @@
 indev: true
 main-world: world
+main-menu-item-disabled-worlds:
+  - copy

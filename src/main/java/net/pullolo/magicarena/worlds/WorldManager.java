@@ -102,7 +102,23 @@ public class WorldManager {
         return worlds;
     }
 
-    public static void saveWorld(World w, boolean temp){
+    public static ArrayList<String> getArenas(){
+        ArrayList<String> worlds = new ArrayList<>();
+        try {
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()){
+                String line = sc.nextLine();
+                if (line.regionMatches(0, "arena_", 0, "arena_".length())){
+                    worlds.add(line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return worlds;
+    }
+
+    public static void saveWorld(World w, boolean temp, boolean arena){
         StringBuilder s = new StringBuilder();
         try {
             Scanner sc = new Scanner(file);
@@ -113,6 +129,7 @@ public class WorldManager {
             throw new RuntimeException(e);
         }
         if (temp) s.append("temp_" + w.getName());
+        else if (arena) s.append("arena_" + w.getName());
         else s.append(w.getName());
         try {
             FileWriter fw = new FileWriter(file);
@@ -123,7 +140,7 @@ public class WorldManager {
         }
     }
 
-    private static void deleteWorld(String name){
+    public static void deleteWorld(String name){
         StringBuilder s = new StringBuilder();
         try {
             Scanner sc = new Scanner(file);

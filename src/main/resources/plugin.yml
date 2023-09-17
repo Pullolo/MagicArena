@@ -16,5 +16,10 @@ commands:
     usage: /<command> <list/tp> <worldName>
     permission: ma.worlds
   gui:
-    usage: /<gui> <open> <guiName>
+    usage: /<command> <open> <guiName>
     permission: ma.guis
+  arenas:
+    usage: /<command> <save/edit/remove> <world/arena>
+    permission: ma.worlds
+  queue:
+    usage: /<command> <solo/duo/trio/squad/team/list>

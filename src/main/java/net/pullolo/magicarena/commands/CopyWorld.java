@@ -24,11 +24,14 @@ public class CopyWorld implements CommandExecutor, TabCompleter {
             return false;
         }
         try {
+            if (args[0].equalsIgnoreCase(args[1])){
+                throw new RuntimeException();
+            }
             sender.sendMessage(ChatColor.GREEN + "Generating world...");
             WorldManager.copyActiveWorld(Bukkit.getWorld(args[0]), args[1]);
             sender.sendMessage(ChatColor.GREEN + "Successfully copied world " + args[0] + " with a new name of " + args[1] + "!");
             World world = Bukkit.getWorld(args[1]);
-            WorldManager.saveWorld(world, false);
+            WorldManager.saveWorld(world, false, false);
             if (sender instanceof Player){
                 ((Player) sender).teleport(world.getSpawnLocation());
             }

@@ -1,6 +1,8 @@
 package net.pullolo.magicarena;
 
 import net.pullolo.magicarena.commands.*;
+import net.pullolo.magicarena.game.GameManager;
+import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.MainMenuItemManager;
@@ -29,11 +31,12 @@ public final class MagicArena extends JavaPlugin {
 
     private static final String prefix = "[MagicArena] ";
     public static String mainWorld;
+    public static GameManager gameManager;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
-
+        gameManager = new GameManager();
         GuiManager guiManager = new GuiManager(this);
         AnimationManager animationManager = new AnimationManager(this, guiManager);
         wishSystem = new WishSystem(animationManager);
@@ -46,7 +49,10 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new CopyWorld(), "copyworld");
         registerCommand(new Worlds(), "worlds");
         registerCommand(new Gui(guiManager, animationManager), "gui");
+        registerCommand(new Arenas(), "arenas");
+        registerCommand(new Queue(), "queue");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
+
 
         loadSavedWorlds();
     }
@@ -62,6 +68,9 @@ public final class MagicArena extends JavaPlugin {
         savedWorlds = deleteTempWorlds(savedWorlds);
         if (config.getBoolean("indev")){
             for (String s : savedWorlds){
+                if (s.regionMatches(0, "arena_", 0, "arena_".length())){
+                    continue;
+                }
                 new WorldCreator(s).createWorld();
                 log.info(prefix + "Loaded world " + s);
             }

@@ -34,6 +34,7 @@ public class QueueManager {
         }
         if (queueType.equals(QueueType.SOLO)){
             playersInSoloQue.add(p);
+            p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
         } else {
             p.sendMessage(ChatColor.RED + "This queue type is not available!");
             return;
@@ -57,6 +58,12 @@ public class QueueManager {
             }
             return;
         }
+        if (queueType.equals(QueueType.DUO)){
+            for (Player p : party){
+                p.sendMessage(ChatColor.GREEN + "Your party was added to " + queueType.toString().toLowerCase() + " queue!");
+            }
+            playersInDuoQue.add(party);
+        }
         tryStartMatch(queueType);
     }
 
@@ -66,6 +73,7 @@ public class QueueManager {
         playersInTrioQue.removeIf(players -> players.contains(p));
         playersInSquadQue.removeIf(players -> players.contains(p));
         playersInTeamQue.removeIf(players -> players.contains(p));
+        p.sendMessage(ChatColor.GREEN + "You have left the queue!");
     }
 
     public void removePartyFromQueue(ArrayList<Player> party){
@@ -83,6 +91,7 @@ public class QueueManager {
             for (ArrayList<Player> players: playersInTeamQue){
                 players.remove(p);
             }
+            p.sendMessage(ChatColor.GREEN + "Your party was removed from queue!");
         }
     }
 
@@ -102,6 +111,22 @@ public class QueueManager {
                 }
                 //todo start game
                 gameManager.prepGame(player1, player2, queueType);
+
+                tryStartMatch(queueType);
+            }
+        }
+        if (queueType.equals(QueueType.DUO)){
+            if (playersInDuoQue.size()>1){
+                ArrayList<Player> team1 = playersInDuoQue.get(0);
+                ArrayList<Player> team2 = playersInDuoQue.get(1);
+                ArrayList<Player> allPlayers = new ArrayList<>();
+                allPlayers.addAll(team1);
+                allPlayers.addAll(team2);
+                for(Player p : allPlayers){
+                    p.sendMessage( ChatColor.GREEN + "Starting match...");
+                }
+
+                gameManager.prepGame(team1, team2, queueType);
 
                 tryStartMatch(queueType);
             }

@@ -6,20 +6,34 @@ commands:
   createworld:
     usage: /<command> <worldName>
     permission: ma.worlds
+    description: Creates a world
   deleteworld:
     usage: /<command> <worldName>
     permission: ma.worlds
+    description: Deletes a world
   copyworld:
     usage: /<command> <worldName> <newWorldName>
     permission: ma.worlds
+    description: Copies a world
   worlds:
     usage: /<command> <list/tp> <worldName>
     permission: ma.worlds
+    description: Lists or teleports you to certain worlds
   gui:
     usage: /<command> <open> <guiName>
     permission: ma.guis
+    description: Test guis
   arenas:
     usage: /<command> <save/edit/remove> <world/arena>
     permission: ma.worlds
+    description: Manage Arenas
   queue:
     usage: /<command> <solo/duo/trio/squad/team/list>
+    description: Queue up for a game
+  stats:
+    usage: /<command> <player>
+    description: Displays your stats in a game
+  kill:
+    usage: /<command> <player>
+    permission: ma.kill
+    description: Kills a player

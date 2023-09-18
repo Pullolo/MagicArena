@@ -1,11 +1,13 @@
 package net.pullolo.magicarena;
 
 import net.pullolo.magicarena.commands.*;
+import net.pullolo.magicarena.events.GameEventsHandler;
 import net.pullolo.magicarena.game.GameManager;
 import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.MainMenuItemManager;
+import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -32,10 +34,12 @@ public final class MagicArena extends JavaPlugin {
     private static final String prefix = "[MagicArena] ";
     public static String mainWorld;
     public static GameManager gameManager;
+    public static JavaPlugin plugin;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        plugin = this;
         gameManager = new GameManager();
         GuiManager guiManager = new GuiManager(this);
         AnimationManager animationManager = new AnimationManager(this, guiManager);
@@ -51,8 +55,10 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new Gui(guiManager, animationManager), "gui");
         registerCommand(new Arenas(), "arenas");
         registerCommand(new Queue(), "queue");
+        registerCommand(new Stats(), "stats");
+        registerCommand(new Kill(), "kill");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
-
+        getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
 
         loadSavedWorlds();
     }

@@ -136,18 +136,21 @@ public class Game {
                     }
                 }
                 if (!isTeamAlive(team1) && isTeamAlive(team2)){
+                    startClock.cancel();
                     gameClock1t.cancel();
                     finishGame(team2, team1, allPlayers, gameType, arena);
                     cancel();
                     return;
                 }
                 if (isTeamAlive(team1) && !isTeamAlive(team2)){
+                    startClock.cancel();
                     gameClock1t.cancel();
                     finishGame(team1, team2, allPlayers, gameType, arena);
                     cancel();
                     return;
                 }
                 if (!isTeamAlive(team1) && !isTeamAlive(team2)){
+                    startClock.cancel();
                     gameClock1t.cancel();
                     finishGame(null, null, allPlayers, gameType, arena);
                     cancel();

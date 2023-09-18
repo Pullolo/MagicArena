@@ -22,7 +22,9 @@ public class GameEventsHandler implements Listener {
         if (arenaPlayers.containsKey(event.getPlayer())){
             arenaPlayers.get(event.getPlayer()).getGame().broadcast("[Arena] Player " + event.getPlayer().getDisplayName() + " has left the game!");
             arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());
+            event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
         }
+
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
     }
 

@@ -95,6 +95,26 @@ public class QueueManager {
         }
     }
 
+    public boolean isPlayerInQueue(Player p){
+        if (playersInSoloQue.contains(p)){
+            return true;
+        }
+        for (ArrayList<Player> players: playersInDuoQue){
+            if (players.contains(p)) return true;
+        }
+        for (ArrayList<Player> players: playersInTrioQue){
+            if (players.contains(p)) return true;
+        }
+        for (ArrayList<Player> players: playersInSquadQue){
+            if (players.contains(p)) return true;
+        }
+        for (ArrayList<Player> players: playersInTeamQue){
+            if (players.contains(p)) return true;
+        }
+
+        return false;
+    }
+
     private void tryStartMatch(QueueType queueType){
         if (queueType.equals(QueueType.SOLO)){
             if (playersInSoloQue.size()>1){

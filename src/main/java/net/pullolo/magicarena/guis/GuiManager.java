@@ -3,6 +3,7 @@ package net.pullolo.magicarena.guis;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.items.ItemClass;
 import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.ChatColor;
@@ -20,8 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.pullolo.magicarena.MagicArena.getLog;
-import static net.pullolo.magicarena.MagicArena.getWishSystem;
+import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.wish.WishSystem.getRarityColorChar;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
 
@@ -82,7 +82,10 @@ public class GuiManager {
         gui.addElement(new StaticGuiElement('a', new ItemStack (Material.COMPASS),
                 click -> {
                     click.getGui().close();
-                    click.getWhoClicked().teleport(click.getWhoClicked().getLocation().add(0, 1, 0));
+                    if (gameManager.getQueueManager().isPlayerInQueue((Player) click.getWhoClicked())){
+                        gameManager.getQueueManager().removePlayerFromQueue((Player) click.getWhoClicked());
+                    } else gameManager.getQueueManager().addPlayerToQueue((Player) click.getWhoClicked(), QueueManager.QueueType.SOLO);
+
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay 1v1!")));
         gui.addElement(new StaticGuiElement('b', new ItemStack (Material.BARRIER),

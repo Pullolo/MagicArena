@@ -1,6 +1,7 @@
 package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.MagicArena;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.MagicArena.mainWorld;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
@@ -28,6 +30,9 @@ public class GameEventsHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event){
         if (event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
             event.getPlayer().setGameMode(GameMode.SURVIVAL);
+        }
+        if (event.getPlayer().getWorld().getName().regionMatches(0, "temp_", 0, 5)){
+            event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
         }
     }
 

@@ -62,18 +62,10 @@ public class QueueManager {
 
     public void removePlayerFromQueue(Player p){
         playersInSoloQue.remove(p);
-        for (ArrayList<Player> players: playersInDuoQue){
-            players.remove(p);
-        }
-        for (ArrayList<Player> players: playersInTrioQue){
-            players.remove(p);
-        }
-        for (ArrayList<Player> players: playersInSquadQue){
-            players.remove(p);
-        }
-        for (ArrayList<Player> players: playersInTeamQue){
-            players.remove(p);
-        }
+        playersInDuoQue.removeIf(players -> players.contains(p));
+        playersInTrioQue.removeIf(players -> players.contains(p));
+        playersInSquadQue.removeIf(players -> players.contains(p));
+        playersInTeamQue.removeIf(players -> players.contains(p));
     }
 
     public void removePartyFromQueue(ArrayList<Player> party){

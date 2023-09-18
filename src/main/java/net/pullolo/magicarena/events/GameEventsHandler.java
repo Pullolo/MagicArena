@@ -21,7 +21,6 @@ public class GameEventsHandler implements Listener {
             arenaPlayers.get(event.getPlayer()).getGame().broadcast("[Arena] Player " + event.getPlayer().getDisplayName() + " has left the game!");
             arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());
         }
-        //todo remove player from party if in party
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
     }
 

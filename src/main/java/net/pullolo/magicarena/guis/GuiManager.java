@@ -103,13 +103,17 @@ public class GuiManager {
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         gui.addElement(new StaticGuiElement('a', new ItemStack(Material.NETHERITE_INGOT),
                 click -> {
-                    if (getWishSystem().wish((Player) click.getWhoClicked(), WishSystem.WishType.ARMOR_WISH)) click.getGui().close();
+                    if (!gameManager.getQueueManager().isPlayerInQueue((Player) click.getWhoClicked())){
+                        if (getWishSystem().wish((Player) click.getWhoClicked(), WishSystem.WishType.ARMOR_WISH)) click.getGui().close();
+                    } else click.getWhoClicked().sendMessage(ChatColor.RED + "You can't wish in queue!");
                     return true;
                 },
                 ChatColor.translateAlternateColorCodes('&', "&r&3Wish for Armor! &a1 ✧")));
         gui.addElement(new StaticGuiElement('w', new ItemStack(Material.BLAZE_ROD),
                 click -> {
-                    if (getWishSystem().wish((Player) click.getWhoClicked(), WishSystem.WishType.WEAPON_WISH)) click.getGui().close();
+                    if (!gameManager.getQueueManager().isPlayerInQueue((Player) click.getWhoClicked())){
+                        if (getWishSystem().wish((Player) click.getWhoClicked(), WishSystem.WishType.WEAPON_WISH)) click.getGui().close();
+                    } else click.getWhoClicked().sendMessage(ChatColor.RED + "You can't wish in queue!");
                     return true;
                 },
                 ChatColor.translateAlternateColorCodes('&', "&r&cWish for Weapons! &a1 ✧")));

@@ -29,6 +29,9 @@ public class DeleteWorld implements CommandExecutor, TabCompleter {
             if (args[0].equals(mainWorld)){
                 throw new RuntimeException("Don't remove main world!");
             }
+            if (args[0].regionMatches(0, "temp_", 0, 5)){
+                throw new RuntimeException("Don't remove an active Arena!");
+            }
             removeWorld(Bukkit.getWorld(args[0]));
             if ((sender instanceof Player) && ((Player) sender).getWorld().equals(Bukkit.getWorld(args[0]))){
                 ((Player) sender).teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());

@@ -37,3 +37,7 @@ commands:
     usage: /<command> <player>
     permission: ma.kill
     description: Kills a player
+  game:
+    usage: /<command> <start/end> <type>
+    permission: ma.games
+    description: Used to test the game

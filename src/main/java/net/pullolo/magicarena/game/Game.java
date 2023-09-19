@@ -27,14 +27,21 @@ public class Game {
     private final ArrayList<Player> team1;
     private final ArrayList<Player> team2;
 
-    public Game(ArrayList<Player> team1, ArrayList<Player> team2, QueueManager.QueueType gameType){
+    private final BukkitRunnable startC;
+    private final BukkitRunnable gameC;
+    private final BukkitRunnable gameCS;
+    private final World world;
+
+    public Game(ArrayList<Player> team1, ArrayList<Player> team2, QueueManager.QueueType gameType, boolean ranked, boolean test){
         String arenaName = pickRandomArena().split("_")[1];
-        while (doesArenaExist(arenaName)){
-            arenaName+="*";
+        String newArenaName = arenaName;
+        while (doesArenaExist(newArenaName)){
+            newArenaName+="-";
         }
-        WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + arenaName);
-        WorldManager.saveWorld(Bukkit.getWorld("temp_" + arenaName), false, false); //this results in saved name being temp_ the temp param does cant be true
-        World arena = Bukkit.getWorld("temp_" + arenaName);
+        WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + newArenaName);
+        WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false); //this results in saved name being temp_ the temp param does cant be true
+        World arena = Bukkit.getWorld("temp_" + newArenaName);
+        this.world=arena;
         ArrayList<Player> allPlayers = new ArrayList<>();
         allPlayers.addAll(team1);
         allPlayers.addAll(team2);
@@ -52,6 +59,9 @@ public class Game {
         for (Player p : allPlayers){
             new ArenaPlayer(p, 1, this);
             p.setGameMode(GameMode.SURVIVAL);
+            if (test){
+                p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");
+            }
             p.sendMessage(ChatColor.GREEN + "Entered Game!");
             p.sendMessage(ChatColor.GREEN + "Match Starting in 20s...");
         }
@@ -90,7 +100,7 @@ public class Game {
             }
         };
         startClock.runTaskTimer(MagicArena.plugin, 0, 1);
-
+        this.startC = startClock;
         BukkitRunnable gameClock1t = new BukkitRunnable() {
             @Override
             public void run() {
@@ -120,6 +130,7 @@ public class Game {
             }
         };
         gameClock1t.runTaskTimer(MagicArena.plugin, 0, 1);
+        this.gameC = gameClock1t;
 
         BukkitRunnable gameClock1s = new BukkitRunnable() {
             @Override
@@ -138,30 +149,52 @@ public class Game {
                         }
                     }
                 }
-                if (!isTeamAlive(team1) && isTeamAlive(team2)){
-                    startClock.cancel();
-                    gameClock1t.cancel();
-                    finishGame(team2, team1, allPlayers, gameType, arena);
-                    cancel();
-                    return;
-                }
-                if (isTeamAlive(team1) && !isTeamAlive(team2)){
-                    startClock.cancel();
-                    gameClock1t.cancel();
-                    finishGame(team1, team2, allPlayers, gameType, arena);
-                    cancel();
-                    return;
-                }
-                if (!isTeamAlive(team1) && !isTeamAlive(team2)){
-                    startClock.cancel();
-                    gameClock1t.cancel();
-                    finishGame(null, null, allPlayers, gameType, arena);
-                    cancel();
-                    return;
+
+
+                if (!test){
+                    if (!isTeamAlive(team1) && isTeamAlive(team2)){
+                        startClock.cancel();
+                        gameClock1t.cancel();
+                        finishGame(team2, team1, allPlayers, gameType, arena);
+                        cancel();
+                        return;
+                    }
+                    if (isTeamAlive(team1) && !isTeamAlive(team2)){
+                        startClock.cancel();
+                        gameClock1t.cancel();
+                        finishGame(team1, team2, allPlayers, gameType, arena);
+                        cancel();
+                        return;
+                    }
+                    if (!isTeamAlive(team1) && !isTeamAlive(team2)){
+                        startClock.cancel();
+                        gameClock1t.cancel();
+                        finishGame(null, null, allPlayers, gameType, arena);
+                        cancel();
+                        return;
+                    }
+                } else {
+                    //Prevent an infinite Game
+                    if (!isTeamAlive(allPlayers)){
+                        for (Player p : allPlayers){
+                            if (p!=null){
+                                p.sendMessage(ChatColor.YELLOW + "[Warning] Due to no players being alive you will be warped in 3 seconds!");
+                            }
+                        }
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                forceEndGame();
+                            }
+                        }.runTaskLater(MagicArena.plugin, 60);
+                        cancel();
+                        return;
+                    }
                 }
             }
         };
         gameClock1s.runTaskTimer(MagicArena.plugin, 0, 20);
+        this.gameCS = gameClock1s;
     }
 
     public void finishGame(ArrayList<Player> winners, ArrayList<Player> losers, ArrayList<Player> allPlayers, QueueManager.QueueType gameType, World world){
@@ -169,6 +202,7 @@ public class Game {
         for (Player p : allPlayers){
             if (p!=null){
                 arenaPlayers.remove(p);
+                p.setFireTicks(0);
             }
         }
         if (winners == null || losers == null){
@@ -209,6 +243,29 @@ public class Game {
                 WorldManager.removeWorld(world);
             }
         }.runTaskLater(MagicArena.plugin, 100);
+    }
+
+    public void forceEndGame(){
+        startC.cancel();
+        gameC.cancel();
+        gameCS.cancel();
+        for (Player p : allPlayers){
+            if (p!=null){
+                arenaPlayers.remove(p);
+                p.sendMessage(ChatColor.RED + "[Arena] This match was terminated, neither side will be penalized for losing!");
+            }
+        }
+        for (Player p : allPlayers){
+            if (p!=null){
+                p.sendMessage(ChatColor.GREEN + "You have been warped!");
+                p.teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
+                p.setGameMode(GameMode.SURVIVAL);
+                p.setHealth(p.getMaxHealth());
+            }
+        }
+        if (world!=null){
+            WorldManager.removeWorld(world);
+        }
     }
 
     public boolean isTeamAlive(ArrayList<Player> players){

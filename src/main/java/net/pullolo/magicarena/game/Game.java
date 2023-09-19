@@ -29,6 +29,9 @@ public class Game {
 
     public Game(ArrayList<Player> team1, ArrayList<Player> team2, QueueManager.QueueType gameType){
         String arenaName = pickRandomArena().split("_")[1];
+        while (doesArenaExist(arenaName)){
+            arenaName+="*";
+        }
         WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + arenaName);
         WorldManager.saveWorld(Bukkit.getWorld("temp_" + arenaName), false, false); //this results in saved name being temp_ the temp param does cant be true
         World arena = Bukkit.getWorld("temp_" + arenaName);
@@ -235,6 +238,15 @@ public class Game {
             }
         }
 
+    }
+
+    private boolean doesArenaExist(String arenaName){
+        for (World w: Bukkit.getWorlds()){
+            if (w.getName().equalsIgnoreCase("temp_" + arenaName)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void broadcast(String message){

@@ -39,7 +39,7 @@ public class Game {
             newArenaName+="-";
         }
         WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + newArenaName);
-        WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false); //this results in saved name being temp_ the temp param does cant be true
+        WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false); //this results in saved name being temp_ the temp param cant be true
         World arena = Bukkit.getWorld("temp_" + newArenaName);
         this.world=arena;
         ArrayList<Player> allPlayers = new ArrayList<>();

@@ -41,3 +41,7 @@ commands:
     usage: /<command> <start/end> <type>
     permission: ma.games
     description: Used to test the game
+  giveitem:
+    usage: /<command>
+    permission: ma.items
+    description: Gives u custom items

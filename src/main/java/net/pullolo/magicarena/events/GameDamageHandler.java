@@ -1,5 +1,7 @@
 package net.pullolo.magicarena.events;
 
+import net.pullolo.magicarena.items.Item;
+import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
@@ -10,6 +12,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
+import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
@@ -60,13 +64,13 @@ public class GameDamageHandler implements Listener {
         if (event.isCancelled()){
             return;
         }
-        if (!(event.getEntity() instanceof Player)){
+        if (!(event.getHitEntity() instanceof Player)){
             return;
         }
         if (!(event.getEntity().getShooter() instanceof Player)){
             return;
         }
-        Player damaged = (Player) event.getEntity();
+        Player damaged = (Player) event.getHitEntity();
         Player damager = (Player) event.getEntity().getShooter();
         if (!(isPlayerInGame(damaged) && isPlayerInGame(damager))){
             return;
@@ -74,7 +78,7 @@ public class GameDamageHandler implements Listener {
         if (damaged.getGameMode().equals(GameMode.CREATIVE)){
             return;
         }
-        if (((Player) event.getEntity()).isBlocking()){
+        if (damaged.isBlocking()){
             return;
         }
         if (arenaPlayers.get(damager).getGame().getAllPlayersInPlayersTeam(damager).contains(damaged)){
@@ -86,10 +90,22 @@ public class GameDamageHandler implements Listener {
 
     private double calculateDamage(double eventDamage, Player damager, Player damaged){
         //todo add scaling for weapons and stuff
-        return arenaPlayers.get(damager).getDamage();
+        if (damager.getInventory().getItemInMainHand().getItemMeta()==null){
+            return arenaPlayers.get(damager).getDamage()/1.3;
+        }
+        Double itemDamage = getItemFromPlayer(damager.getInventory().getItemInMainHand()).getDamage();
+        double playerDamage = arenaPlayers.get(damager).getDamage();
+
+        return playerDamage/1.3 * itemDamage/2;
     }
 
     private double calculateProjectileDamage(Player damager, Player damaged){
-        return arenaPlayers.get(damager).getDamage()*2;
+        if (damager.getInventory().getItemInMainHand().getItemMeta()==null){
+            return arenaPlayers.get(damager).getDamage()/1.3;
+        }
+        Double itemDamage = getItemFromPlayer(damager.getInventory().getItemInMainHand()).getDamage();
+        double playerDamage = arenaPlayers.get(damager).getDamage();
+
+        return playerDamage/1.3 * itemDamage/1.8;
     }
 }

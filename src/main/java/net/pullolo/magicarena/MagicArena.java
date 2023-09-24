@@ -2,13 +2,13 @@ package net.pullolo.magicarena;
 
 import net.pullolo.magicarena.commands.*;
 import net.pullolo.magicarena.events.GameDamageHandler;
+import net.pullolo.magicarena.data.DbManager;
 import net.pullolo.magicarena.events.GameEventsHandler;
 import net.pullolo.magicarena.game.GameManager;
-import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
-import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -18,6 +18,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,12 +36,16 @@ public final class MagicArena extends JavaPlugin {
     private static final String prefix = "[MagicArena] ";
     public static String mainWorld;
     public static GameManager gameManager;
+    public static DbManager dbManager = new DbManager();
     public static JavaPlugin plugin;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
+        dbManager.init();
+        ItemsDefinitions.init();
+        checkDb();
         gameManager = new GameManager();
         GuiManager guiManager = new GuiManager(this);
         AnimationManager animationManager = new AnimationManager(this, guiManager);
@@ -59,6 +64,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new Stats(), "stats");
         registerCommand(new Kill(), "kill");
         registerCommand(new GameCmd(), "game");
+        registerCommand(new GiveItem(), "giveitem");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);
@@ -69,6 +75,7 @@ public final class MagicArena extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        dbManager.disconnect();
         deleteActiveTempWorlds();
     }
 
@@ -132,5 +139,11 @@ public final class MagicArena extends JavaPlugin {
     }
     public static WishSystem getWishSystem() {
         return wishSystem;
+    }
+    public static void checkDb(){
+        dbManager.connect();
+        if (dbManager.isDbEnabled()){
+            log.info("Database is operational");
+        } else log.warning("Database is offline!");
     }
 }

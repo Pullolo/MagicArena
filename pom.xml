@@ -71,6 +71,10 @@
             <id>minebench-repo</id>
             <url>https://repo.minebench.de/</url>
         </repository>
+        <repository>
+            <id>skullcreator-repo</id>
+            <url>https://github.com/deanveloper/SkullCreator/raw/mvn-repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -90,6 +94,12 @@
             <artifactId>inventorygui</artifactId>
             <!--The following version may not be the latest. Check it before using.-->
             <version>1.6.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>dev.dbassett</groupId>
+            <artifactId>skullcreator</artifactId>
+            <version>3.0.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

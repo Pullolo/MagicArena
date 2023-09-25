@@ -10,8 +10,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
-import static net.pullolo.magicarena.items.ItemsDefinitions.testItem;
+import static net.pullolo.magicarena.items.ItemsDefinitions.*;
 
 public class GiveItem implements CommandExecutor, TabCompleter {
     @Override
@@ -38,6 +37,13 @@ public class GiveItem implements CommandExecutor, TabCompleter {
                 ((Player) sender).getInventory().addItem(new Item(testItem, 0, 0).getItem());
             } else ((Player) sender).getInventory().addItem(testItem.getItem());
         }
+        if (args[0].equalsIgnoreCase("basic_sword")){
+            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
+                ((Player) sender).getInventory().addItem(new Item(basicSword, 5, 100).getItem());
+            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
+                ((Player) sender).getInventory().addItem(new Item(basicSword, 0, 0).getItem());
+            } else ((Player) sender).getInventory().addItem(basicSword.getItem());
+        }
         return true;
     }
 
@@ -55,8 +61,9 @@ public class GiveItem implements CommandExecutor, TabCompleter {
         }
         if (args.length==1){
             ArrayList<String> completion = new ArrayList<>();
-            addToCompletion("test_item", args[0], completion);
             addToCompletion("copy", args[0], completion);
+            addToCompletion("test_item", args[0], completion);
+            addToCompletion("basic_sword", args[0], completion);
             return completion;
         }
         if (args.length==2){

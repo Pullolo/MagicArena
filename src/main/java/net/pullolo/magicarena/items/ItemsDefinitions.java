@@ -16,10 +16,25 @@ import static net.pullolo.magicarena.MagicArena.getLog;
 public class ItemsDefinitions {
 
     public static Item testItem;
+    public static Item basicSword;
     public static final ArrayList<String> itemIds = new ArrayList<>();
 
     public static void init(){
         createTestItem();
+        createBasicSword();
+    }
+
+    private static void createBasicSword(){
+        String name = "&aBasic Sword";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+14");
+        lore.add("");
+        lore.add("&a&lUNCOMMON SWORD");
+        lore.add("&8item_id:basic_sword");
+        ItemStack item = createItem(Material.WOODEN_SWORD, name, lore);
+        basicSword = new Item(item);
+        itemIds.add("basic_sword");
     }
 
     private static void createTestItem(){
@@ -40,7 +55,6 @@ public class ItemsDefinitions {
         lore.add("&8item_id:test_item");
 
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
-        //todo finish
         testItem = new Item(item);
         itemIds.add("test_item");
     }

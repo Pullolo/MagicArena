@@ -1,6 +1,7 @@
 package net.pullolo.magicarena;
 
 import net.pullolo.magicarena.commands.*;
+import net.pullolo.magicarena.events.GameAbilitiesHandler;
 import net.pullolo.magicarena.events.GameDamageHandler;
 import net.pullolo.magicarena.data.DbManager;
 import net.pullolo.magicarena.events.GameEventsHandler;
@@ -68,6 +69,7 @@ public final class MagicArena extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);
+        getServer().getPluginManager().registerEvents(new GameAbilitiesHandler(), this);
 
         loadSavedWorlds();
     }

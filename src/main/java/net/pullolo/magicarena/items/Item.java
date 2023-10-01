@@ -206,16 +206,16 @@ public class Item {
         int bonusDamage;
         double q = this.quality;
         if (q>90){
-            bonusDamage=8;
+            bonusDamage=10;
         } else if (q>70) {
-            bonusDamage=4;
-        } else if (q>40) {    //amounts per quality
+            bonusDamage=6;
+        } else if (q>40) {    //amounts per quality todo balance
             bonusDamage=-4;
         } else {
             bonusDamage=-8;
         }
         for (int i = 0; i<this.stars; i++){
-            bonusDamage+=4;  //amount per star
+            bonusDamage+=2;  //amount per star todo balance
         }
 
         ItemMeta meta = item.getItemMeta();

@@ -1,21 +1,39 @@
 package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.MagicArena;
+import net.pullolo.magicarena.players.ArenaEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.player.*;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
+import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class GameEventsHandler implements Listener {
+
+    @EventHandler
+    public void onArmorStandSpawn(PlayerCommandPreprocessEvent event){
+        if (!(event.getMessage().equalsIgnoreCase("/summon minecraft:creeper") && isPlayerInGame(event.getPlayer()))){
+            return;
+        }
+        Player p = event.getPlayer();
+        Creeper creeper = (Creeper) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.CREEPER);
+        creeper.setAI(false);
+        arenaEntities.put(creeper, new ArenaEntity(creeper, 1, arenaPlayers.get(p).getGame(), true));
+        event.setCancelled(true);
+    }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){

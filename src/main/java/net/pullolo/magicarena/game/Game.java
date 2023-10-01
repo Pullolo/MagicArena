@@ -7,6 +7,8 @@ import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -16,14 +18,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static net.pullolo.magicarena.MagicArena.config;
-import static net.pullolo.magicarena.MagicArena.mainWorld;
+import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static org.bukkit.Bukkit.getServer;
 
 public class Game {
 
     private final ArrayList<Player> allPlayers;
+    private final ArrayList<Entity> allEntities = new ArrayList<>();
     private final ArrayList<Player> team1;
     private final ArrayList<Player> team2;
 
@@ -128,6 +131,30 @@ public class Game {
                         }
                     }
                 }
+                for (Entity e : allEntities){
+                    ArrayList<Entity> toDel = new ArrayList<>();
+                    if (e!=null && arenaEntities.containsKey(e)){
+                        if (arenaEntities.get(e).getHealth()<=0 || e.getLocation().getY() < -96){
+                            arenaEntities.remove(e);
+                            ((Damageable) e).setHealth(0);
+                        } else {
+                            arenaEntities.get(e).updateStats();
+                            ((Damageable) e).setMaxHealth(40);
+                            ((Damageable) e).setHealth(40);
+                        }
+                    }
+                    for (Entity en : toDel){
+                        allEntities.remove(en);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (en != null){
+                                    en.remove();
+                                }
+                            }
+                        }.runTaskLater(plugin, 20);
+                    }
+                }
             }
         };
         gameClock1t.runTaskTimer(MagicArena.plugin, 0, 1);
@@ -199,7 +226,7 @@ public class Game {
     }
 
     public void finishGame(ArrayList<Player> winners, ArrayList<Player> losers, ArrayList<Player> allPlayers, QueueManager.QueueType gameType, World world){
-
+        removeAllEntitiesFromGame();
         for (Player p : allPlayers){
             if (p!=null){
                 arenaPlayers.remove(p);
@@ -250,6 +277,7 @@ public class Game {
         startC.cancel();
         gameC.cancel();
         gameCS.cancel();
+        removeAllEntitiesFromGame();
         for (Player p : allPlayers){
             if (p!=null){
                 arenaPlayers.remove(p);
@@ -277,7 +305,6 @@ public class Game {
         }
         return false;
     }
-    //todo add check to end game and see who won
 
     public String pickRandomArena(){
         return WorldManager.getArenas().get(new Random().nextInt(WorldManager.getArenas().size()));
@@ -312,6 +339,21 @@ public class Game {
             if (p!=null){
                 p.sendMessage(message);
             }
+        }
+    }
+
+    private void removeAllEntitiesFromGame(){
+        //todo possibly fix
+        ArrayList<Entity> toDel = new ArrayList<>();
+        for (Entity e : allEntities){
+            if (arenaEntities.get(e).getGame().equals(this)){
+                toDel.add(e);
+            }
+        }
+        for (Entity e : toDel){
+            allEntities.remove(e);
+            arenaEntities.remove(e);
+            e.remove();
         }
     }
 
@@ -410,5 +452,12 @@ public class Game {
         }else {
             arenaPlayers.get(p).getBonusMagicDefence().put(key, 0.0);
         }
+    }
+
+    public void addEntity(Entity e){
+        allEntities.add(e);
+    }
+    public void removeEntity(Entity e){
+        allEntities.remove(e);
     }
 }

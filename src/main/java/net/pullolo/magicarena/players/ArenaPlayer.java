@@ -1,19 +1,17 @@
 package net.pullolo.magicarena.players;
 
-import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.game.Game;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
-public class ArenaPlayer extends ArenaEntity {
+public class ArenaPlayer extends ArenaEntityBlueprint {
 
     private final Game game;
     private boolean inGame = true;
 
     public static HashMap<Player, ArenaPlayer> arenaPlayers = new HashMap<>();
-
 
     public ArenaPlayer(Player player, int level, Game game){
         if (arenaPlayers.containsKey(player)){
@@ -67,32 +65,6 @@ public class ArenaPlayer extends ArenaEntity {
     public void updateStats() {
         fixedUpdateStats();
         performChecksAndCalc();
-    }
-
-    private void performChecksAndCalc(){
-        calcStats();
-        runChecks();
-    }
-
-    public void runChecks(){
-        if (getLevel()<1){
-            setLevel(1);
-        }
-        if (getHealth()>getMaxHealth()){
-            setHealth(getMaxHealth());
-        }
-        if (getCritChance() > (double) 100){
-            setCritChance(100);
-        }
-        if (getCritChance() < (double) 0){
-            setCritChance(0);
-        }
-        if (getMana()>getMaxMana()){
-            setMana(getMaxMana());
-        }
-        if (getMana() < 0){
-            setMana(0);
-        }
     }
 
     public Game getGame() {

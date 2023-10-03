@@ -110,6 +110,9 @@ public abstract class ArenaEntityBlueprint {
         if (getHealth()>getMaxHealth()){
             setHealth(getMaxHealth());
         }
+        if (getHealth()<0){
+            setHealth(0);
+        }
         if (getCritChance() > (double) 100){
             setCritChance(100);
         }

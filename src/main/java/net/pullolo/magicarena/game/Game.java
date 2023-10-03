@@ -135,6 +135,7 @@ public class Game {
                     ArrayList<Entity> toDel = new ArrayList<>();
                     if (e!=null && arenaEntities.containsKey(e)){
                         if (arenaEntities.get(e).getHealth()<=0 || e.getLocation().getY() < -96){
+                            arenaEntities.get(e).updateStats();
                             arenaEntities.remove(e);
                             ((Damageable) e).setHealth(0);
                         } else {
@@ -350,11 +351,12 @@ public class Game {
     }
 
     private void removeAllEntitiesFromGame(){
-        //todo possibly fix
         ArrayList<Entity> toDel = new ArrayList<>();
         for (Entity e : allEntities){
-            if (arenaEntities.get(e).getGame().equals(this)){
-                toDel.add(e);
+            if (e != null && arenaEntities.containsKey(e)){
+                if (arenaEntities.get(e).getGame().equals(this)){
+                    toDel.add(e);
+                }
             }
         }
         for (Entity e : toDel){

@@ -11,6 +11,7 @@ public class ArenaEntity extends ArenaEntityBlueprint{
 
     private final Game game;
     private final Entity entity;
+    private final boolean isTester;
 
     public static HashMap<Entity, ArenaEntity> arenaEntities = new HashMap<>();
 
@@ -20,11 +21,11 @@ public class ArenaEntity extends ArenaEntityBlueprint{
         } else arenaEntities.put(entity, this);
         this.game = game;
         this.entity = entity;
+        this.isTester = isTester;
         game.addEntity(entity);
         setLevel(level);
         updateStats();
         respawn();
-        if (isTester) setBaseHpRegen(getMaxHealth());
     }
 
     @Override
@@ -55,7 +56,8 @@ public class ArenaEntity extends ArenaEntityBlueprint{
         setBaseMaxHealth(90+getLevel()*10);
         setBaseMaxMana(80+getLevel()*20);
         setBaseManaRegen(getLevel());
-        setBaseHpRegen(getLevel()/20+1);
+        if (isTester) setBaseHpRegen(getMaxHealth());
+        else setBaseHpRegen(getLevel()/20+1);
         setBaseDefence(getLevel()*5);
         setBaseMagicDefence(getLevel()*5);
         setBaseDamage((getLevel()/2+1)*5+getLevel());

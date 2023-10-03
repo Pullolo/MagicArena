@@ -135,6 +135,7 @@ public class GameDamageHandler implements Listener {
     }
 
     public void onEntityDamage(Entity damaged, double damage){
+//        getLog().warning(damaged.toString());
         if (!arenaEntities.containsKey(damaged)){
             return;
         }

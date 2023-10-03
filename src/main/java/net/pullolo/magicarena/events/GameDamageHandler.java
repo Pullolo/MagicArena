@@ -116,6 +116,10 @@ public class GameDamageHandler implements Listener {
         }
 
         arenaEntities.get(damaged).damage(damager, damaged, calculateProjectileDamage(damager, damaged), false);
+
+        if (damager instanceof Player){
+            checkIfKilled((Player) damager, damaged);
+        }
     }
 
     public void onProjectileDamagePlayer(ProjectileHitEvent event){
@@ -135,7 +139,6 @@ public class GameDamageHandler implements Listener {
     }
 
     public void onEntityDamage(Entity damaged, double damage){
-//        getLog().warning(damaged.toString());
         if (!arenaEntities.containsKey(damaged)){
             return;
         }
@@ -163,6 +166,10 @@ public class GameDamageHandler implements Listener {
         }
 
         arenaEntities.get(damaged).damage(damager, damaged, calculateDamage(event.getDamage(), damager, damaged), false);
+
+        if (damager instanceof Player){
+            checkIfKilled((Player) damager, damaged);
+        }
     }
 
 
@@ -194,5 +201,11 @@ public class GameDamageHandler implements Listener {
         double playerDamage = arenaPlayers.get(damager).getDamage();
 
         return playerDamage/1.3 * itemDamage/1.8;
+    }
+
+    private void checkIfKilled(Player p, Entity e){
+        if (arenaEntities.get(e).getHealth()<=0){
+            new OnArenaEntityKilled(p, e);
+        }
     }
 }

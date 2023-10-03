@@ -177,6 +177,13 @@ public class Game {
                         }
                     }
                 }
+                for (Entity e : allEntities){
+                    if (e!=null && arenaEntities.containsKey(e)){
+                        arenaEntities.get(e).regen();
+                        arenaEntities.get(e).regenMana();
+                        arenaEntities.get(e).updateStats();
+                    }
+                }
 
 
                 if (!test){

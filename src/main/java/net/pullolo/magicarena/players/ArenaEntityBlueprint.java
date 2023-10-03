@@ -1,11 +1,13 @@
 package net.pullolo.magicarena.players;
 
 import net.pullolo.magicarena.misc.DamageIndicator;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Random;
 
+import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 
 public abstract class ArenaEntityBlueprint {
@@ -53,14 +55,19 @@ public abstract class ArenaEntityBlueprint {
 
     public abstract void regen();
     public abstract void regenMana();
-    public void damage(Player damager, Player damaged, double amou, boolean isMagic){
-        boolean isCrit = rollForCrit(arenaPlayers.get(damager).getCritChance());
+    public void damage(Entity damager, Entity damaged, double amou, boolean isMagic){
+        boolean isCrit;
+        if (damager instanceof Player){
+            isCrit = rollForCrit(arenaPlayers.get(damager).getCritChance());
+        } else isCrit = rollForCrit(arenaEntities.get(damager).getCritChance());
 
         double amount;
         double effectiveHpDef = getHealth() * (1 + getDefence()/100);
         double effectiveHpRes = getHealth() * (1 + getMagicDefence()/100);
         if (isCrit){
-            amount = amou * ((100+arenaPlayers.get(damager).getCritDamage())/100);
+            if (damager instanceof Player){
+                amount = amou * ((100+arenaPlayers.get(damager).getCritDamage())/100);
+            } else amount = amou * ((100+arenaEntities.get(damager).getCritDamage())/100);
         } else amount = amou;
 
         if (isMagic){
@@ -72,7 +79,7 @@ public abstract class ArenaEntityBlueprint {
 
         new DamageIndicator(damaged, amount, isCrit);
     }
-    public void damage(Player damaged, double amount, boolean isMagic){
+    public void damage(Entity damaged, double amount, boolean isMagic){
         double effectiveHpDef = getHealth() * (1 + getDefence()/100);
         double effectiveHpRes = getHealth() * (1 + getMagicDefence()/100);
 

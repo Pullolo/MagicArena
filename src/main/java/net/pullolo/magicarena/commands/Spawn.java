@@ -2,6 +2,7 @@ package net.pullolo.magicarena.commands;
 
 import net.pullolo.magicarena.players.ArenaEntity;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -50,7 +51,7 @@ public class Spawn implements CommandExecutor, TabCompleter {
                     arenaEntities.put(e, new ArenaEntity(e, level, arenaPlayers.get(player).getGame(), dummy));
                 }
             } catch (Exception e){
-                sender.sendMessage("This mob doesn't exist!");
+                sender.sendMessage(ChatColor.RED + "This mob doesn't exist!");
             }
         }
         return true;

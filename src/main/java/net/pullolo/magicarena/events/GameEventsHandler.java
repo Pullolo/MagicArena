@@ -20,19 +20,6 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class GameEventsHandler implements Listener {
 
-    //todo remove this and make a cmd for spawning mobs
-    @EventHandler
-    public void onDummySpawn(PlayerCommandPreprocessEvent event){
-        if (!(event.getMessage().equalsIgnoreCase("/summon minecraft:creeper") && isPlayerInGame(event.getPlayer()))){
-            return;
-        }
-        Player p = event.getPlayer();
-        Creeper creeper = (Creeper) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.CREEPER);
-        creeper.setAI(false);
-        arenaEntities.put(creeper, new ArenaEntity(creeper, 1, arenaPlayers.get(p).getGame(), true));
-        event.setCancelled(true);
-    }
-
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
         if (arenaPlayers.containsKey(event.getPlayer())){

@@ -20,6 +20,7 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class GameEventsHandler implements Listener {
 
+    //todo remove this and make a cmd for spawning mobs
     @EventHandler
     public void onDummySpawn(PlayerCommandPreprocessEvent event){
         if (!(event.getMessage().equalsIgnoreCase("/summon minecraft:creeper") && isPlayerInGame(event.getPlayer()))){

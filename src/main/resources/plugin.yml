@@ -45,3 +45,7 @@ commands:
     usage: /<command>
     permission: ma.items
     description: Gives u custom items
+  spawn:
+    usage: /<command> <mob> <level> <?dummy>
+    permission: ma.spawn
+    description: Spawns a mob at ur location

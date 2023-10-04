@@ -93,6 +93,7 @@ public class PartyManager {
             p.sendMessage(ChatColor.RED + "[Party] You are already in a party!");
             return;
         }
+        partyInvites.remove(p);
         ArrayList<Player> party = partyInvites.get(p);
         addPlayerToParty(p, party);
         announceMessage(party, ChatColor.GREEN + "[Party] Player " + p.getDisplayName() + " has joined the party!");

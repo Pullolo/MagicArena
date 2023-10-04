@@ -35,6 +35,13 @@ public class QueueManager {
         if (queueType.equals(QueueType.SOLO)){
             playersInSoloQue.add(p);
             p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
+        } else if (queueType.equals(QueueType.DUO)) {
+            for (ArrayList<Player> party : playersInDuoQue){
+                if (party.size()<2){
+                    party.add(p);
+                    p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
+                }
+            }
         } else {
             p.sendMessage(ChatColor.RED + "This queue type is not available!");
             return;
@@ -42,7 +49,7 @@ public class QueueManager {
         tryStartMatch(queueType);
     }
 
-    public void addPartyToQueue(ArrayList<Player> party, QueueType queueType, boolean fill){
+    public void addPartyToQueue(ArrayList<Player> party, QueueType queueType){
         for (Player p: party){
             if (getPlayersInQueue().contains(p)){
                 for (Player pp : party){
@@ -51,8 +58,7 @@ public class QueueManager {
                 return;
             }
         }
-        //todo add fill option
-        if (!(party.size()==getQueueTypeAsInt(queueType))){
+        if (!(party.size()<=getQueueTypeAsInt(queueType))){
             for (Player p : party){
                 p.sendMessage(ChatColor.RED + "Could not enter Matchmaking due to invalid party size!");
             }
@@ -133,10 +139,14 @@ public class QueueManager {
                 gameManager.prepGame(player1, player2, queueType);
 
                 tryStartMatch(queueType);
+                return;
             }
         }
         if (queueType.equals(QueueType.DUO)){
             if (playersInDuoQue.size()>1){
+                if (playersInDuoQue.get(0).size()<2 && playersInDuoQue.get(1).size()<2){
+                    return;
+                }
                 ArrayList<Player> team1 = playersInDuoQue.get(0);
                 ArrayList<Player> team2 = playersInDuoQue.get(1);
                 ArrayList<Player> allPlayers = new ArrayList<>();
@@ -149,6 +159,7 @@ public class QueueManager {
                 gameManager.prepGame(team1, team2, queueType);
 
                 tryStartMatch(queueType);
+                return;
             }
         }
     }

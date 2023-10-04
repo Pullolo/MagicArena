@@ -74,7 +74,7 @@ public class GuiManager {
     public InventoryGui createGameSelectGui(Player player){
         String[] guiSetup = {
                 "         ",
-                " a b b b ",
+                " a b d d ",
                 "         "
         };
         InventoryGui gui = new InventoryGui(this.plugin, player, "Select Game", guiSetup);
@@ -88,7 +88,24 @@ public class GuiManager {
 
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay 1v1!")));
-        gui.addElement(new StaticGuiElement('b', new ItemStack (Material.BARRIER),
+        gui.addElement(new StaticGuiElement('b', new ItemStack (Material.COMPASS),
+                click -> {
+                    click.getGui().close();
+                    Player p = (Player) click.getWhoClicked();
+
+                    if (gameManager.getQueueManager().isPlayerInQueue(p)){
+                        if (partyManager.isPlayerInParty(p)){
+                            gameManager.getQueueManager().removePartyFromQueue(partyManager.getPlayersParty(p));
+                        } else gameManager.getQueueManager().removePlayerFromQueue(p);
+                    } else {
+                        if (partyManager.isPlayerInParty(p)){
+                            gameManager.getQueueManager().addPartyToQueue(partyManager.getPlayersParty(p), QueueManager.QueueType.DUO);
+                        } else gameManager.getQueueManager().addPlayerToQueue(p, QueueManager.QueueType.DUO);
+                    }
+
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay 2v2!")));
+        gui.addElement(new StaticGuiElement('d', new ItemStack (Material.BARRIER),
                 ChatColor.translateAlternateColorCodes('&', "&r&cComing Soon!")));
         return gui;
     }

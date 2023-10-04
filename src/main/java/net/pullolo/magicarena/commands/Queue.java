@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.pullolo.magicarena.MagicArena.gameManager;
+import static net.pullolo.magicarena.MagicArena.partyManager;
 
 public class Queue implements CommandExecutor, TabCompleter {
     @Override
@@ -42,6 +43,12 @@ public class Queue implements CommandExecutor, TabCompleter {
                 sender.sendMessage( ChatColor.GREEN + "Joining queue");
                 gameManager.getQueueManager().addPlayerToQueue((Player) sender, QueueManager.QueueType.SOLO);
             }
+            if (args[0].equalsIgnoreCase("duo")){
+                sender.sendMessage( ChatColor.GREEN + "Joining queue");
+                if (partyManager.isPlayerInParty((Player) sender)){
+                    gameManager.getQueueManager().addPartyToQueue(partyManager.getPlayersParty((Player) sender), QueueManager.QueueType.DUO);
+                } else gameManager.getQueueManager().addPlayerToQueue((Player) sender, QueueManager.QueueType.DUO);
+            }
             if (args[0].equalsIgnoreCase("leave")){
                 sender.sendMessage( ChatColor.GREEN + "Leaving queue");
                 gameManager.getQueueManager().removePlayerFromQueue((Player) sender);
@@ -60,6 +67,7 @@ public class Queue implements CommandExecutor, TabCompleter {
             addToCompletion("list", args[0], completion);
             if (sender instanceof Player){
                 addToCompletion("solo", args[0], completion);
+                addToCompletion("duo", args[0], completion);
                 addToCompletion("leave", args[0], completion);
             }
             return completion;

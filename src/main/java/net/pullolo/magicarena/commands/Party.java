@@ -98,6 +98,7 @@ public class Party implements CommandExecutor, TabCompleter {
                 }
                 return true;
             }
+        } else {
             if (args[0].equalsIgnoreCase("chat")){
                 partyManager.message(p, args[1]);
                 return true;

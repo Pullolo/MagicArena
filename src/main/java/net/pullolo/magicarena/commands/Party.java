@@ -69,6 +69,10 @@ public class Party implements CommandExecutor, TabCompleter {
                 partyManager.declineInvite(p);
                 return true;
             }
+            if (args[0].equalsIgnoreCase("disband")){
+                partyManager.disband(p);
+                return true;
+            }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("invite")){
                 try {
@@ -86,6 +90,18 @@ public class Party implements CommandExecutor, TabCompleter {
                 }
                 return true;
             }
+            if (args[0].equalsIgnoreCase("transfer")){
+                try {
+                    partyManager.transferOwnerShip(p, Bukkit.getPlayer(args[1]));
+                } catch (Exception e){
+                    sender.sendMessage(ChatColor.RED + "[Party] This player does not exist!");
+                }
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("chat")){
+                partyManager.message(p, args[1]);
+                return true;
+            }
         }
         return true;
     }
@@ -93,6 +109,9 @@ public class Party implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if (!cmd.getName().equalsIgnoreCase("party")){
+            return null;
+        }
+        if (!(sender instanceof Player)){
             return null;
         }
         if (args.length==1){
@@ -104,13 +123,25 @@ public class Party implements CommandExecutor, TabCompleter {
             addToCompletion("leave", args[0], completion);
             addToCompletion("kick", args[0], completion);
             addToCompletion("list", args[0], completion);
+            addToCompletion("transfer", args[0], completion);
+            addToCompletion("chat", args[0], completion);
+            addToCompletion("disband", args[0], completion);
             return completion;
         }
-        if (args.length==2 && (args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("kick"))){
+        if (args.length==2 && (args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("transfer"))){
+            boolean playersInParty = args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("transfer");
             List<String> completion = new ArrayList<>();
-            for (Player p : Bukkit.getOnlinePlayers()){
-                addToCompletion(p.getDisplayName(), args[1], completion);
+
+            if (playersInParty && partyManager.isPlayerInParty((Player) sender)){
+                for (Player p : partyManager.getPlayersParty((Player) sender)){
+                    addToCompletion(p.getDisplayName(), args[1], completion);
+                }
+            } else {
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    addToCompletion(p.getDisplayName(), args[1], completion);
+                }
             }
+
             return completion;
         }
         return new ArrayList<>();

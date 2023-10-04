@@ -22,6 +22,24 @@ public class PartyManager {
         announceMessage(newParty, ChatColor.GREEN + "[Party] Party successfully created!");
     }
 
+    public void disband(Player partyOwner){
+        if (!isPlayerInParty(partyOwner)){
+            partyOwner.sendMessage(ChatColor.RED + "[Party] You are not in a party!");
+            return;
+        }
+        ArrayList<Player> party = getPlayersParty(partyOwner);
+        //check if the owner is actually an owner
+        if (!party.get(0).equals(partyOwner)){
+            partyOwner.sendMessage(ChatColor.RED + "[Party] You don't own the party!");
+            return;
+        }
+        ArrayList<Player> toBeRemovedFromParty = new ArrayList<>(party);
+        for (Player p : toBeRemovedFromParty){
+            leaveParty(p);
+            p.sendMessage(ChatColor.RED + "[Party] The party has been disbanded!");
+        }
+    }
+
     public void addPlayerToParty(Player newPlayer, ArrayList<Player> party){
         if (!parties.contains(party)){
             throw new IllegalArgumentException("This party does not exist!");
@@ -123,6 +141,39 @@ public class PartyManager {
             return;
         }
         leaveParty(kicked);
+    }
+
+    public void message(Player p, String message){
+        if (!isPlayerInParty(p)){
+            p.sendMessage(ChatColor.RED + "[Party] You are not in a party!");
+            return;
+        }
+        ArrayList<Player> party = getPlayersParty(p);
+        announceMessage(party, ChatColor.GREEN + "[PartyChat] [" + ChatColor.WHITE +  p.getDisplayName() + ChatColor.GREEN + "] " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message));
+    }
+
+    public void transferOwnerShip(Player oldOwner, Player newOwner){
+        if (!isPlayerInParty(oldOwner)){
+            oldOwner.sendMessage(ChatColor.RED + "[Party] You are not in a party!");
+            return;
+        }
+        ArrayList<Player> party = getPlayersParty(oldOwner);
+        //check if the owner is actually an owner
+        if (!party.get(0).equals(oldOwner)){
+            oldOwner.sendMessage(ChatColor.RED + "[Party] You don't own the party!");
+            return;
+        }
+        if (!party.contains(oldOwner)){
+            oldOwner.sendMessage(ChatColor.RED + "[Party] The player you are trying to promote does not belong to this party!");
+            return;
+        }
+        ArrayList<Player> tempParty = new ArrayList<>(party);
+        tempParty.remove(newOwner);
+        party.clear();
+        party.add(newOwner);
+        party.addAll(tempParty);
+        oldOwner.sendMessage(ChatColor.RED + "[Party] You are no longer a party owner!");
+        newOwner.sendMessage(ChatColor.GREEN + "[Party] You are now a new party owner!");
     }
 
     public ArrayList<Player> getPlayersParty(Player p){

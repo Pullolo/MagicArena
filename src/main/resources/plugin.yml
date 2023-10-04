@@ -50,7 +50,7 @@ commands:
     permission: ma.spawn
     description: Spawns a mob at ur location
   party:
-    usage: /<command> <invite/join/decline/create/kick/leave> <player>
+    usage: /<command> <cmd> <player>
     description: Manage parties
     aliases:
       - p

@@ -171,7 +171,7 @@ public class QueueManager {
         }
         if (queueType.equals(QueueType.DUO)){
             if (playersInDuoQue.size()>1){
-                if (playersInDuoQue.get(0).size()<2 && playersInDuoQue.get(1).size()<2){
+                if (playersInDuoQue.get(0).size()<2 || playersInDuoQue.get(1).size()<2){
                     return;
                 }
                 ArrayList<Player> team1 = playersInDuoQue.get(0);

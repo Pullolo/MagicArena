@@ -179,6 +179,9 @@ public class QueueManager {
                 ArrayList<Player> allPlayers = new ArrayList<>();
                 allPlayers.addAll(team1);
                 allPlayers.addAll(team2);
+                playersInDuoQue.remove(team1);
+                playersInDuoQue.remove(team2);
+
                 for(Player p : allPlayers){
                     p.sendMessage( ChatColor.GREEN + "Starting match...");
                 }

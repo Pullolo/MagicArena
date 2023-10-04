@@ -40,7 +40,6 @@ public class QueueManager {
             for (ArrayList<Player> party : playersInDuoQue){
                 if (party.size()<2){
                     party.add(p);
-                    p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
                     found=true;
                 }
             }
@@ -49,6 +48,7 @@ public class QueueManager {
                 pl.add(p);
                 playersInDuoQue.add(pl);
             }
+            p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
         } else {
             p.sendMessage(ChatColor.RED + "This queue type is not available!");
             return;

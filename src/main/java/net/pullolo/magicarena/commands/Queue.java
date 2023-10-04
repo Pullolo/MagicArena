@@ -47,14 +47,14 @@ public class Queue implements CommandExecutor, TabCompleter {
             if (args[0].equalsIgnoreCase("duo")){
                 sender.sendMessage( ChatColor.GREEN + "Joining queue");
                 if (partyManager.isPartyOwner((Player) sender)){
-                    gameManager.getQueueManager().addPartyToQueue(partyManager.getPlayersParty((Player) sender), QueueManager.QueueType.DUO);
+                    gameManager.getQueueManager().addPartyToQueue(new ArrayList<>(partyManager.getPlayersParty((Player) sender)), QueueManager.QueueType.DUO);
                 } else if (!partyManager.isPlayerInParty((Player) sender)) gameManager.getQueueManager().addPlayerToQueue((Player) sender, QueueManager.QueueType.DUO);
                 else sender.sendMessage(ChatColor.RED + "Only the owner can start queue!");
             }
             if (args[0].equalsIgnoreCase("leave")){
                 sender.sendMessage( ChatColor.GREEN + "Leaving queue");
                 if (partyManager.isPartyOwner((Player) sender)){
-                    gameManager.getQueueManager().removePartyFromQueue(partyManager.getPlayersParty((Player) sender));
+                    gameManager.getQueueManager().removePartyFromQueue(new ArrayList<>(partyManager.getPlayersParty((Player) sender)));
                 } else if (!partyManager.isPlayerInParty((Player) sender)) gameManager.getQueueManager().removePlayerFromQueue((Player) sender);
                 else sender.sendMessage(ChatColor.RED + "Only the owner can leave queue!");
             }

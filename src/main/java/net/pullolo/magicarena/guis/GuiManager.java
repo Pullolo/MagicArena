@@ -97,12 +97,12 @@ public class GuiManager {
 
                     if (gameManager.getQueueManager().isPlayerInQueue(p)){
                         if (partyManager.isPartyOwner(p)){
-                            gameManager.getQueueManager().removePartyFromQueue(partyManager.getPlayersParty(p));
+                            gameManager.getQueueManager().removePartyFromQueue(new ArrayList<>(partyManager.getPlayersParty(p)));
                         } else if (!partyManager.isPlayerInParty(p)) gameManager.getQueueManager().removePlayerFromQueue(p);
                         else p.sendMessage(ChatColor.RED + "Only the owner can leave queue!");
                     } else {
                         if (partyManager.isPartyOwner(p)){
-                            gameManager.getQueueManager().addPartyToQueue(partyManager.getPlayersParty(p), QueueManager.QueueType.DUO);
+                            gameManager.getQueueManager().addPartyToQueue(new ArrayList<>(partyManager.getPlayersParty(p)), QueueManager.QueueType.DUO);
                         } else if (!partyManager.isPlayerInParty(p)) gameManager.getQueueManager().addPlayerToQueue(p, QueueManager.QueueType.DUO);
                         else p.sendMessage(ChatColor.RED + "Only the owner can start queue!");
                     }

@@ -195,6 +195,15 @@ public class PartyManager {
         return false;
     }
 
+    public boolean isPartyOwner(Player p){
+        if (!isPlayerInParty(p)){
+            return false;
+        }
+        ArrayList<Player> party = getPlayersParty(p);
+        //check if the owner is actually an owner
+        return party.get(0).equals(p);
+    }
+
     public void announceMessage(ArrayList<Player> players, String message){
         for (Player p : players){
             p.sendMessage(message);

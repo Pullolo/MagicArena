@@ -82,9 +82,11 @@ public class GuiManager {
         gui.addElement(new StaticGuiElement('a', new ItemStack (Material.COMPASS),
                 click -> {
                     click.getGui().close();
-                    if (gameManager.getQueueManager().isPlayerInQueue((Player) click.getWhoClicked())){
-                        gameManager.getQueueManager().removePlayerFromQueue((Player) click.getWhoClicked());
-                    } else gameManager.getQueueManager().addPlayerToQueue((Player) click.getWhoClicked(), QueueManager.QueueType.SOLO);
+                    if (!partyManager.isPlayerInParty((Player) click.getWhoClicked())){
+                        if (gameManager.getQueueManager().isPlayerInQueue((Player) click.getWhoClicked())){
+                            gameManager.getQueueManager().removePlayerFromQueue((Player) click.getWhoClicked());
+                        } else gameManager.getQueueManager().addPlayerToQueue((Player) click.getWhoClicked(), QueueManager.QueueType.SOLO);
+                    } else click.getWhoClicked().sendMessage(ChatColor.RED + "To queue first leave the party!");
 
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay 1v1!")));
@@ -94,13 +96,15 @@ public class GuiManager {
                     Player p = (Player) click.getWhoClicked();
 
                     if (gameManager.getQueueManager().isPlayerInQueue(p)){
-                        if (partyManager.isPlayerInParty(p)){
+                        if (partyManager.isPartyOwner(p)){
                             gameManager.getQueueManager().removePartyFromQueue(partyManager.getPlayersParty(p));
-                        } else gameManager.getQueueManager().removePlayerFromQueue(p);
+                        } else if (!partyManager.isPlayerInParty(p)) gameManager.getQueueManager().removePlayerFromQueue(p);
+                        else p.sendMessage(ChatColor.RED + "Only the owner can leave queue!");
                     } else {
-                        if (partyManager.isPlayerInParty(p)){
+                        if (partyManager.isPartyOwner(p)){
                             gameManager.getQueueManager().addPartyToQueue(partyManager.getPlayersParty(p), QueueManager.QueueType.DUO);
-                        } else gameManager.getQueueManager().addPlayerToQueue(p, QueueManager.QueueType.DUO);
+                        } else if (!partyManager.isPlayerInParty(p)) gameManager.getQueueManager().addPlayerToQueue(p, QueueManager.QueueType.DUO);
+                        else p.sendMessage(ChatColor.RED + "Only the owner can start queue!");
                     }
 
                     return true;

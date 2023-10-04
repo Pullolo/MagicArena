@@ -36,11 +36,18 @@ public class QueueManager {
             playersInSoloQue.add(p);
             p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
         } else if (queueType.equals(QueueType.DUO)) {
+            boolean found = false;
             for (ArrayList<Player> party : playersInDuoQue){
                 if (party.size()<2){
                     party.add(p);
                     p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
+                    found=true;
                 }
+            }
+            if (!found){
+                ArrayList<Player> pl = new ArrayList<>();
+                pl.add(p);
+                playersInDuoQue.add(pl);
             }
         } else {
             p.sendMessage(ChatColor.RED + "This queue type is not available!");
@@ -83,22 +90,42 @@ public class QueueManager {
     }
 
     public void removePartyFromQueue(ArrayList<Player> party){
+        ArrayList<ArrayList<Player>> toDelDuo = new ArrayList<>();
+        ArrayList<ArrayList<Player>> toDelTrio = new ArrayList<>();
+        ArrayList<ArrayList<Player>> toDelSquad = new ArrayList<>();
+        ArrayList<ArrayList<Player>> toDelTeam = new ArrayList<>();
         for (Player p: party){
             playersInSoloQue.remove(p);
             for (ArrayList<Player> players: playersInDuoQue){
                 players.remove(p);
+                if (players.size()<1){
+                    toDelDuo.add(players);
+                }
             }
             for (ArrayList<Player> players: playersInTrioQue){
                 players.remove(p);
+                if (players.size()<1){
+                    toDelTrio.add(players);
+                }
             }
             for (ArrayList<Player> players: playersInSquadQue){
                 players.remove(p);
+                if (players.size()<1){
+                    toDelSquad.add(players);
+                }
             }
             for (ArrayList<Player> players: playersInTeamQue){
                 players.remove(p);
+                if (players.size()<1){
+                    toDelTeam.add(players);
+                }
             }
             p.sendMessage(ChatColor.GREEN + "Your party was removed from queue!");
         }
+        playersInDuoQue.removeAll(toDelDuo);
+        playersInTrioQue.removeAll(toDelTrio);
+        playersInSquadQue.removeAll(toDelSquad);
+        playersInTeamQue.removeAll(toDelTeam);
     }
 
     public boolean isPlayerInQueue(Player p){

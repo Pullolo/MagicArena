@@ -40,6 +40,9 @@ public class GameCmd implements CommandExecutor, TabCompleter {
                     if (args[1].equalsIgnoreCase("solo")){
                         new Game(senderToArray, new ArrayList<>(), QueueManager.QueueType.SOLO, false, true);
                     }
+                    if (args[1].equalsIgnoreCase("duo")){
+                        new Game(senderToArray, new ArrayList<>(), QueueManager.QueueType.DUO, false, true);
+                    }
                 } catch (Exception e){
                     e.printStackTrace();
                     sender.sendMessage(ChatColor.RED + "An error occurred while creating a game!");

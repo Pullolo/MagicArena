@@ -100,7 +100,11 @@ public class Party implements CommandExecutor, TabCompleter {
             }
         } else {
             if (args[0].equalsIgnoreCase("chat")){
-                partyManager.message(p, args[1]);
+                String message = "";
+                for (int i = 1; i < args.length; i++){
+                    message+=args[i]+" ";
+                }
+                partyManager.message(p, message);
                 return true;
             }
         }

@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.*;
 
 import static net.pullolo.magicarena.MagicArena.mainWorld;
+import static net.pullolo.magicarena.MagicArena.partyManager;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
@@ -22,6 +23,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
+        partyManager.leaveParty(event.getPlayer());
         if (arenaPlayers.containsKey(event.getPlayer())){
             arenaPlayers.get(event.getPlayer()).getGame().broadcast("[Arena] Player " + event.getPlayer().getDisplayName() + " has left the game!");
             arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());

@@ -49,3 +49,8 @@ commands:
     usage: /<command> <mob> <level> <?dummy>
     permission: ma.spawn
     description: Spawns a mob at ur location
+  party:
+    usage: /<command> <invite/join/decline/create/kick/leave> <player>
+    description: Manage parties
+    aliases:
+      - p

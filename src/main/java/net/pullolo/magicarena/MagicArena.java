@@ -10,6 +10,7 @@ import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
+import net.pullolo.magicarena.players.PartyManager;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -37,6 +38,7 @@ public final class MagicArena extends JavaPlugin {
     private static final String prefix = "[MagicArena] ";
     public static String mainWorld;
     public static GameManager gameManager;
+    public static PartyManager partyManager;
     public static DbManager dbManager = new DbManager();
     public static JavaPlugin plugin;
 
@@ -47,6 +49,7 @@ public final class MagicArena extends JavaPlugin {
         dbManager.init();
         ItemsDefinitions.init();
         checkDb();
+        partyManager = new PartyManager();
         gameManager = new GameManager();
         GuiManager guiManager = new GuiManager(this);
         AnimationManager animationManager = new AnimationManager(this, guiManager);
@@ -67,6 +70,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new GameCmd(), "game");
         registerCommand(new GiveItem(), "giveitem");
         registerCommand(new Spawn(), "spawn");
+        registerCommand(new Party(), "party");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);

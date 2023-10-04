@@ -54,7 +54,7 @@ public class PartyManager {
             return;
         }
         partyInvites.put(invited, party);
-        announceMessage(party, ChatColor.GREEN + "[Party] Player " + invited + " has been invited to join this party!");
+        announceMessage(party, ChatColor.GREEN + "[Party] Player " + invited.getDisplayName() + " has been invited to join this party!");
         invited.sendMessage(ChatColor.GREEN + "[Party] You have been invited to join " + partyOwner.getDisplayName() + "'s party! (You have 60s to accept)");
         new BukkitRunnable() {
             @Override

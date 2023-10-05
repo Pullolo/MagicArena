@@ -2,6 +2,7 @@ package net.pullolo.magicarena.wish;
 
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomUncommonWeapon;
 
 public class WishSystem {
 
@@ -96,27 +98,54 @@ public class WishSystem {
         //todo add a proper wishing system (getItem(itemClass, rarity))
 
         if (wishType == WishType.WEAPON_WISH){
-            finalItem = new ItemStack(Material.NETHERITE_SWORD);
-        } else finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
-        ItemMeta im = finalItem.getItemMeta();
+            if (wishRarity.equals(WishRarity.UNCOMMON)){
+                finalItem = new Item(getRandomUncommonWeapon(itemClass), stars, q).getItem();
+            } else {
+                finalItem = new ItemStack(Material.NETHERITE_SWORD);
+                ItemMeta im = finalItem.getItemMeta();
 
-        //todo temp
-        if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
-            im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
-        }
+                //todo temp
+                if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
+                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
+                }
 
-        im.setDisplayName(im.getDisplayName() + starsStr);
+                im.setDisplayName(im.getDisplayName() + starsStr);
 
-        List<String> lore;
-        if (finalItem.getItemMeta().getLore()==null){
-            lore = new ArrayList<>();
+                List<String> lore;
+                if (finalItem.getItemMeta().getLore()==null){
+                    lore = new ArrayList<>();
+                } else {
+                    //todo possibly move it 2nd to last
+                    lore = finalItem.getItemMeta().getLore();
+                }
+                lore.add(ChatColor.translateAlternateColorCodes('&', quality));
+                im.setLore(lore);
+                finalItem.setItemMeta(im);
+            }
+
         } else {
-            //todo possibly move it 2nd to last
-            lore = finalItem.getItemMeta().getLore();
+            finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
+            ItemMeta im = finalItem.getItemMeta();
+
+            //todo temp
+            if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
+                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
+            }
+
+            im.setDisplayName(im.getDisplayName() + starsStr);
+
+            List<String> lore;
+            if (finalItem.getItemMeta().getLore()==null){
+                lore = new ArrayList<>();
+            } else {
+                //todo possibly move it 2nd to last
+                lore = finalItem.getItemMeta().getLore();
+            }
+            lore.add(ChatColor.translateAlternateColorCodes('&', quality));
+            im.setLore(lore);
+            finalItem.setItemMeta(im);
         }
-        lore.add(ChatColor.translateAlternateColorCodes('&', quality));
-        im.setLore(lore);
-        finalItem.setItemMeta(im);
+
 
         anims.playWishAnim(player, wishRarity, wishType, stars, itemClass, finalItem, 10);
         return true;

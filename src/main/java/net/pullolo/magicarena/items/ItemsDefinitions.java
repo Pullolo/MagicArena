@@ -1,15 +1,16 @@
 package net.pullolo.magicarena.items;
 
 import dev.dbassett.skullcreator.SkullCreator;
-import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import net.pullolo.magicarena.items.ItemClass;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
 
@@ -17,11 +18,26 @@ public class ItemsDefinitions {
 
     public static Item testItem;
     public static Item basicSword;
+    public static Item stoneStick;
     public static final ArrayList<String> itemIds = new ArrayList<>();
 
     public static void init(){
         createTestItem();
         createBasicSword();
+        createStoneStick();
+    }
+
+    private static void createStoneStick(){
+        String name = "&aStone Stick";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+16");
+        lore.add("");
+        lore.add("&a&lUNCOMMON SWORD");
+        lore.add("&8item_id:stone_stick");
+        ItemStack item = createItem(Material.STONE_SWORD, name, lore);
+        stoneStick = new Item(item);
+        itemIds.add("stone_stick");
     }
 
     private static void createBasicSword(){
@@ -73,6 +89,22 @@ public class ItemsDefinitions {
         item.setItemMeta(meta);
 
         return item;
+    }
+
+    public static Item getRandomUncommonWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(2)+1; //1-1 range
+        switch (r){
+            case 1:
+                return basicSword;
+            case 2:
+                return stoneStick;
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
     }
 
     private static ItemStack getSkull(String base64) {

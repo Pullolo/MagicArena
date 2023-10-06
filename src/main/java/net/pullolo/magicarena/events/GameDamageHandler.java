@@ -3,6 +3,7 @@ package net.pullolo.magicarena.events;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.players.ArenaPlayer;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -192,6 +193,8 @@ public class GameDamageHandler implements Listener {
             arenaPlayers.get(damager).setHealth(arenaPlayers.get(damager).getHealth()+2);
             damager.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, damager.getLocation().add(0, 1, 0), 20, 0.2, 0.6, 0.2, 1);
             ((Player) damager).playSound(damager, Sound.ENTITY_PLAYER_LEVELUP, 1, (1 + ((float) new Random().nextInt(2))/10));
+            //easter egg
+            if(((Player) damager).getDisplayName().equalsIgnoreCase("yaemikujo") && new Random().nextInt(50)==0) damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cKocham cię Słonko &7<&cod &aMikołaja&c <3&7>"));
         }
         Double itemDamage = playersItem.getDamage();
         double playerDamage = arenaPlayers.get(damager).getDamage();

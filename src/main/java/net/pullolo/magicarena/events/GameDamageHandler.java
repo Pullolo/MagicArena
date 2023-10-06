@@ -4,6 +4,8 @@ import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import org.bukkit.GameMode;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+
+import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
@@ -175,7 +179,6 @@ public class GameDamageHandler implements Listener {
 
 
     private double calculateDamage(double eventDamage, Entity damager, Entity damaged){
-        //todo add scaling for weapons and stuff
         if (!(damager instanceof Player)){
             double entityDamage = arenaEntities.get(damager).getDamage();
             return entityDamage/1.3;
@@ -183,7 +186,14 @@ public class GameDamageHandler implements Listener {
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null){
             return arenaPlayers.get(damager).getDamage()/1.3;
         }
-        Double itemDamage = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getDamage();
+        //todo add scaling for weapons and stuff
+        Item playersItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
+        if (playersItem.getItemId().equalsIgnoreCase("leeching_staff")){
+            arenaPlayers.get(damager).setHealth(arenaPlayers.get(damager).getHealth()+2);
+            damager.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, damager.getLocation().add(0, 1, 0), 20, 0.2, 0.6, 0.2, 1);
+            ((Player) damager).playSound(damager, Sound.ENTITY_PLAYER_LEVELUP, 1, (1 + ((float) new Random().nextInt(2))/10));
+        }
+        Double itemDamage = playersItem.getDamage();
         double playerDamage = arenaPlayers.get(damager).getDamage();
 
         return playerDamage/1.3 * itemDamage/2;
@@ -197,6 +207,7 @@ public class GameDamageHandler implements Listener {
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null){
             return arenaPlayers.get(damager).getDamage()/1.3;
         }
+        //todo add scaling for weapons and stuff
         Double itemDamage = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getDamage();
         double playerDamage = arenaPlayers.get(damager).getDamage();
 

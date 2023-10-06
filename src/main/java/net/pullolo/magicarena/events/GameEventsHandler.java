@@ -1,6 +1,7 @@
 package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.MagicArena;
+import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -11,15 +12,34 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.*;
 
 import static net.pullolo.magicarena.MagicArena.mainWorld;
 import static net.pullolo.magicarena.MagicArena.partyManager;
+import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class GameEventsHandler implements Listener {
+
+    @EventHandler
+    public void onPlayerBow(EntityShootBowEvent event){
+        if (event.getConsumable()==null){
+            return;
+        }
+        if (event.getConsumable().getItemMeta()==null){
+            return;
+        }
+        if (!(event.getEntity() instanceof Player)){
+            return;
+        }
+        if (itemIds.contains(new Item(event.getConsumable()).getItemId())){
+            event.setCancelled(true);
+            return;
+        }
+    }
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){

@@ -2,11 +2,13 @@ package net.pullolo.magicarena.items;
 
 import dev.dbassett.skullcreator.SkullCreator;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import net.pullolo.magicarena.items.ItemClass;
+import org.bukkit.inventory.meta.PotionMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +21,34 @@ public class ItemsDefinitions {
     public static Item testItem;
     public static Item basicSword;
     public static Item stoneStick;
+    public static Item leechingStaff;
     public static final ArrayList<String> itemIds = new ArrayList<>();
 
     public static void init(){
         createTestItem();
         createBasicSword();
         createStoneStick();
+        createLeechingStaff();
+    }
+
+    private static void createLeechingStaff(){
+        String name = "&aLeeching Staff";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+9");
+        lore.add("");
+        lore.add("&6Item Ability: Druid Leech &eON HIT");
+        lore.add("&7Heals you for &a2 &7health on hit.");
+        lore.add("");
+        lore.add("&a&lUNCOMMON SWORD");
+        lore.add("&8item_id:leeching_staff");
+        ItemStack item = createItem(Material.TIPPED_ARROW, name, lore);
+        PotionMeta im = (PotionMeta) item.getItemMeta();
+        im.clearCustomEffects();
+        im.setColor(Color.LIME);
+        item.setItemMeta(im);
+        leechingStaff = new Item(item);
+        itemIds.add("leeching_staff");
     }
 
     private static void createStoneStick(){

@@ -51,6 +51,13 @@ public class GiveItem implements CommandExecutor, TabCompleter {
                 ((Player) sender).getInventory().addItem(new Item(stoneStick, 0, 0).getItem());
             } else ((Player) sender).getInventory().addItem(stoneStick.getItem());
         }
+        if (args[0].equalsIgnoreCase("leeching_staff")){
+            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
+                ((Player) sender).getInventory().addItem(new Item(leechingStaff, 5, 100).getItem());
+            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
+                ((Player) sender).getInventory().addItem(new Item(leechingStaff, 0, 0).getItem());
+            } else ((Player) sender).getInventory().addItem(leechingStaff.getItem());
+        }
         return true;
     }
 
@@ -72,6 +79,7 @@ public class GiveItem implements CommandExecutor, TabCompleter {
             addToCompletion("test_item", args[0], completion);
             addToCompletion("basic_sword", args[0], completion);
             addToCompletion("stone_stick", args[0], completion);
+            addToCompletion("leeching_staff", args[0], completion);
             return completion;
         }
         if (args.length==2){

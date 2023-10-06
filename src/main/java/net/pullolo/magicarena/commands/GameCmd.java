@@ -75,7 +75,7 @@ public class GameCmd implements CommandExecutor, TabCompleter {
         } else if (args.length==2 && args[0].equalsIgnoreCase("start")){
             ArrayList<String> completion = new ArrayList<>();
             addToCompletion("solo", args[1], completion);
-//            addToCompletion("duo", args[1], completion);
+            addToCompletion("duo", args[1], completion);
             return completion;
         }
         return null;

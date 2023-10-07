@@ -55,8 +55,8 @@ public class ItemsDefinitions {
         List<String> lore = new ArrayList<>();
 
         lore.add("&7Damage: &c+1");
-        lore.add("&7Intelligence: &b+20");
         lore.add("&7Ability Damage: &3+30");
+        lore.add("&7Intelligence: &b+20");
         lore.add("");
         lore.add("&6Ability: Magic Missile &eRIGHT CLICK");
         lore.add("&7Fires a magic missile dealing &3110%");

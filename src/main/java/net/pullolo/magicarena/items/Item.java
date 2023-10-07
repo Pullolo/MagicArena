@@ -218,6 +218,28 @@ public class Item {
             bonusDamage+=2;  //amount per star todo balance
         }
 
+        if (this.damage == 1){
+            ItemMeta meta = item.getItemMeta();
+            List<String> newLore = new ArrayList<>();
+            List<String> lore = meta.getLore();
+            for (String s: lore){
+                if (s.contains("§7Ability Damage: ")){
+                    String f;
+                    if ((this.abilityPower+bonusDamage)>=0){
+                        f = s.split(":")[0]+": §3+"+((int) (this.abilityPower+bonusDamage));
+                    } else {
+                        f = s.split(":")[0]+": §3-"+((int) (this.abilityPower+bonusDamage));
+                    }
+                    newLore.add(f);
+                    continue;
+                }
+                newLore.add(s);
+            }
+            meta.setLore(newLore);
+            item.setItemMeta(meta);
+            return;
+        }
+
         if (this.damage+bonusDamage<1){
             bonusDamage= (int) (-(this.damage)+1);
         }

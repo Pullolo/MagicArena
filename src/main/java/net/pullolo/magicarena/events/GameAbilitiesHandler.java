@@ -128,7 +128,7 @@ public class GameAbilitiesHandler implements Listener {
 
                     return;
                 } else p.sendMessage(ChatColor.RED + "You dont have enough Mana!");
-            } p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("UT", p)/100)/10 + "s.");
+            } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("UT", p)/100)/10 + "s.");
         }
     }
 

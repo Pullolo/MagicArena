@@ -79,12 +79,15 @@ public class MainMenuItemManager implements Listener {
     }
 
     private void setItem(Player player){
-        if (player.getInventory().getItem(8)==null || !player.getInventory().getItem(8).equals(getMainMenuItem())) {
-            if (!player.getInventory().getItem(8).equals(getMainMenuItem())){
-                ItemStack prevItem = player.getInventory().getItem(8);
-                player.getInventory().setItem(8, getMainMenuItem());
-                player.getInventory().addItem(prevItem);
-            } else player.getInventory().setItem(8, getMainMenuItem());
+        if (player.getInventory().getItem(8)==null) {
+            player.getInventory().setItem(8, getMainMenuItem());
+            return;
+        }
+        if (!player.getInventory().getItem(8).equals(getMainMenuItem())){
+            ItemStack prevItem = player.getInventory().getItem(8);
+            player.getInventory().setItem(8, getMainMenuItem());
+            player.getInventory().addItem(prevItem);
+            return;
         }
     }
 

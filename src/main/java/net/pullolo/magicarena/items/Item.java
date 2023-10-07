@@ -218,6 +218,10 @@ public class Item {
             bonusDamage+=2;  //amount per star todo balance
         }
 
+        if (this.damage+bonusDamage<1){
+            bonusDamage= (int) (-(this.damage)+1);
+        }
+
         ItemMeta meta = item.getItemMeta();
         List<String> newLore = new ArrayList<>();
         List<String> lore = meta.getLore();
@@ -234,7 +238,6 @@ public class Item {
             }
             newLore.add(s);
         }
-        this.damage+=bonusDamage;
         meta.setLore(newLore);
         item.setItemMeta(meta);
     }

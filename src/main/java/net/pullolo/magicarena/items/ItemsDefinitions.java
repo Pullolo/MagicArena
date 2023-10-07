@@ -21,7 +21,10 @@ public class ItemsDefinitions {
     public static Item testItem;
     public static Item basicSword;
     public static Item stoneStick;
-    public static Item leechingStaff;
+    public static Item leechingStaff; //healer
+    public static Item solidStoneAxe; //tank
+    public static Item unstableTome; //dps
+    public static Item longBow; //archer
     public static final ArrayList<String> itemIds = new ArrayList<>();
 
     public static void init(){
@@ -29,6 +32,56 @@ public class ItemsDefinitions {
         createBasicSword();
         createStoneStick();
         createLeechingStaff();
+        createSolidStoneAxe();
+        createUnstableTome();
+        createLongBow();
+    }
+
+    private static void createLongBow(){
+        String name = "&aLong Bow";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+15");
+        lore.add("");
+        lore.add("&a&lUNCOMMON BOW");
+        lore.add("&8item_id:long_bow");
+        ItemStack item = createItem(Material.BOW, name, lore);
+        longBow = new Item(item);
+        itemIds.add("long_bow");
+    }
+
+    private static void createUnstableTome(){
+        String name = "&aUnstable Tome";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+1");
+        lore.add("&7Intelligence: &b+20");
+        lore.add("&7Ability Damage: &3+30");
+        lore.add("");
+        lore.add("&6Ability: Magic Missile &eRIGHT CLICK");
+        lore.add("&7Fires a magic missile dealing &3110%");
+        lore.add("&7your ability damage.");
+        lore.add("");
+        lore.add("&a&lUNCOMMON BOOK");
+        lore.add("&8item_id:unstable_tome");
+        ItemStack item = createItem(Material.BOOK, name, lore);
+        unstableTome = new Item(item);
+        itemIds.add("unstable_tome");
+    }
+
+    private static void createSolidStoneAxe(){
+        String name = "&aLeeching Staff";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+12");
+        lore.add("&7Health: &4+50");
+        lore.add("&7Defence: &a+15");
+        lore.add("");
+        lore.add("&a&lUNCOMMON AXE");
+        lore.add("&8item_id:solid_stone_axe");
+        ItemStack item = createItem(Material.STONE_AXE, name, lore);
+        solidStoneAxe = new Item(item);
+        itemIds.add("solid_stone_axe");
     }
 
     private static void createLeechingStaff(){
@@ -116,12 +169,23 @@ public class ItemsDefinitions {
     }
 
     public static Item getRandomUncommonWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(2)+1; //1-1 range
+        int r = new Random().nextInt(3)+1; //1-1 range
         switch (r){
             case 1:
                 return basicSword;
             case 2:
                 return stoneStick;
+            case 3:
+                switch (itemClass){
+                    case DPS:
+                        return unstableTome;
+                    case HEALER:
+                        return leechingStaff;
+                    case ARCHER:
+                        return longBow;
+                    case TANK:
+                        return solidStoneAxe;
+                }
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

@@ -70,7 +70,7 @@ public class ItemsDefinitions {
     }
 
     private static void createSolidStoneAxe(){
-        String name = "&aLeeching Staff";
+        String name = "&aSolid Stone Axe";
         List<String> lore = new ArrayList<>();
 
         lore.add("&7Damage: &c+12");

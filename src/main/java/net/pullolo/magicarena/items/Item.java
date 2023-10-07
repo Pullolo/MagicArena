@@ -10,7 +10,7 @@ import java.util.List;
 public class Item {
 
     private final ItemStack item;
-    private String itemId;
+    private String itemId = "NULL";
     private int stars;
     private double quality;
 

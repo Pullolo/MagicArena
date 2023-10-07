@@ -61,6 +61,8 @@ public class ItemsDefinitions {
         lore.add("&6Ability: Magic Missile &eRIGHT CLICK");
         lore.add("&7Fires a magic missile dealing &3110%");
         lore.add("&7your ability damage.");
+        lore.add("&8Mana Cost: &330");
+        lore.add("&8Cooldown: &a1.5s");
         lore.add("");
         lore.add("&a&lUNCOMMON BOOK");
         lore.add("&8item_id:unstable_tome");

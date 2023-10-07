@@ -10,6 +10,7 @@ import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
+import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.players.PartyManager;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
@@ -58,6 +59,7 @@ public final class MagicArena extends JavaPlugin {
         WorldManager.init(this);
         config = getConfig();
         setMainWorld();
+        createCooldowns();
         registerCommand(new CreateWorld(), "createworld");
         registerCommand(new DeleteWorld(), "deleteworld");
         registerCommand(new CopyWorld(), "copyworld");
@@ -98,6 +100,10 @@ public final class MagicArena extends JavaPlugin {
                 log.info(prefix + "Loaded world " + s);
             }
         }
+    }
+
+    private void createCooldowns(){
+        CooldownApi.createCooldown("UT", 1.5);
     }
 
     private void registerCommand(Object cmd, String cmdName){

@@ -10,6 +10,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -113,7 +114,18 @@ public class Game {
                         float speed = (float) (arenaPlayers.get(p).getSpeed()/500);
                         p.setWalkSpeed(speed);
                         if (arenaPlayers.get(p).getHealth()<=0 || p.getLocation().getY() < -96){
-                            playerDied(p);
+                            //totem check
+                            if (p.getInventory().getItemInMainHand().getItemMeta()!=null && p.getInventory().getItemInMainHand().getType().equals(Material.TOTEM_OF_UNDYING) && arenaPlayers.get(p).getHealth()<=0){
+                                p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                                arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getMaxHealth()/20);
+                                p.getWorld().spawnParticle(Particle.TOTEM, p.getLocation().add(0, 1, 0), 100, 0.1, 0, 0.1, 1);
+                                p.getWorld().playSound(p.getLocation(), Sound.ITEM_TOTEM_USE, 1, 1);
+                            } else if (p.getInventory().getItemInOffHand().getItemMeta()!=null && p.getInventory().getItemInOffHand().getType().equals(Material.TOTEM_OF_UNDYING) && arenaPlayers.get(p).getHealth()<=0) {
+                                p.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+                                arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getMaxHealth()/20);
+                                p.getWorld().spawnParticle(Particle.TOTEM, p.getLocation().add(0, 1, 0), 100, 0.1, 0, 0.1, 1);
+                                p.getWorld().playSound(p.getLocation(), Sound.ITEM_TOTEM_USE, 1, 1);
+                            } else playerDied(p);
                         } else {
                             arenaPlayers.get(p).updateStats();
 

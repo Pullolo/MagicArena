@@ -1,9 +1,9 @@
 package net.pullolo.magicarena.players;
 
+import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 

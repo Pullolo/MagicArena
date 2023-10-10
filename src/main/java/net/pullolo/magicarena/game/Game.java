@@ -20,23 +20,24 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.MagicArena.mainWorld;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static org.bukkit.Bukkit.getServer;
 
-public class Game {
+public abstract class Game {
 
-    private final ArrayList<Player> allPlayers;
-    private final ArrayList<Entity> allEntities = new ArrayList<>();
-    private final ArrayList<Player> team1;
-    private final ArrayList<Player> team2;
+    private ArrayList<Player> allPlayers;
+    private ArrayList<Entity> allEntities = new ArrayList<>();
+    private ArrayList<Player> team1;
+    private ArrayList<Player> team2;
 
-    private final BukkitRunnable startC;
-    private final BukkitRunnable gameC;
-    private final BukkitRunnable gameCS;
-    private final World world;
+    private BukkitRunnable startC;
+    private BukkitRunnable gameC;
+    private BukkitRunnable gameCS;
+    private World world;
 
-    public Game(ArrayList<Player> team1, ArrayList<Player> team2, QueueManager.QueueType gameType, boolean ranked, boolean test){
+    public World createWorld(){
         String arenaName = pickRandomArena().split("_")[1];
         String newArenaName = arenaName;
         while (doesArenaExist(newArenaName)){
@@ -44,67 +45,9 @@ public class Game {
         }
         WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + newArenaName);
         WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false); //this results in saved name being temp_ the temp param cant be true
-        World arena = Bukkit.getWorld("temp_" + newArenaName);
-        this.world=arena;
-        ArrayList<Player> allPlayers = new ArrayList<>();
-        allPlayers.addAll(team1);
-        allPlayers.addAll(team2);
-        this.team1 = team1;
-        this.team2 = team2;
-        this.allPlayers = allPlayers;
-        for (Player p: team1){
-            Location loc = new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), config.getDouble("arenas-spawn-z"));
-            loc.setDirection(loc.getDirection().multiply(-1));
-            p.teleport(loc);
-        }
-        for (Player p: team2){
-            p.teleport(new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), -config.getDouble("arenas-spawn-z")));
-        }
-        for (Player p : allPlayers){
-            new ArenaPlayer(p, 1, this);
-            p.setGameMode(GameMode.SURVIVAL);
-            if (test){
-                p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");
-            }
-            p.sendMessage(ChatColor.GREEN + "Entered Game!");
-            p.sendMessage(ChatColor.GREEN + "Match Starting in 20s...");
-        }
-        BukkitRunnable startClock = new BukkitRunnable() {
-            int i = 20*20;
-            @Override
-            public void run() {
-                i--;
-                for (Player p : team1){
-                    if (p!=null && p.getLocation().getZ()<config.getDouble("arenas-spawn-z")-1){
-                        Location loc = new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), config.getDouble("arenas-spawn-z"));
-                        loc.setDirection(loc.getDirection().multiply(-1));
-                        p.teleport(loc);
-                    }
-                }
-                for (Player p : team2){
-                    if (p!=null && p.getLocation().getZ()>-config.getDouble("arenas-spawn-z")+2){
-                        p.teleport(new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), -config.getDouble("arenas-spawn-z")));
-                    }
-                }
-                if (i<5*20 && i%20==0){
-                    for (Player p : allPlayers){
-                        if (p!=null){
-                            p.sendMessage(ChatColor.GREEN + "Starting in " + i/20);
-                        }
-                    }
-                }
-                if (i<1){
-                    for (Player p : allPlayers){
-                        if (p!=null){
-                            p.sendMessage(ChatColor.GREEN + "Game started!");
-                        }
-                    }
-                    this.cancel();
-                }
-            }
-        };
-        startClock.runTaskTimer(MagicArena.plugin, 0, 1);
-        this.startC = startClock;
+        return Bukkit.getWorld("temp_" + newArenaName);
+    }
+    public void startNecessaryClocks(boolean test, QueueManager.QueueType gameType, World arena){
         BukkitRunnable gameClock1t = new BukkitRunnable() {
             @Override
             public void run() {
@@ -201,21 +144,21 @@ public class Game {
 
                 if (!test){
                     if (!isTeamAlive(team1) && isTeamAlive(team2)){
-                        startClock.cancel();
+                        if (startC!=null) startC.cancel();
                         gameClock1t.cancel();
                         finishGame(team2, team1, allPlayers, gameType, arena);
                         cancel();
                         return;
                     }
                     if (isTeamAlive(team1) && !isTeamAlive(team2)){
-                        startClock.cancel();
+                        if (startC!=null) startC.cancel();
                         gameClock1t.cancel();
                         finishGame(team1, team2, allPlayers, gameType, arena);
                         cancel();
                         return;
                     }
                     if (!isTeamAlive(team1) && !isTeamAlive(team2)){
-                        startClock.cancel();
+                        if (startC!=null) startC.cancel();
                         gameClock1t.cancel();
                         finishGame(null, null, allPlayers, gameType, arena);
                         cancel();
@@ -294,7 +237,7 @@ public class Game {
     }
 
     public void forceEndGame(){
-        startC.cancel();
+        if (startC!=null) startC.cancel();
         gameC.cancel();
         gameCS.cancel();
         removeAllEntitiesFromGame();
@@ -326,9 +269,7 @@ public class Game {
         return false;
     }
 
-    public String pickRandomArena(){
-        return WorldManager.getArenas().get(new Random().nextInt(WorldManager.getArenas().size()));
-    }
+    public abstract String pickRandomArena();
 
     public void playerDied(Player p){
         p.sendMessage(ChatColor.RED + "[Arena] You died!");
@@ -480,5 +421,25 @@ public class Game {
     }
     public void removeEntity(Entity e){
         allEntities.remove(e);
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public void setTeam1(ArrayList<Player> team1) {
+        this.team1 = team1;
+    }
+
+    public void setTeam2(ArrayList<Player> team2) {
+        this.team2 = team2;
+    }
+
+    public void setAllPlayers(ArrayList<Player> allPlayers) {
+        this.allPlayers = allPlayers;
+    }
+
+    public void setStartC(BukkitRunnable startC) {
+        this.startC = startC;
     }
 }

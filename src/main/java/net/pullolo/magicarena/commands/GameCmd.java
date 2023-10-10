@@ -1,6 +1,6 @@
 package net.pullolo.magicarena.commands;
 
-import net.pullolo.magicarena.game.Game;
+import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.QueueManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -38,10 +38,10 @@ public class GameCmd implements CommandExecutor, TabCompleter {
                 senderToArray.add((Player) sender);
                 try {
                     if (args[1].equalsIgnoreCase("solo")){
-                        new Game(senderToArray, new ArrayList<>(), QueueManager.QueueType.SOLO, false, true);
+                        new ArenaGame(senderToArray, new ArrayList<>(), QueueManager.QueueType.SOLO, false, true);
                     }
                     if (args[1].equalsIgnoreCase("duo")){
-                        new Game(senderToArray, new ArrayList<>(), QueueManager.QueueType.DUO, false, true);
+                        new ArenaGame(senderToArray, new ArrayList<>(), QueueManager.QueueType.DUO, false, true);
                     }
                 } catch (Exception e){
                     e.printStackTrace();

@@ -36,6 +36,6 @@ public class GameManager {
         for (Player p : team2){
             p.sendMessage(ChatColor.GREEN + "Match Started Successfully!");
         }
-        new Game(team1, team2, gameType, false, false);
+        new ArenaGame(team1, team2, gameType, false, false);
     }
 }

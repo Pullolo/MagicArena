@@ -56,7 +56,8 @@ public class GameEventsHandler implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         if (event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
-            event.getPlayer().setGameMode(GameMode.SURVIVAL);
+            if (event.getPlayer().isOp()) event.getPlayer().setGameMode(GameMode.CREATIVE);
+            else event.getPlayer().setGameMode(GameMode.SURVIVAL);
         }
         if (event.getPlayer().getWorld().getName().regionMatches(0, "temp_", 0, 5)){
             event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());

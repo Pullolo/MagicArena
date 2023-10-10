@@ -227,7 +227,8 @@ public abstract class Game {
                     if (p!=null){
                         p.sendMessage(ChatColor.GREEN + "You have been warped!");
                         p.teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
-                        p.setGameMode(GameMode.SURVIVAL);
+                        if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
+                        else p.setGameMode(GameMode.SURVIVAL);
                         p.setHealth(p.getMaxHealth());
                     }
                 }
@@ -251,7 +252,8 @@ public abstract class Game {
             if (p!=null){
                 p.sendMessage(ChatColor.GREEN + "You have been warped!");
                 p.teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
-                p.setGameMode(GameMode.SURVIVAL);
+                if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
+                else p.setGameMode(GameMode.SURVIVAL);
                 p.setHealth(p.getMaxHealth());
             }
         }

@@ -87,7 +87,7 @@ public class GameAbilitiesHandler implements Listener {
                                         if (!entity.equals(p)){
                                             if (entity instanceof Damageable){
                                                 if (entity instanceof Player){
-                                                    if (isKillable((Player) entity)){
+                                                    if (isKillable(p ,(Player) entity)){
                                                         arenaPlayers.get(entity).damage(p, entity, arenaPlayers.get(p).getMagicDamage()*1.1, true);
                                                         ((Damageable) entity).damage(0.01, p);
                                                     }
@@ -139,11 +139,14 @@ public class GameAbilitiesHandler implements Listener {
         return mana;
     }
 
-    private boolean isKillable(Player player){
-        if (!isPlayerInGame(player)){
+    private boolean isKillable(Player damager, Player damaged){
+        if (!isPlayerInGame(damaged)){
             return false;
         }
-        if (player.getGameMode().equals(GameMode.CREATIVE)){
+        if (damaged.getGameMode().equals(GameMode.CREATIVE)){
+            return false;
+        }
+        if (arenaPlayers.get(damager).getGame().getAllPlayersInPlayersTeam(damager).contains(damaged)){
             return false;
         }
         return true;

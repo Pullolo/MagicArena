@@ -34,7 +34,7 @@ public class QueueManager {
         }
         if (queueType.equals(QueueType.SOLO)){
             playersInSoloQue.add(p);
-            p.sendMessage(ChatColor.GREEN + "You have benn added to queue!");
+            p.sendMessage(ChatColor.GREEN + "You have been added to queue!");
         } else if (queueType.equals(QueueType.DUO)) {
             boolean found = false;
             for (ArrayList<Player> party : playersInDuoQue){

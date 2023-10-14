@@ -1,6 +1,7 @@
 package net.pullolo.magicarena.commands;
 
 import net.pullolo.magicarena.game.ArenaGame;
+import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
@@ -50,7 +52,21 @@ public class GameCmd implements CommandExecutor, TabCompleter {
             }
         }
         if (args.length==1){
-            if (args[0].equalsIgnoreCase("end")){
+            if (args[0].equalsIgnoreCase("dungeon")){
+                if (isPlayerInGame((Player) sender)){
+                    sender.sendMessage( ChatColor.RED + "You are currently in game!");
+                    return true;
+                }
+                ArrayList<Player> senderToArray = new ArrayList<>();
+                senderToArray.add((Player) sender);
+                try {
+                    new Dungeon(senderToArray, 1, Dungeon.Difficulty.NORMAL, true);
+                    return true;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    sender.sendMessage(ChatColor.RED + "An error occurred while creating a game!");
+                }
+            } else if (args[0].equalsIgnoreCase("end")){
                 if (!isPlayerInGame((Player) sender)){
                     sender.sendMessage( ChatColor.RED + "You are currently not in game!");
                     return true;
@@ -70,6 +86,7 @@ public class GameCmd implements CommandExecutor, TabCompleter {
         if (args.length==1){
             ArrayList<String> completion = new ArrayList<>();
             addToCompletion("start", args[0], completion);
+            addToCompletion("dungeon", args[0], completion);
             addToCompletion("end", args[0], completion);
             return completion;
         } else if (args.length==2 && args[0].equalsIgnoreCase("start")){

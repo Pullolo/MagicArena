@@ -88,7 +88,7 @@ public class ArenaGame extends Game {
         };
         startClock.runTaskTimer(MagicArena.plugin, 0, 1);
         setStartC(startClock);
-        startNecessaryClocks(test, gameType, arena);
+        startNecessaryClocks(test, arena);
     }
 
     @Override

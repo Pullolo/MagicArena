@@ -54,3 +54,6 @@ commands:
     description: Manage parties
     aliases:
       - p
+  dungeon:
+    usage: /<command>
+    description: Play dungeons (You need to be in a party)

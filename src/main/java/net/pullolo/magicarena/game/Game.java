@@ -47,7 +47,7 @@ public abstract class Game {
         WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false); //this results in saved name being temp_ the temp param cant be true
         return Bukkit.getWorld("temp_" + newArenaName);
     }
-    public void startNecessaryClocks(boolean test, QueueManager.QueueType gameType, World arena){
+    public void startNecessaryClocks(boolean test, World arena){
         BukkitRunnable gameClock1t = new BukkitRunnable() {
             @Override
             public void run() {
@@ -146,21 +146,23 @@ public abstract class Game {
                     if (!isTeamAlive(team1) && isTeamAlive(team2)){
                         if (startC!=null) startC.cancel();
                         gameClock1t.cancel();
-                        finishGame(team2, team1, allPlayers, gameType, arena);
+                        if (team2==null) finishDungeon(allPlayers, arena, false);
+                        else finishGame(team2, team1, allPlayers, arena);
                         cancel();
                         return;
                     }
                     if (isTeamAlive(team1) && !isTeamAlive(team2)){
                         if (startC!=null) startC.cancel();
                         gameClock1t.cancel();
-                        finishGame(team1, team2, allPlayers, gameType, arena);
+                        finishGame(team1, team2, allPlayers, arena);
                         cancel();
                         return;
                     }
                     if (!isTeamAlive(team1) && !isTeamAlive(team2)){
                         if (startC!=null) startC.cancel();
                         gameClock1t.cancel();
-                        finishGame(null, null, allPlayers, gameType, arena);
+                        if (team2==null) finishDungeon(allPlayers, arena, false);
+                        else finishGame(null, null, allPlayers, arena);
                         cancel();
                         return;
                     }
@@ -188,7 +190,7 @@ public abstract class Game {
         this.gameCS = gameClock1s;
     }
 
-    public void finishGame(ArrayList<Player> winners, ArrayList<Player> losers, ArrayList<Player> allPlayers, QueueManager.QueueType gameType, World world){
+    public void finishGame(ArrayList<Player> winners, ArrayList<Player> losers, ArrayList<Player> allPlayers, World world){
         removeAllEntitiesFromGame();
         for (Player p : allPlayers){
             if (p!=null){
@@ -213,6 +215,35 @@ public abstract class Game {
         for (Player p : losers){
             if (p!=null){
                 p.sendMessage(ChatColor.RED + "[Arena] You have lost this game!");
+            }
+        }
+        for (Player p : allPlayers){
+            if (p!=null){
+                p.sendMessage(ChatColor.GREEN + "You will be warped out in 5 seconds!");
+            }
+        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player p : allPlayers){
+                    if (p!=null){
+                        p.sendMessage(ChatColor.GREEN + "You have been warped!");
+                        p.teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
+                        if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
+                        else p.setGameMode(GameMode.SURVIVAL);
+                        p.setHealth(p.getMaxHealth());
+                    }
+                }
+                WorldManager.removeWorld(world);
+            }
+        }.runTaskLater(MagicArena.plugin, 100);
+    }
+
+    public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won){
+        for (Player p : allPlayers){
+            if (p!=null){
+                p.sendMessage("[Arena] An error occurred in the match, neither side will be penalized for losing!");
+                arenaPlayers.remove(p);
             }
         }
         for (Player p : allPlayers){
@@ -263,6 +294,7 @@ public abstract class Game {
     }
 
     public boolean isTeamAlive(ArrayList<Player> players){
+        if (players==null) return true;
         for (Player p : players) {
             if (p!=null && arenaPlayers.containsKey(p)){
                 return true;
@@ -323,7 +355,7 @@ public abstract class Game {
 
     public ArrayList<Player> getAllPlayersInPlayersTeam(Player p){
         if (team1.contains(p)) return team1;
-        else if (team2.contains(p)) return team2;
+        else if (team2 !=null && team2.contains(p)) return team2;
         return new ArrayList<>();
     }
 

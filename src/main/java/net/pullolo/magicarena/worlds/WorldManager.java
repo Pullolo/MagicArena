@@ -134,7 +134,7 @@ public class WorldManager {
         return worlds;
     }
 
-    public static void saveWorld(World w, boolean temp, boolean arena){
+    public static void saveWorld(World w, boolean temp, boolean arena, boolean dungeon){
         StringBuilder s = new StringBuilder();
         try {
             Scanner sc = new Scanner(file);
@@ -146,6 +146,7 @@ public class WorldManager {
         }
         if (temp) s.append("temp_" + w.getName());
         else if (arena) s.append("arena_" + w.getName());
+        else if (dungeon) s.append("dungeon_" + w.getName());
         else s.append(w.getName());
         try {
             FileWriter fw = new FileWriter(file);

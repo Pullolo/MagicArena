@@ -27,6 +27,10 @@ commands:
     usage: /<command> <save/edit/remove> <world/arena>
     permission: ma.worlds
     description: Manage Arenas
+  dungeons:
+    usage: /<command> <save/edit/remove> <world/dungeon>
+    permission: ma.worlds
+    description: Manage Dungeons
   queue:
     usage: /<command> <solo/duo/trio/squad/team/list>
     description: Queue up for a game

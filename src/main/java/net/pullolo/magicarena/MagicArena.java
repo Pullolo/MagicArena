@@ -66,6 +66,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new Worlds(), "worlds");
         registerCommand(new Gui(guiManager, animationManager), "gui");
         registerCommand(new Arenas(), "arenas");
+        registerCommand(new Dungeons(), "dungeons");
         registerCommand(new Queue(), "queue");
         registerCommand(new Stats(), "stats");
         registerCommand(new Kill(), "kill");

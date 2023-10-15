@@ -16,11 +16,11 @@ import java.util.List;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class Arenas implements CommandExecutor, TabCompleter {
+public class Dungeons implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!cmd.getName().equalsIgnoreCase("arenas")){
+        if (!cmd.getName().equalsIgnoreCase("dungeons")){
             return false;
         }
         if (args.length<1){
@@ -29,7 +29,7 @@ public class Arenas implements CommandExecutor, TabCompleter {
         if (args.length==1){
             if (args[0].equalsIgnoreCase("list")){
                 sender.sendMessage(ChatColor.GRAY + "-----------------------------------------");
-                for (String s : WorldManager.getArenas()){
+                for (String s : WorldManager.getDungeons()){
                     sender.sendMessage(ChatColor.GREEN + s.split("_")[1]);
                 }
                 sender.sendMessage(ChatColor.GRAY + "-----------------------------------------");
@@ -39,36 +39,35 @@ public class Arenas implements CommandExecutor, TabCompleter {
             try{
                 if (args[0].equalsIgnoreCase("save")){
                     World w = Bukkit.getWorld(args[1]);
-                    WorldManager.saveWorld(w, false, true, false);
+                    WorldManager.saveWorld(w, false, false, true);
                     WorldManager.deleteWorld(w.getName());
                     WorldManager.unloadWorld(w, true);
                 }
                 if (args[0].equalsIgnoreCase("edit")) {
-                    if (!WorldManager.getArenas().contains("arena_" + args[1])){
-                        sender.sendMessage(ChatColor.RED + "This arena does not exist!");
+                    if (!WorldManager.getDungeons().contains("dungeon_" + args[1])){
+                        sender.sendMessage(ChatColor.RED + "This dungeon does not exist!");
                         return true;
                     }
-                    WorldManager.deleteWorld("arena_" + args[1]);
+                    WorldManager.deleteWorld("dungeon_" + args[1]);
                     WorldManager.saveWorld(new WorldCreator(args[1]).createWorld(), false, false, false);
                 }
                 if (args[0].equalsIgnoreCase("remove")){
-                    if (!WorldManager.getArenas().contains("arena_" + args[1])){
-                        sender.sendMessage(ChatColor.RED + "This arena does not exist!");
+                    if (!WorldManager.getDungeons().contains("dungeon_" + args[1])){
+                        sender.sendMessage(ChatColor.RED + "This dungeon does not exist!");
                         return true;
                     }
-                    WorldManager.removeDisabledWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + args[1]), "arena_" + args[1]);
+                    WorldManager.removeDisabledWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + args[1]), "dungeon_" + args[1]);
                 }
             } catch (Exception e){
                 sender.sendMessage(ChatColor.RED + "An error occurred!");
             }
-
         }
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!cmd.getName().equalsIgnoreCase("arenas")){
+        if (!cmd.getName().equalsIgnoreCase("dungeons")){
             return null;
         }
         if (args.length == 1){
@@ -87,7 +86,7 @@ public class Arenas implements CommandExecutor, TabCompleter {
                 }
             }
             if (args[0].equalsIgnoreCase("edit") || args[0].equalsIgnoreCase("remove")){
-                for (String s : WorldManager.getArenas()){
+                for (String s : WorldManager.getDungeons()){
                     addToCompletion(s.split("_")[1], args[1], completion);
                 }
             }

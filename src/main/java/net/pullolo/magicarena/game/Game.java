@@ -44,7 +44,7 @@ public abstract class Game {
             newArenaName+="-";
         }
         WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + newArenaName);
-        WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false); //this results in saved name being temp_ the temp param cant be true
+        WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false, false); //this results in saved name being temp_ the temp param cant be true
         return Bukkit.getWorld("temp_" + newArenaName);
     }
     public void startNecessaryClocks(boolean test, World arena){

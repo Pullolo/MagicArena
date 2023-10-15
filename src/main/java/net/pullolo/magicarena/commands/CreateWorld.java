@@ -42,7 +42,7 @@ public class CreateWorld implements CommandExecutor, TabCompleter {
         });
 
         World world = creator.createWorld();
-        WorldManager.saveWorld(world, false, false);
+        WorldManager.saveWorld(world, false, false, false);
         sender.sendMessage(ChatColor.GREEN + "Successfully created world " + args[0] + "!");
         world.setSpawnLocation(new Location(world, 0.5, 61, 0.5));
         new Location(world, 0, 60, 0).getBlock().setType(Material.BEDROCK);

@@ -2,7 +2,6 @@ package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.misc.CooldownApi;
-import net.pullolo.magicarena.players.ArenaPlayer;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Damageable;
@@ -28,6 +27,9 @@ public class GameAbilitiesHandler implements Listener {
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent event){
         if (!isPlayerInGame(event.getPlayer())){
+            return;
+        }
+        if (!arenaPlayers.get(event.getPlayer()).getGame().hasStarted()){
             return;
         }
         if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))){

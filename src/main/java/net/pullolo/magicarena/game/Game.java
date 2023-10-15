@@ -4,7 +4,6 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.items.Item;
-import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
@@ -17,7 +16,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
@@ -36,6 +34,7 @@ public abstract class Game {
     private BukkitRunnable gameC;
     private BukkitRunnable gameCS;
     private World world;
+    private boolean started = false;
 
     public World createWorld(){
         String arenaName = pickRandomArena().split("_")[1];
@@ -485,5 +484,13 @@ public abstract class Game {
 
     public void setStartC(BukkitRunnable startC) {
         this.startC = startC;
+    }
+
+    public boolean hasStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 }

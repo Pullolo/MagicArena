@@ -63,6 +63,7 @@ public class Dungeon extends Game{
                             p.sendMessage(ChatColor.GREEN + "Game started!");
                         }
                     }
+                    setStarted(true);
                     for (Location loc : getAllNearBlocks(new Location(dungeon, 0, 62, -6))){
                         loc.getBlock().setType(Material.AIR);
                     }

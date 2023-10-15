@@ -82,6 +82,7 @@ public class ArenaGame extends Game {
                             p.sendMessage(ChatColor.GREEN + "Game started!");
                         }
                     }
+                    setStarted(true);
                     this.cancel();
                 }
             }

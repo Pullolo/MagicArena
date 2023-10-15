@@ -34,6 +34,9 @@ public class Dungeon extends Game{
             if (test){
                 p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");
             }
+            //todo temp
+            p.sendMessage(ChatColor.YELLOW + "[Warning] InDev=True, Some features may be incomplete!");
+            //todo end temp
             p.sendMessage(ChatColor.GREEN + "Entered Game!");
             p.sendMessage(ChatColor.GREEN + "Match Starting in 10s...");
         }

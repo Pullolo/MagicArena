@@ -3,6 +3,8 @@ package net.pullolo.magicarena.guis;
 import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
+import dev.dbassett.skullcreator.SkullCreator;
+import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.items.ItemClass;
 import net.pullolo.magicarena.wish.WishSystem;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 import static net.pullolo.magicarena.wish.WishSystem.getRarityColorChar;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
 
@@ -45,7 +48,7 @@ public class GuiManager {
         gui.addElement(new StaticGuiElement('g', new ItemStack (Material.COMPASS),
                 click -> {
                     click.getGui().close();
-                    createGameSelectGui((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                    createGamesMenu((Player) click.getWhoClicked()).show(click.getWhoClicked());
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&a➼ Play")));
         gui.addElement(new StaticGuiElement('w', new ItemStack (Material.NETHER_STAR),
@@ -69,6 +72,40 @@ public class GuiManager {
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Your Items")));
 
+        return gui;
+    }
+    public InventoryGui createGamesMenu(Player player){
+        String[] guiSetup = {
+                "         ",
+                "   p d   ",
+                "         "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Select Game Mode", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1)); // fill the empty slots with this
+        gui.addElement(new StaticGuiElement('p', new ItemStack (Material.COMPASS),
+                click -> {
+                    click.getGui().close();
+                    createGameSelectGui((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay PvP!")));
+        gui.addElement(new StaticGuiElement('d', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjM3YjZmNTAxNTRkMTkyZDhjM2E3MmQxM2ZhNDRjOTUzYjQxMTM4NThjOWQyZWRmMjE4ZjUxNzk5OGQ3MzM2YyJ9fX0="),
+                click -> {
+                    click.getGui().close();
+                    Player p = (Player) click.getWhoClicked();
+                    //todo temp
+                    if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p) && !gameManager.getQueueManager().isPlayerInQueue(p)){
+                        for (Player member : partyManager.getPlayersParty(p)){
+                            if (isPlayerInGame(member)){
+                                p.sendMessage("No players can be in game!");
+                                return true;
+                            }
+                        }
+                        p.sendMessage(ChatColor.GREEN + "Creating Dungeon...");
+                        new Dungeon(partyManager.getPlayersParty(p), 1, Dungeon.Difficulty.NORMAL, false);
+                    } else p.sendMessage(ChatColor.RED + "You need to be in a party and be it's owner to execute this command!");
+                    //todo end temp
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay Dungeons!")));
         return gui;
     }
     public InventoryGui createGameSelectGui(Player player){
@@ -398,5 +435,9 @@ public class GuiManager {
         sm.setOwningPlayer(p);
         skull.setItemMeta(sm);
         return skull;
+    }
+
+    private ItemStack getPlayerSkull(String base64){
+        return SkullCreator.itemFromBase64(base64);
     }
 }

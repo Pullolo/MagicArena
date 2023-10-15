@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.pullolo.magicarena.MagicArena.gameManager;
 import static net.pullolo.magicarena.MagicArena.partyManager;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
@@ -25,7 +26,7 @@ public class DungeonCmd implements CommandExecutor, TabCompleter {
             return true;
         }
         Player p = (Player) sender;
-        if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p)){
+        if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p) && !gameManager.getQueueManager().isPlayerInQueue(p)){
             for (Player member : partyManager.getPlayersParty(p)){
                 if (isPlayerInGame(member)){
                     sender.sendMessage("No players can be in game!");

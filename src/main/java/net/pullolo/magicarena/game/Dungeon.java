@@ -10,8 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static net.pullolo.magicarena.MagicArena.config;
-import static net.pullolo.magicarena.MagicArena.mainWorld;
+import static net.pullolo.magicarena.MagicArena.*;
 
 public class Dungeon extends Game{
 
@@ -31,7 +30,7 @@ public class Dungeon extends Game{
         for (Player p : allPlayers){
             new ArenaPlayer(p, 1, this);
             p.setGameMode(GameMode.SURVIVAL);
-            p.teleport(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ));
+            p.teleport(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).setDirection(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).getDirection().multiply(-1)));
             if (test){
                 p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");
             }
@@ -45,7 +44,7 @@ public class Dungeon extends Game{
             public void run() {
                 i--;
                 for (Player p : allPlayers){
-                    if (p!=null && (Math.abs(p.getLocation().getZ())>spawnZ+2 || Math.abs(p.getLocation().getX())>spawnX+2)){
+                    if (p!=null && (Math.abs(p.getLocation().getZ())>spawnZ+5 || Math.abs(p.getLocation().getX())>spawnX+5)){
                         Location loc = new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ);
                         loc.setDirection(loc.getDirection().multiply(-1));
                         p.teleport(loc);
@@ -63,6 +62,10 @@ public class Dungeon extends Game{
                         if (p!=null){
                             p.sendMessage(ChatColor.GREEN + "Game started!");
                         }
+                    }
+                    for (Location loc : getAllNearBlocks(new Location(dungeon, 0, 62, -6))){
+                        getLog().warning(loc.toString());
+                        loc.getBlock().setType(Material.AIR);
                     }
                     this.cancel();
                 }
@@ -110,5 +113,71 @@ public class Dungeon extends Game{
     @Override
     public String pickRandomArena() {
         return WorldManager.getDungeons().get(new Random().nextInt(WorldManager.getDungeons().size()));
+    }
+
+    public ArrayList<Location> getAllNearBlocks(Location loc){
+        ArrayList<Location> blocks = new ArrayList<>();
+        blocks.add(loc);
+        Material m = loc.getBlock().getType();
+        if (m.equals(Material.AIR)) return new ArrayList<>();
+
+        return getAllBlocks(loc, blocks, m);
+    }
+
+    private ArrayList<Location> getAllBlocks(Location loc, ArrayList<Location> b, Material m){
+        ArrayList<Location> blocks = new ArrayList<>(b);
+        if (loc.clone().add(1, 0, 0).getBlock().getType().equals(m)){
+            if (!doesArrayContainLoc(loc.clone().add(1, 0, 0), blocks)){
+                blocks.add(loc.clone().add(1, 0, 0));
+                addAll(loc.clone().add(1, 0, 0), blocks, m);
+            }
+        }
+        if (loc.clone().add(-1, 0, 0).getBlock().getType().equals(m)){
+            if (!doesArrayContainLoc(loc.clone().add(-1, 0, 0), blocks)){
+                blocks.add(loc.clone().add(-1, 0, 0));
+                addAll(loc.clone().add(-1, 0, 0), blocks, m);
+            }
+        }
+        if (loc.clone().add(0, 1, 0).getBlock().getType().equals(m)){
+            if (!doesArrayContainLoc(loc.clone().add(0, 1, 0), blocks)){
+                blocks.add(loc.clone().add(0, 1, 0));
+                addAll(loc.clone().add(0, 1, 0), blocks, m);
+            }
+        }
+        if (loc.clone().add(0, -1, 0).getBlock().getType().equals(m)){
+            if (!doesArrayContainLoc(loc.clone().add(0, -1, 0), blocks)){
+                blocks.add(loc.clone().add(0, -1, 0));
+                addAll(loc.clone().add(0, -1, 0), blocks, m);
+            }
+        }
+        if (loc.clone().add(0, 0, 1).getBlock().getType().equals(m)){
+            if (!doesArrayContainLoc(loc.clone().add(0, 0, 1), blocks)){
+                blocks.add(loc.clone().add(0, 0, 1));
+                addAll(loc.clone().add(0, 0, 1), blocks, m);
+            }
+        }
+        if (loc.clone().add(0, 0, -1).getBlock().getType().equals(m)){
+            if (!doesArrayContainLoc(loc.clone().add(0, 0, -1), blocks)){
+                blocks.add(loc.clone().add(0, 0, -1));
+                addAll(loc.clone().add(0, 0, -1), blocks, m);
+            }
+        }
+        return blocks;
+    }
+    private void addAll(Location loc, ArrayList<Location> blocks, Material m){
+        for (Location l : getAllBlocks(loc, blocks, m)){
+            if (!blocks.contains(l)){
+                blocks.add(l);
+            }
+        }
+    }
+    private boolean doesArrayContainLoc(Location loc, ArrayList<Location> locs){
+        if (locs.size()>125) return true;
+        for (Location l : locs){
+            if (l.getX() == loc.getX() && l.getY() == loc.getY() && l.getZ() == loc.getZ()){
+                return true;
+            }
+        }
+        return false;
     }
 }

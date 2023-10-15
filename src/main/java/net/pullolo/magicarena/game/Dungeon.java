@@ -74,6 +74,16 @@ public class Dungeon extends Game{
     }
 
     @Override
+    public void update1s(){
+
+    }
+
+    @Override
+    public void update1t(){
+
+    }
+
+    @Override
     public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won) {
         for (Player p : allPlayers){
             if (p!=null){

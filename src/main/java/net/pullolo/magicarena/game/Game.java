@@ -111,6 +111,7 @@ public abstract class Game {
                         }.runTaskLater(plugin, 20);
                     }
                 }
+                update1t();
             }
         };
         gameClock1t.runTaskTimer(MagicArena.plugin, 0, 1);
@@ -141,6 +142,7 @@ public abstract class Game {
                     }
                 }
 
+                update1s();
 
                 if (!test){
                     if (!isTeamAlive(team1) && isTeamAlive(team2)){
@@ -188,6 +190,14 @@ public abstract class Game {
         };
         gameClock1s.runTaskTimer(MagicArena.plugin, 0, 20);
         this.gameCS = gameClock1s;
+    }
+
+    public void update1s(){
+        //do nothing
+    }
+
+    public void update1t(){
+        //do nothing
     }
 
     public void finishGame(ArrayList<Player> winners, ArrayList<Player> losers, ArrayList<Player> allPlayers, World world){

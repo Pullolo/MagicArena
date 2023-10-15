@@ -118,6 +118,22 @@ public class WorldManager {
         return worlds;
     }
 
+    public static ArrayList<String> getDungeons(){
+        ArrayList<String> worlds = new ArrayList<>();
+        try {
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()){
+                String line = sc.nextLine();
+                if (line.regionMatches(0, "dungeon_", 0, "dungeon_".length())){
+                    worlds.add(line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return worlds;
+    }
+
     public static void saveWorld(World w, boolean temp, boolean arena){
         StringBuilder s = new StringBuilder();
         try {

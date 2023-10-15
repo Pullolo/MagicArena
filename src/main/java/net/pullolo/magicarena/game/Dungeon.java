@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.config;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
@@ -98,6 +99,6 @@ public class Dungeon extends Game{
 
     @Override
     public String pickRandomArena() {
-        return WorldManager.getArenas().get(0);
+        return WorldManager.getDungeons().get(new Random().nextInt(WorldManager.getDungeons().size()));
     }
 }

@@ -94,7 +94,7 @@ public final class MagicArena extends JavaPlugin {
         savedWorlds = deleteTempWorlds(savedWorlds);
         if (config.getBoolean("indev")){
             for (String s : savedWorlds){
-                if (s.regionMatches(0, "arena_", 0, "arena_".length())){
+                if (s.regionMatches(0, "arena_", 0, "arena_".length()) || s.regionMatches(0, "dungeon_", 0, "dungeon_".length())){
                     continue;
                 }
                 new WorldCreator(s).createWorld();

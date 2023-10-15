@@ -64,7 +64,6 @@ public class Dungeon extends Game{
                         }
                     }
                     for (Location loc : getAllNearBlocks(new Location(dungeon, 0, 62, -6))){
-                        getLog().warning(loc.toString());
                         loc.getBlock().setType(Material.AIR);
                     }
                     this.cancel();

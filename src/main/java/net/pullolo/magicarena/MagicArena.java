@@ -17,6 +17,7 @@ import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -75,6 +76,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new Spawn(), "spawn");
         registerCommand(new Party(), "party");
         registerCommand(new DungeonCmd(), "dungeon");
+        registerCommand(new GetSkull(), "getskull");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);

@@ -61,3 +61,7 @@ commands:
   dungeon:
     usage: /<command>
     description: Play dungeons (You need to be in a party)
+  getskull:
+    usage: /<command> <base64>
+    permission: ma.items
+    description: Gives you a skull

@@ -4,6 +4,8 @@ import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -19,6 +21,9 @@ public class Dungeon extends Game{
         HARD,
         ULTRA
     }
+
+    private final ArrayList<BlockState> foundSecrets = new ArrayList<>();
+    private int score = 0;
 
     public Dungeon(ArrayList<Player> allPlayers, int level, Difficulty difficulty, boolean test){
         final double spawnX = 0.5, spawnZ = 0.5;
@@ -87,6 +92,16 @@ public class Dungeon extends Game{
     @Override
     public void update1t(){
 
+    }
+
+    public void findSecret(BlockState b, Player p){
+        foundSecrets.add(b);
+        broadcast(ChatColor.DARK_RED + "Player " + ChatColor.AQUA + p.getDisplayName() + ChatColor.DARK_RED + " has found a Secret! " + ChatColor.GOLD + " +100 Score");
+        score+=100;
+    }
+
+    public boolean isSecretFound(BlockState b) {
+        return foundSecrets.contains(b);
     }
 
     @Override
@@ -182,5 +197,9 @@ public class Dungeon extends Game{
             }
         }
         return false;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

@@ -26,7 +26,7 @@ import static org.bukkit.Bukkit.getServer;
 public abstract class Game {
 
     private ArrayList<Player> allPlayers;
-    private ArrayList<Entity> allEntities = new ArrayList<>();
+    private final ArrayList<Entity> allEntities = new ArrayList<>();
     private ArrayList<Player> team1;
     private ArrayList<Player> team2;
 
@@ -461,6 +461,9 @@ public abstract class Game {
 
     public void addEntity(Entity e){
         allEntities.add(e);
+    }
+    public ArrayList<Entity> getAllEntities(){
+        return allEntities;
     }
     public void removeEntity(Entity e){
         allEntities.remove(e);

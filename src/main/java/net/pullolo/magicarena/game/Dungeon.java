@@ -96,7 +96,7 @@ public class Dungeon extends Game{
 
     public void findSecret(BlockState b, Player p){
         foundSecrets.add(b);
-        broadcast(ChatColor.DARK_RED + "Player " + ChatColor.RED + p.getDisplayName() + ChatColor.DARK_RED + " has found a Secret! " + ChatColor.GOLD + " +100 Score");
+        broadcast(ChatColor.DARK_RED + "Player " + ChatColor.RED + p.getDisplayName() + ChatColor.DARK_RED + " has found a Secret!" + ChatColor.GOLD + " +100 Score");
         score+=100;
     }
 

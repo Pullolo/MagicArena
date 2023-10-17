@@ -65,3 +65,7 @@ commands:
     usage: /<command> <base64>
     permission: ma.items
     description: Gives you a skull
+  setcustomname:
+    usage: /<command> <name>
+    permission: ma.mobs
+    description: Names a mob

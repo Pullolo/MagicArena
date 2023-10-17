@@ -1,11 +1,15 @@
 package net.pullolo.magicarena.game;
 
 import net.pullolo.magicarena.MagicArena;
+import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -13,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
+import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 
 public class Dungeon extends Game{
 
@@ -66,6 +72,7 @@ public class Dungeon extends Game{
                     }
                 }
                 if (i<1){
+                    convertArmorStandsToMobs(2, level);
                     for (Player p : allPlayers){
                         if (p!=null){
                             p.sendMessage(ChatColor.GREEN + "Game started!");
@@ -92,6 +99,44 @@ public class Dungeon extends Game{
     @Override
     public void update1t(){
 
+    }
+
+    public void convertArmorStandsToMobs(int blockOffset, int level){
+        Random r = new Random();
+        double x;
+        double z;
+        World w = getWorld();
+        for (Entity en : w.getEntities()){
+            if (!(en instanceof ArmorStand)){
+                continue;
+            }
+            ArmorStand as = (ArmorStand) en;
+            try {
+                if (as.getCustomName().regionMatches(0, "s: ", 0, 3)){
+                    //String example = "s: zombie 10";
+                    String[] spawnArgs = as.getCustomName().split(": ")[1].split(" ");
+                    String mobType = spawnArgs[0];
+                    int amount = Integer.parseInt(spawnArgs[1]);
+                    for (int i = 0; i<amount; i++){
+                        x = r.nextDouble()*blockOffset;
+                        z = r.nextDouble()*blockOffset;
+                        Location newLoc = as.getLocation().add(x,0,z);
+                        as.remove();
+                        if (!newLoc.getBlock().isPassable()){
+                            newLoc.add(0, 1, 0);
+                            if (newLoc.getBlock().getType().equals(Material.BEDROCK)){
+                                continue;
+                            }
+                        }
+                        //todo temp
+                        Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
+                        arenaEntities.put(e, new ArenaEntity(e, level, this, false));
+                    }
+                }
+            } catch (Exception e){
+                continue;
+            }
+        }
     }
 
     public void findSecret(BlockState b, Player p){

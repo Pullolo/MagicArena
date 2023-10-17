@@ -473,6 +473,10 @@ public abstract class Game {
         this.world = world;
     }
 
+    public World getWorld(){
+        return this.world;
+    }
+
     public void setTeam1(ArrayList<Player> team1) {
         this.team1 = team1;
     }

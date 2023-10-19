@@ -111,9 +111,9 @@ public final class MagicArena extends JavaPlugin {
         CooldownApi.createCooldown("UT", 1.5);
     }
 
-    private void registerCommand(Object cmd, String cmdName){
-        if ((cmd instanceof CommandExecutor) && (cmd instanceof TabCompleter)){
-            getCommand(cmdName).setExecutor((CommandExecutor) cmd);
+    private void registerCommand(CommandExecutor cmd, String cmdName){
+        if (cmd instanceof TabCompleter){
+            getCommand(cmdName).setExecutor(cmd);
             getCommand(cmdName).setTabCompleter((TabCompleter) cmd);
         } else {
             throw new RuntimeException("Provided object is not a command executor and a tab completer at the same time!");

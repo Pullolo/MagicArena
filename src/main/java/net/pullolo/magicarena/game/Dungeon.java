@@ -3,6 +3,7 @@ package net.pullolo.magicarena.game;
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
+import net.pullolo.magicarena.players.DungeonEntity;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -30,6 +31,8 @@ public class Dungeon extends Game{
 
     private final ArrayList<BlockState> foundSecrets = new ArrayList<>();
     private int score = 0;
+    private int witherKeys = 0;
+    private boolean bossKey = false;
 
     public Dungeon(ArrayList<Player> allPlayers, int level, Difficulty difficulty, boolean test){
         final double spawnX = 0.5, spawnZ = 0.5;
@@ -101,6 +104,14 @@ public class Dungeon extends Game{
 
     }
 
+    public void broadcastSound(Sound sound, float vol, float pitch){
+        for (Player p : getAllPlayers()){
+            if (p!=null){
+                p.playSound(p.getLocation(), sound, vol, pitch);
+            }
+        }
+    }
+
     public void convertArmorStandsToMobs(int blockOffset, int level){
         Random r = new Random();
         double x;
@@ -117,6 +128,7 @@ public class Dungeon extends Game{
                     String[] spawnArgs = as.getCustomName().split(": ")[1].split(" ");
                     String mobType = spawnArgs[0];
                     int amount = Integer.parseInt(spawnArgs[1]);
+                    int mobWithKey = r.nextInt(amount);
                     for (int i = 0; i<amount; i++){
                         x = r.nextDouble()*blockOffset;
                         z = r.nextDouble()*blockOffset;
@@ -130,7 +142,8 @@ public class Dungeon extends Game{
                         }
                         //todo temp
                         Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
-                        arenaEntities.put(e, new ArenaEntity(e, level, this, false));
+                        arenaEntities.put(e, new DungeonEntity(e, level, this, false));
+                        if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
                     }
                 }
             } catch (Exception e){
@@ -246,5 +259,36 @@ public class Dungeon extends Game{
 
     public int getScore() {
         return score;
+    }
+    public void findWitherKey(Player p){
+        witherKeys++;
+        broadcast(ChatColor.DARK_RED + "Player " + ChatColor.RED + p.getDisplayName() + ChatColor.DARK_RED + " has found a" + ChatColor.DARK_GRAY + " Wither Key!");
+        broadcastSound(Sound.ENTITY_ITEM_PICKUP, 1, 1.3f);
+    }
+    public void findBossKey(Player p){
+        bossKey=true;
+        broadcast(ChatColor.DARK_RED + "Player " + ChatColor.RED + p.getDisplayName() + ChatColor.DARK_RED + " has found a" + ChatColor.DARK_PURPLE + " Boss Key!");
+        broadcastSound(Sound.ENTITY_ITEM_PICKUP, 1, 1.3f);
+    }
+    public void openWitherDoor(Location loc){
+        witherKeys--;
+        for (Location l: getAllNearBlocks(loc)){
+            l.getBlock().setType(Material.AIR);
+        }
+        broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.DARK_GRAY + "Wither Door " + ChatColor.DARK_RED + "has been opened!");
+        broadcastSound(Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1, 0.5f);
+    }
+    public void openBossDoor(Location loc){
+        for (Location l: getAllNearBlocks(loc)){
+            l.getBlock().setType(Material.AIR);
+        }
+        broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.DARK_PURPLE + "Boss Door " + ChatColor.DARK_RED + "has been opened!");
+        broadcastSound(Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1, 0.3f);
+    }
+    public int getWitherKeys(){
+        return witherKeys;
+    }
+    public boolean isBossKeyFound(){
+        return bossKey;
     }
 }

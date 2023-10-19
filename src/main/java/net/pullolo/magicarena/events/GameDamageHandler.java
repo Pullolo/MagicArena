@@ -3,6 +3,7 @@ package net.pullolo.magicarena.events;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.players.ArenaPlayer;
+import net.pullolo.magicarena.players.DungeonEntity;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
@@ -148,6 +149,9 @@ public class GameDamageHandler implements Listener {
             return;
         }
         arenaEntities.get(damaged).damage(damaged, damage*5, false);
+        if (arenaEntities.get(damaged).getHealth()<=0){
+            new OnArenaEntityKilled(damaged);
+        }
     }
 
     public void onEntityDamagedByEntity(EntityDamageByEntityEvent event){

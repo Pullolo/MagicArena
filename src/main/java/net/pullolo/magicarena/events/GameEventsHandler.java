@@ -5,10 +5,7 @@ import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaEntity;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
@@ -102,11 +99,24 @@ public class GameEventsHandler implements Listener {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock()==null){
             return;
         }
-        BlockState b = event.getClickedBlock().getState();
         Dungeon d = (Dungeon) arenaPlayers.get(event.getPlayer()).getGame();
+        if (event.getClickedBlock().getType().equals(Material.REDSTONE_BLOCK)){
+            if (d.isBossKeyFound()){
+                d.openBossDoor(event.getClickedBlock().getLocation());
+            }
+        } else if (event.getClickedBlock().getType().equals(Material.COAL_BLOCK)) {
+            if (d.getWitherKeys()>0){
+                d.openWitherDoor(event.getClickedBlock().getLocation());
+            }
+        }
+        BlockState b = event.getClickedBlock().getState();
+
         if (b instanceof Skull){
             if (isSkullEqual((Skull) b, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmIwNTVjODEwYmRkZmQxNjI2NGVjOGQ0MzljNDMyODNlMzViY2E3MWE1MDk4M2UxNWUzNjRjZDhhYjdjNjY4ZiJ9fX0=")){
-                if (!d.isSecretFound(b)) d.findSecret(b, event.getPlayer());
+                if (!d.isSecretFound(b)){
+                    d.findSecret(b, event.getPlayer());
+                    d.broadcastSound(Sound.ENTITY_PLAYER_LEVELUP, 1, 1.3f);
+                }
             }
         }
     }

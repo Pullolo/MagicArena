@@ -488,6 +488,9 @@ public abstract class Game {
     public void setAllPlayers(ArrayList<Player> allPlayers) {
         this.allPlayers = allPlayers;
     }
+    public ArrayList<Player> getAllPlayers(){
+        return this.allPlayers;
+    }
 
     public void setStartC(BukkitRunnable startC) {
         this.startC = startC;

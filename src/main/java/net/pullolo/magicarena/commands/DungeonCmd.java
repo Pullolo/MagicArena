@@ -31,7 +31,7 @@ public class DungeonCmd implements CommandExecutor, TabCompleter {
         }
         int lvl;
         try{
-            lvl = Integer.parseInt(args[1]);
+            lvl = Integer.parseInt(args[0]);
         } catch (Exception e){
             return false;
         }

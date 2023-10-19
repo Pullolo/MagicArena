@@ -25,6 +25,8 @@ public class ItemsDefinitions {
     public static Item solidStoneAxe; //tank
     public static Item unstableTome; //dps
     public static Item longBow; //archer
+
+    public static Item bladeOfTheUniverse;
     public static final ArrayList<String> itemIds = new ArrayList<>();
 
     public static void init(){
@@ -35,6 +37,8 @@ public class ItemsDefinitions {
         createSolidStoneAxe();
         createUnstableTome();
         createLongBow();
+
+        createBladeOfTheUniverse();
     }
 
     private static void createLongBow(){
@@ -152,6 +156,22 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
         testItem = new Item(item);
         itemIds.add("test_item");
+    }
+
+    private static void createBladeOfTheUniverse(){
+        String name = "&d&k1 &dBlade Of The Universe &k1";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+999999979");
+        lore.add("&7Critical Chance: &c+100");
+        lore.add("&7Critical Damage: &c+999999999");
+        lore.add("");
+        lore.add("&d&lMYTHIC SWORD");
+        lore.add("&8item_id:blade_of_the_universe");
+
+        ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
+        bladeOfTheUniverse = new Item(new Item(item), 5, 100);
+        itemIds.add("blade_of_the_universe");
     }
 
     private static ItemStack createItem(Material material, String displayName, List<String> lore){

@@ -30,6 +30,9 @@ public class GiveItem implements CommandExecutor, TabCompleter {
                 ((Player) sender).getInventory().addItem(getItemFromPlayer(((Player) sender).getInventory().getItemInMainHand()).getItem());
             }
         }
+        if (args[0].equalsIgnoreCase("blade_of_the_universe")){
+            ((Player) sender).getInventory().addItem(bladeOfTheUniverse.getItem());
+        }
         if (args[0].equalsIgnoreCase("test_item")){
             if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
                 ((Player) sender).getInventory().addItem(new Item(testItem, 5, 100).getItem());
@@ -79,6 +82,7 @@ public class GiveItem implements CommandExecutor, TabCompleter {
                 ((Player) sender).getInventory().addItem(new Item(solidStoneAxe, 0, 0).getItem());
             } else ((Player) sender).getInventory().addItem(solidStoneAxe.getItem());
         }
+
         return true;
     }
 
@@ -97,6 +101,7 @@ public class GiveItem implements CommandExecutor, TabCompleter {
         if (args.length==1){
             ArrayList<String> completion = new ArrayList<>();
             addToCompletion("copy", args[0], completion);
+            addToCompletion("blade_of_the_universe", args[0], completion);
             addToCompletion("test_item", args[0], completion);
             addToCompletion("basic_sword", args[0], completion);
             addToCompletion("stone_stick", args[0], completion);
@@ -106,7 +111,7 @@ public class GiveItem implements CommandExecutor, TabCompleter {
             addToCompletion("solid_stone_axe", args[0], completion);
             return completion;
         }
-        if (args.length==2){
+        if (args.length==2 && !args[0].equalsIgnoreCase("blade_of_the_universe")){
             ArrayList<String> completion = new ArrayList<>();
             addToCompletion("maxed", args[1], completion);
             addToCompletion("worst", args[1], completion);

@@ -59,7 +59,7 @@ commands:
     aliases:
       - p
   dungeon:
-    usage: /<command>
+    usage: /<command> <lvl>
     description: Play dungeons (You need to be in a party)
   getskull:
     usage: /<command> <base64>

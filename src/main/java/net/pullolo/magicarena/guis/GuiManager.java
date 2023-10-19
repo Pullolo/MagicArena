@@ -91,21 +91,39 @@ public class GuiManager {
         gui.addElement(new StaticGuiElement('d', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjM3YjZmNTAxNTRkMTkyZDhjM2E3MmQxM2ZhNDRjOTUzYjQxMTM4NThjOWQyZWRmMjE4ZjUxNzk5OGQ3MzM2YyJ9fX0="),
                 click -> {
                     click.getGui().close();
-                    Player p = (Player) click.getWhoClicked();
-                    //todo temp
-                    if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p) && !gameManager.getQueueManager().isPlayerInQueue(p)){
-                        for (Player member : partyManager.getPlayersParty(p)){
-                            if (isPlayerInGame(member)){
-                                p.sendMessage("No players can be in game!");
-                                return true;
-                            }
-                        }
-                        p.sendMessage(ChatColor.GREEN + "Creating Dungeon...");
-                        new Dungeon(partyManager.getPlayersParty(p), 1, Dungeon.Difficulty.NORMAL, false);
-                    } else p.sendMessage(ChatColor.RED + "You need to be in a party and be it's owner to execute this command!");
-                    //todo end temp
+                    createDungeonSelectGui((Player) click.getWhoClicked()).show(click.getWhoClicked());
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&aPlay Dungeons!")));
+        return gui;
+    }
+    public InventoryGui createDungeonSelectGui(Player player){
+        String[] guiSetup = {
+                "         ",
+                "  a b c  ",
+                "         "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Select Game", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1)); // fill the empty slots with this
+
+        gui.addElement(new StaticGuiElement('a', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWVmOTA0YzY2ZjRjZDM1N2ViODBhMWU0MDU3ODNmNTIxZDI4NDUwMzQzNWFlZGU2MDNjODlkYjE1ZTY4NTcwOSJ9fX0="),
+                click -> {
+                    click.getGui().close();
+                    startDungeon((Player) click.getWhoClicked(), 10);
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&aDungeon Lvl10!")));
+        gui.addElement(new StaticGuiElement('b', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTBiM2M5MWI3MjdkODdkOGM4YWE5NjAyOGYyMjc1Yjg0MDVkZWJjNzUxNmEwMjNkMGY3NzQ4YmFiMjFmOWM0MyJ9fX0="),
+                click -> {
+                    click.getGui().close();
+                    startDungeon((Player) click.getWhoClicked(), 50);
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&aDungeon Lvl50!")));
+        gui.addElement(new StaticGuiElement('c', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmM0MDdjM2JkOWJiN2I3N2Q3OWYzN2M0YzVkZmE1MDlmMTYyZWY4NTQ1MTkzODlmNzAxNmI4ZTQ0ZDg2OTI4In19fQ=="),
+                click -> {
+                    click.getGui().close();
+                    startDungeon((Player) click.getWhoClicked(), 90);
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&aDungeon Lvl90!")));
+
         return gui;
     }
     public InventoryGui createGameSelectGui(Player player){
@@ -435,6 +453,20 @@ public class GuiManager {
         sm.setOwningPlayer(p);
         skull.setItemMeta(sm);
         return skull;
+    }
+
+    private void startDungeon(Player p, int level){
+        //todo temp
+        if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p) && !gameManager.getQueueManager().isPlayerInQueue(p)){
+            for (Player member : partyManager.getPlayersParty(p)){
+                if (isPlayerInGame(member)){
+                    p.sendMessage(ChatColor.RED + "No players can be in game!");
+                }
+            }
+            p.sendMessage(ChatColor.GREEN + "Creating Dungeon...");
+            new Dungeon(partyManager.getPlayersParty(p), level, Dungeon.getRandomDifficulty(), false);
+        } else p.sendMessage(ChatColor.RED + "You need to be in a party and be it's owner to execute this command!");
+        //todo end temp
     }
 
     private ItemStack getPlayerSkull(String base64){

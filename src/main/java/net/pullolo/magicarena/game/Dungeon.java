@@ -23,6 +23,7 @@ import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 
 public class Dungeon extends Game{
 
+
     public enum Difficulty{
         NORMAL,
         HARD,
@@ -41,6 +42,15 @@ public class Dungeon extends Game{
         setAllPlayers(allPlayers);
         setTeam1(allPlayers);
         setTeam2(null);
+        switch (difficulty){
+            case HARD:
+                level= (int) (level*1.5);
+                break;
+            case ULTRA:
+                level=level*2;
+                break;
+        }
+        int finalLevel = level;
         for (Player p : allPlayers){
             new ArenaPlayer(p, 1, this);
             p.setGameMode(GameMode.SURVIVAL);
@@ -51,7 +61,7 @@ public class Dungeon extends Game{
             //todo temp
             p.sendMessage(ChatColor.YELLOW + "[Warning] InDev=True, Some features may be incomplete!");
             //todo end temp
-            p.sendMessage(ChatColor.GREEN + "Entered " + difficulty.toString().toLowerCase() + " dungeon!");
+            p.sendMessage(ChatColor.GREEN + "Entered " + ChatColor.RED + difficulty.toString() + ChatColor.GREEN + " dungeon!");
             p.sendMessage(ChatColor.GREEN + "Match Starting in 10s...");
         }
         BukkitRunnable startClock = new BukkitRunnable() {
@@ -75,7 +85,7 @@ public class Dungeon extends Game{
                     }
                 }
                 if (i<1){
-                    convertArmorStandsToMobs(2, level);
+                    convertArmorStandsToMobs(2, finalLevel);
                     for (Player p : allPlayers){
                         if (p!=null){
                             p.sendMessage(ChatColor.GREEN + "Game started!");
@@ -324,5 +334,19 @@ public class Dungeon extends Game{
     }
     public boolean isBossKeyFound(){
         return bossKey;
+    }
+    public void addScore(int amount) {
+        score+=amount;
+    }
+
+    public static Difficulty getRandomDifficulty(){
+        switch (new Random().nextInt(Difficulty.values().length)){
+            case 1:
+                return Difficulty.HARD;
+            case 2:
+                return Difficulty.ULTRA;
+            default:
+                return Difficulty.NORMAL;
+        }
     }
 }

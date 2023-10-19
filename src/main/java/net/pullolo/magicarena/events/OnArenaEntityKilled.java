@@ -24,6 +24,7 @@ public class OnArenaEntityKilled {
             if (((DungeonEntity) arenaEntities.get(e)).hasBossKey()){
                 d.findBossKey(killer);
             }
+            d.addScore(1);
         }
         //works
     }

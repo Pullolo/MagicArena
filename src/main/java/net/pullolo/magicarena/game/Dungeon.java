@@ -154,7 +154,7 @@ public class Dungeon extends Game{
                                         }
                                     }
                                 }
-                                //temp
+                                //temp todo same here
                                 Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
                                 arenaEntities.put(e, new DungeonEntity(e, level, this, false));
                                 if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
@@ -181,7 +181,7 @@ public class Dungeon extends Game{
                                     }
                                 }
                             }
-                            //temp
+                            //temp todo make a method to spawn mobs to check their type and if they are custom, spawn custom
                             Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
                             arenaEntities.put(e, new DungeonEntity(e, level, this, false));
                             if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);

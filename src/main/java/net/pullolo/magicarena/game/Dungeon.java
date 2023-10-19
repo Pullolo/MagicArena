@@ -154,6 +154,7 @@ public class Dungeon extends Game{
                                         }
                                     }
                                 }
+                                //temp
                                 Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
                                 arenaEntities.put(e, new DungeonEntity(e, level, this, false));
                                 if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
@@ -180,6 +181,7 @@ public class Dungeon extends Game{
                                     }
                                 }
                             }
+                            //temp
                             Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
                             arenaEntities.put(e, new DungeonEntity(e, level, this, false));
                             if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);

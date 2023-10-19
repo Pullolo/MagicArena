@@ -69,3 +69,7 @@ commands:
     usage: /<command> <name>
     permission: ma.mobs
     description: Names a mob
+  getcustomname:
+    usage: /<command> <name>
+    permission: ma.mobs
+    description: Gives you a name of a mob

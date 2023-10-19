@@ -51,7 +51,7 @@ public class Dungeon extends Game{
             //todo temp
             p.sendMessage(ChatColor.YELLOW + "[Warning] InDev=True, Some features may be incomplete!");
             //todo end temp
-            p.sendMessage(ChatColor.GREEN + "Entered Game!");
+            p.sendMessage(ChatColor.GREEN + "Entered " + difficulty.toString().toLowerCase() + " dungeon!");
             p.sendMessage(ChatColor.GREEN + "Match Starting in 10s...");
         }
         BukkitRunnable startClock = new BukkitRunnable() {
@@ -123,31 +123,78 @@ public class Dungeon extends Game{
             }
             ArmorStand as = (ArmorStand) en;
             try {
-                if (as.getCustomName().regionMatches(0, "s: ", 0, 3)){
-                    //String example = "s: zombie 10";
-                    String[] spawnArgs = as.getCustomName().split(": ")[1].split(" ");
-                    String mobType = spawnArgs[0];
-                    int amount = Integer.parseInt(spawnArgs[1]);
-                    int mobWithKey = r.nextInt(amount);
-                    for (int i = 0; i<amount; i++){
-                        x = r.nextDouble()*blockOffset;
-                        z = r.nextDouble()*blockOffset;
-                        Location newLoc = as.getLocation().add(x,0,z);
-                        as.remove();
-                        if (!newLoc.getBlock().isPassable()){
-                            newLoc.add(0, 1, 0);
-                            if (newLoc.getBlock().getType().equals(Material.BEDROCK)){
+                String cmd = as.getCustomName();
+                if (cmd.regionMatches(0, "s: ", 0, 3)){
+                    if (cmd.contains(",")){
+                        String[] cmds = cmd.split(",");
+                        int patchOfMobs = r.nextInt(cmds.length);
+                        int j = 0;
+                        for (String s : cmds){
+                            if (!s.regionMatches(0, "s: ", 0, 3)){
                                 continue;
                             }
+                            String[] spawnArgs = s.split(": ")[1].split(" ");
+                            String mobType = spawnArgs[0];
+                            int amount = Integer.parseInt(spawnArgs[1]);
+                            int mobWithKey=-1;
+                            if (patchOfMobs==j) {
+                                mobWithKey=r.nextInt(amount);
+                            }
+                            for (int i = 0; i<amount; i++){
+                                x = r.nextDouble()*blockOffset;
+                                z = r.nextDouble()*blockOffset;
+                                Location newLoc = as.getLocation().add(x,0,z);
+                                as.remove();
+                                if (!newLoc.getBlock().isPassable()){
+                                    newLoc.add(0, 1, 0);
+                                    if (newLoc.getBlock().getType().equals(Material.BEDROCK)){
+                                        if (mobWithKey==i && i<amount-1){
+                                            mobWithKey++;
+                                            continue;
+                                        }
+                                    }
+                                }
+                                Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
+                                arenaEntities.put(e, new DungeonEntity(e, level, this, false));
+                                if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
+                            }
+                            j++;
                         }
-                        //todo temp
-                        Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
-                        arenaEntities.put(e, new DungeonEntity(e, level, this, false));
-                        if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
+                    } else {
+                        //String example = "s: zombie 10,s: skeleton 2";
+                        String[] spawnArgs = cmd.split(": ")[1].split(" ");
+                        String mobType = spawnArgs[0];
+                        int amount = Integer.parseInt(spawnArgs[1]);
+                        int mobWithKey = r.nextInt(amount);
+                        for (int i = 0; i<amount; i++){
+                            x = r.nextDouble()*blockOffset;
+                            z = r.nextDouble()*blockOffset;
+                            Location newLoc = as.getLocation().add(x,0,z);
+                            as.remove();
+                            if (!newLoc.getBlock().isPassable()){
+                                newLoc.add(0, 1, 0);
+                                if (newLoc.getBlock().getType().equals(Material.BEDROCK)){
+                                    if (mobWithKey==i && i<amount-1){
+                                        mobWithKey++;
+                                        continue;
+                                    }
+                                }
+                            }
+                            Entity e = w.spawnEntity(newLoc, EntityType.valueOf(mobType.toUpperCase()));
+                            arenaEntities.put(e, new DungeonEntity(e, level, this, false));
+                            if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
+                        }
                     }
                 }
             } catch (Exception e){
                 continue;
+            }
+        }
+        //create boss key
+        if (getAllEntities().size()>0){
+            Entity e = getAllEntities().get(getAllEntities().size()-1);
+            if (arenaEntities.get(e) instanceof DungeonEntity){
+                ((DungeonEntity) arenaEntities.get(e)).setBossKey(true);
             }
         }
     }
@@ -164,26 +211,10 @@ public class Dungeon extends Game{
 
     @Override
     public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won) {
-        for (Player p : allPlayers){
-            if (p!=null){
-                p.sendMessage(ChatColor.GREEN + "You will be warped out in 5 seconds!");
-            }
-        }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Player p : allPlayers){
-                    if (p!=null){
-                        p.sendMessage(ChatColor.GREEN + "You have been warped!");
-                        p.teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
-                        if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
-                        else p.setGameMode(GameMode.SURVIVAL);
-                        p.setHealth(p.getMaxHealth());
-                    }
-                }
-                WorldManager.removeWorld(world);
-            }
-        }.runTaskLater(MagicArena.plugin, 100);
+        if (won){
+            broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.GREEN + "You have Won!" + ChatColor.GOLD + " " + score + " Score");
+        } else broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.RED + "You have Lost!" + ChatColor.GOLD + " " + score + " Score");
+        super.finishDungeon(allPlayers, world, won);
     }
 
     @Override
@@ -284,6 +315,7 @@ public class Dungeon extends Game{
         }
         broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.DARK_PURPLE + "Boss Door " + ChatColor.DARK_RED + "has been opened!");
         broadcastSound(Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1, 0.3f);
+        finishDungeon(getAllPlayers(), getWorld(), true);
     }
     public int getWitherKeys(){
         return witherKeys;

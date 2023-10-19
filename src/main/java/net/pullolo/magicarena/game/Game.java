@@ -200,6 +200,9 @@ public abstract class Game {
     }
 
     public void finishGame(ArrayList<Player> winners, ArrayList<Player> losers, ArrayList<Player> allPlayers, World world){
+        if (startC!=null) startC.cancel();
+        if (gameC!=null) gameC.cancel();
+        if (gameCS!=null) gameCS.cancel();
         removeAllEntitiesFromGame();
         for (Player p : allPlayers){
             if (p!=null){
@@ -249,10 +252,14 @@ public abstract class Game {
     }
 
     public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won){
+        if (startC!=null) startC.cancel();
+        if (gameC!=null) gameC.cancel();
+        if (gameCS!=null) gameCS.cancel();
+        removeAllEntitiesFromGame();
         for (Player p : allPlayers){
             if (p!=null){
-                p.sendMessage("[Arena] An error occurred in the match, neither side will be penalized for losing!");
                 arenaPlayers.remove(p);
+                p.setFireTicks(0);
             }
         }
         for (Player p : allPlayers){

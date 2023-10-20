@@ -186,10 +186,11 @@ public class GameDamageHandler implements Listener {
     private double calculateDamage(double eventDamage, Entity damager, Entity damaged){
         if (!(damager instanceof Player)){
             double entityDamage = arenaEntities.get(damager).getDamage();
-            return entityDamage/1.3;
+            return entityDamage;
         }
+        double playerDamage = arenaPlayers.get(damager).getDamage();
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null){
-            return arenaPlayers.get(damager).getDamage()/1.3;
+            return 5*(1+playerDamage/100);
         }
         //todo add scaling for weapons and stuff
         Item playersItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
@@ -201,9 +202,8 @@ public class GameDamageHandler implements Listener {
             if(((Player) damager).getDisplayName().equalsIgnoreCase("yaemikujo") && new Random().nextInt(50)==0) damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cKocham cię Słonko &7<&5od &aMikołaja&5 <3&7>"));
         }
         Double itemDamage = playersItem.getDamage();
-        double playerDamage = arenaPlayers.get(damager).getDamage();
 
-        return playerDamage/1.3 * itemDamage/2;
+        return (5+itemDamage)*(1+playerDamage/100);
     }
 
     private double calculateProjectileDamage(Entity damager, Entity damaged){
@@ -218,7 +218,7 @@ public class GameDamageHandler implements Listener {
         Double itemDamage = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getDamage();
         double playerDamage = arenaPlayers.get(damager).getDamage();
 
-        return playerDamage/1.3 * itemDamage/1.8;
+        return (5+itemDamage)*(1+playerDamage/100);
     }
 
     private void checkIfKilled(Player p, Entity e){

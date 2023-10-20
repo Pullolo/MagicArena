@@ -80,6 +80,7 @@ public class ArenaGame extends Game {
                     for (Player p : allPlayers){
                         if (p!=null){
                             p.sendMessage(ChatColor.GREEN + "Game started!");
+                            if (arenaPlayers.containsKey(p)) arenaPlayers.get(p).respawn();
                         }
                     }
                     setStarted(true);

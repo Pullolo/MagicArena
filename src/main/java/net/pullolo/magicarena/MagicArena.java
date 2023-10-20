@@ -8,6 +8,7 @@ import net.pullolo.magicarena.events.GameEventsHandler;
 import net.pullolo.magicarena.game.GameManager;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
+import net.pullolo.magicarena.items.ArmorDefinitions;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
 import net.pullolo.magicarena.misc.CooldownApi;
@@ -50,6 +51,7 @@ public final class MagicArena extends JavaPlugin {
         plugin = this;
         dbManager.init();
         ItemsDefinitions.init();
+        ArmorDefinitions.init();
         checkDb();
         partyManager = new PartyManager();
         gameManager = new GameManager();
@@ -73,6 +75,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new Kill(), "kill");
         registerCommand(new GameCmd(), "game");
         registerCommand(new GiveItem(), "giveitem");
+        registerCommand(new GiveArmor(), "givearmor");
         registerCommand(new Spawn(), "spawn");
         registerCommand(new Party(), "party");
         registerCommand(new DungeonCmd(), "dungeon");

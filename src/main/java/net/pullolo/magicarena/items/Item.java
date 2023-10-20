@@ -7,6 +7,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
+
 public class Item {
 
     private final ItemStack item;
@@ -14,12 +16,14 @@ public class Item {
     private int stars;
     private double quality;
 
-    private Double damage, intelligence, health, defence, abilityPower, critDamage, critChance, resistance, speed;
+    private Double damage, intelligence, health, defence, abilityPower, critDamage, critChance, resistance, speed, manaRegen, healthRegen;
 
     public Item(ItemStack item) {
         this.item = item.clone();
         this.damage = 0.0;
         this.intelligence = 0.0;
+        this.manaRegen = 0.0;
+        this.healthRegen = 0.0;
         this.health = 0.0;
         this.defence = 0.0;
         this.abilityPower = 0.0;
@@ -71,6 +75,14 @@ public class Item {
                     String[] ss = s.split("§f");
                     speed = Double.parseDouble(ss[1]);
                 }
+                if (s.contains("§7Mana Regen: ")){
+                    String[] ss = s.split("§b");
+                    manaRegen = Double.parseDouble(ss[1]);
+                }
+                if (s.contains("§7Health Regen: ")){
+                    String[] ss = s.split("§4");
+                    healthRegen = Double.parseDouble(ss[1]);
+                }
                 if (s.contains("§7Quality: ")){
                     String[] ss = s.split("- ");
                     quality = Double.parseDouble(ss[1]);
@@ -100,16 +112,20 @@ public class Item {
         this.item = item.getItem().clone();
         this.damage = item.getDamage();
         this.intelligence = item.getIntelligence();
+        this.manaRegen = item.getManaRegen();
         this.health = item.getHealth();
+        this.healthRegen = item.getHealthRegen();
         this.defence = item.getDefence();
         this.abilityPower = item.getAbilityPower();
         this.critDamage = item.getCritDamage();
         this.critChance = item.getCritChance();
         this.resistance = item.getResistance();
         this.speed = item.getSpeed();
+        this.itemId = item.getItemId();
         setStars(stars);
         setQuality(quality);
-        updateStats();
+        if (armorItemIds.contains(this.getItemId())) updateArmorStats();
+        else updateStats();
     }
 
     public Double getDamage() {
@@ -262,5 +278,75 @@ public class Item {
         }
         meta.setLore(newLore);
         item.setItemMeta(meta);
+    }
+
+    public void updateArmorStats(){
+        int bonusValue;
+        double q = this.quality;
+        if (q>90){
+            bonusValue=10;
+        } else if (q>70) {
+            bonusValue=6;
+        } else if (q>40) {    //amounts per quality todo balance
+            bonusValue=-4;
+        } else {
+            bonusValue=-8;
+        }
+        for (int i = 0; i<this.stars; i++){
+            bonusValue+=2;  //amount per star todo balance
+        }
+
+        if (this.defence == 1){
+            ItemMeta meta = item.getItemMeta();
+            List<String> newLore = new ArrayList<>();
+            List<String> lore = meta.getLore();
+            for (String s: lore){
+                if (s.contains("§7Resistance: ")){
+                    String f;
+                    if ((this.resistance+bonusValue)>=0){
+                        f = s.split(":")[0]+": §3+"+((int) (this.resistance+bonusValue));
+                    } else {
+                        f = s.split(":")[0]+": §3-"+((int) (this.resistance+bonusValue));
+                    }
+                    newLore.add(f);
+                    continue;
+                }
+                newLore.add(s);
+            }
+            meta.setLore(newLore);
+            item.setItemMeta(meta);
+            return;
+        }
+
+        if (this.defence+bonusValue<1){
+            bonusValue= (int) (-(this.defence)+1);
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        List<String> newLore = new ArrayList<>();
+        List<String> lore = meta.getLore();
+        for (String s: lore){
+            if (s.contains("§7Defence: ")){
+                String f;
+                if ((this.defence+bonusValue)>=0){
+                    f = s.split(" ")[0]+" §a+"+((int) (this.defence+bonusValue));
+                } else {
+                    f = s.split(" ")[0]+" §a-"+((int) (this.defence+bonusValue));
+                }
+                newLore.add(f);
+                continue;
+            }
+            newLore.add(s);
+        }
+        meta.setLore(newLore);
+        item.setItemMeta(meta);
+    }
+
+    public Double getManaRegen() {
+        return manaRegen;
+    }
+
+    public Double getHealthRegen() {
+        return healthRegen;
     }
 }

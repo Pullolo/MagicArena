@@ -53,7 +53,7 @@ public class ArenaEntity extends ArenaEntityBlueprint{
     }
 
     public void fixedUpdateStats(){
-        setBaseMaxHealth(90+getLevel()*10);
+        setBaseMaxHealth(90+Math.pow(getLevel(), 2));
         setBaseMaxMana(80+getLevel()*20);
         setBaseManaRegen(getLevel());
         if (isTester) setBaseHpRegen(getMaxHealth());

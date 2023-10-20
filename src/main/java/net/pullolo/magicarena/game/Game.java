@@ -8,6 +8,7 @@ import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
+import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
+import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static org.bukkit.Bukkit.getServer;
@@ -70,7 +73,13 @@ public abstract class Game {
                             } else playerDied(p);
                         } else {
                             arenaPlayers.get(p).updateStats();
-
+                            try{
+                                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c" + Math.round(arenaPlayers.get(p).getHealth()) + "/" + Math.round(arenaPlayers.get(p).getMaxHealth())
+                                        + "❤     §a" + Math.round(arenaPlayers.get(p).getDefence()) + "❈ Defence    §b" + Math.round(arenaPlayers.get(p).getMana())
+                                        + "/" + Math.round(arenaPlayers.get(p).getMaxMana()) + "✎ Mana"));
+                            } catch (Exception exception){
+                                exception.printStackTrace();
+                            }
                             float h = (float) (arenaPlayers.get(p).getHealth() / arenaPlayers.get(p).getMaxHealth());
                             h = h * 20;
                             (p).setFoodLevel(20);
@@ -124,13 +133,6 @@ public abstract class Game {
                         arenaPlayers.get(p).regen();
                         arenaPlayers.get(p).regenMana();
                         arenaPlayers.get(p).updateStats();
-                        try{
-                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§c" + Math.round(arenaPlayers.get(p).getHealth()) + "/" + Math.round(arenaPlayers.get(p).getMaxHealth())
-                                    + "❤     §a" + Math.round(arenaPlayers.get(p).getDefence()) + "❈ Defence    §b" + Math.round(arenaPlayers.get(p).getMana())
-                                    + "/" + Math.round(arenaPlayers.get(p).getMaxMana()) + "✎ Mana"));
-                        } catch (Exception exception){
-                            exception.printStackTrace();
-                        }
                     }
                 }
                 for (Entity e : allEntities){
@@ -381,7 +383,146 @@ public abstract class Game {
     }
 
     private void updatePlayerStatsArmorWorn(Player p) {
-        //todo
+        String key = "armor";
+        double bonusDefence = 0;
+        double bonusDamage = 0;
+        double bonusAbilityDamage = 0;
+        double bonusCritDamage = 0;
+        double bonusCritChance = 0;
+        double bonusMagicDefence = 0;
+        double bonusIntelligence = 0;
+        double bonusSpeed = 0;
+        double bonusHealth = 0;
+        double bonusManaRegen = 0;
+        double bonusHealthRegen = 0;
+
+        ItemStack helmItemStack = p.getEquipment().getHelmet();
+        ItemStack chestItemStack = p.getEquipment().getChestplate();
+        ItemStack legsItemStack = p.getEquipment().getLeggings();
+        ItemStack bootsItemStack = p.getEquipment().getBoots();
+
+        if (helmItemStack != null || chestItemStack != null || legsItemStack != null || bootsItemStack != null){
+            if (helmItemStack!=null && helmItemStack.getItemMeta()!=null){
+                Item item = new Item(helmItemStack);
+                if (armorItemIds.contains(item.getItemId())){
+                    bonusDefence += item.getDefence();
+                    bonusDamage += item.getDamage();
+                    bonusAbilityDamage += item.getAbilityPower();
+                    bonusCritDamage += item.getCritDamage();
+                    bonusCritChance += item.getCritChance();
+                    bonusMagicDefence += item.getResistance();
+                    bonusIntelligence += item.getIntelligence();
+                    bonusSpeed += item.getSpeed();
+                    bonusHealth += item.getHealth();
+                    bonusManaRegen += item.getManaRegen();
+                    bonusHealthRegen += item.getHealthRegen();
+                }
+            }
+            if (chestItemStack!=null && chestItemStack.getItemMeta()!=null){
+                Item item = new Item(chestItemStack);
+                if (armorItemIds.contains(item.getItemId())){
+                    bonusDefence += item.getDefence();
+                    bonusDamage += item.getDamage();
+                    bonusAbilityDamage += item.getAbilityPower();
+                    bonusCritDamage += item.getCritDamage();
+                    bonusCritChance += item.getCritChance();
+                    bonusMagicDefence += item.getResistance();
+                    bonusIntelligence += item.getIntelligence();
+                    bonusSpeed += item.getSpeed();
+                    bonusHealth += item.getHealth();
+                    bonusManaRegen += item.getManaRegen();
+                    bonusHealthRegen += item.getHealthRegen();
+                }
+            }
+            if (legsItemStack!=null && legsItemStack.getItemMeta()!=null){
+                Item item = new Item(legsItemStack);
+                if (armorItemIds.contains(item.getItemId())){
+                    bonusDefence += item.getDefence();
+                    bonusDamage += item.getDamage();
+                    bonusAbilityDamage += item.getAbilityPower();
+                    bonusCritDamage += item.getCritDamage();
+                    bonusCritChance += item.getCritChance();
+                    bonusMagicDefence += item.getResistance();
+                    bonusIntelligence += item.getIntelligence();
+                    bonusSpeed += item.getSpeed();
+                    bonusHealth += item.getHealth();
+                    bonusManaRegen += item.getManaRegen();
+                    bonusHealthRegen += item.getHealthRegen();
+                }
+            }
+            if (bootsItemStack!=null && bootsItemStack.getItemMeta()!=null){
+                Item item = new Item(bootsItemStack);
+                if (armorItemIds.contains(item.getItemId())){
+                    bonusDefence += item.getDefence();
+                    bonusDamage += item.getDamage();
+                    bonusAbilityDamage += item.getAbilityPower();
+                    bonusCritDamage += item.getCritDamage();
+                    bonusCritChance += item.getCritChance();
+                    bonusMagicDefence += item.getResistance();
+                    bonusIntelligence += item.getIntelligence();
+                    bonusSpeed += item.getSpeed();
+                    bonusHealth += item.getHealth();
+                    bonusManaRegen += item.getManaRegen();
+                    bonusHealthRegen += item.getHealthRegen();
+                }
+            }
+        }
+
+        if (arenaPlayers.get(p).getBonusDefence().containsKey(key)){
+            arenaPlayers.get(p).getBonusDefence().replace(key, bonusDefence);
+        } else {
+            arenaPlayers.get(p).getBonusDefence().put(key, bonusDefence);
+        }
+        if (arenaPlayers.get(p).getBonusDamage().containsKey(key)){
+            arenaPlayers.get(p).getBonusDamage().replace(key, bonusDamage);
+        } else {
+            arenaPlayers.get(p).getBonusDamage().put(key, bonusDamage);
+        }
+        if (arenaPlayers.get(p).getBonusCritDamage().containsKey(key)){
+            arenaPlayers.get(p).getBonusCritDamage().replace(key, bonusCritDamage);
+        } else {
+            arenaPlayers.get(p).getBonusCritDamage().put(key, bonusCritDamage);
+        }
+        if (arenaPlayers.get(p).getBonusCritChance().containsKey(key)){
+            arenaPlayers.get(p).getBonusCritChance().replace(key, bonusCritChance);
+        } else {
+            arenaPlayers.get(p).getBonusCritChance().put(key, bonusCritChance);
+        }
+        if (arenaPlayers.get(p).getBonusMagicDefence().containsKey(key)){
+            arenaPlayers.get(p).getBonusMagicDefence().replace(key, bonusMagicDefence);
+        } else {
+            arenaPlayers.get(p).getBonusMagicDefence().put(key, bonusMagicDefence);
+        }
+        if (arenaPlayers.get(p).getBonusMaxMana().containsKey(key)){
+            arenaPlayers.get(p).getBonusMaxMana().replace(key, bonusIntelligence);
+        } else {
+            arenaPlayers.get(p).getBonusMaxMana().put(key, bonusIntelligence);
+        }
+        if (arenaPlayers.get(p).getBonusSpeed().containsKey(key)){
+            arenaPlayers.get(p).getBonusSpeed().replace(key, bonusSpeed);
+        } else {
+            arenaPlayers.get(p).getBonusSpeed().put(key, bonusSpeed);
+        }
+        if (arenaPlayers.get(p).getBonusMaxHealth().containsKey(key)){
+            arenaPlayers.get(p).getBonusMaxHealth().replace(key, bonusHealth);
+        } else {
+            arenaPlayers.get(p).getBonusMaxHealth().put(key, bonusHealth);
+        }
+        if (arenaPlayers.get(p).getBonusMagicDamage().containsKey(key)){
+            arenaPlayers.get(p).getBonusMagicDamage().replace(key, bonusAbilityDamage);
+        } else {
+            arenaPlayers.get(p).getBonusMagicDamage().put(key, bonusAbilityDamage);
+        }
+        if (arenaPlayers.get(p).getBonusManaRegen().containsKey(key)){
+            arenaPlayers.get(p).getBonusManaRegen().replace(key, bonusManaRegen);
+        } else {
+            arenaPlayers.get(p).getBonusManaRegen().put(key, bonusManaRegen);
+        }
+        if (arenaPlayers.get(p).getBonusHpRegen().containsKey(key)){
+            arenaPlayers.get(p).getBonusHpRegen().replace(key, bonusHealthRegen);
+        } else {
+            arenaPlayers.get(p).getBonusHpRegen().put(key, bonusHealthRegen);
+        }
     }
 
     private void updatePlayerStatsItemHeld(Player p){
@@ -427,6 +568,16 @@ public abstract class Game {
             }else {
                 arenaPlayers.get(p).getBonusMagicDefence().put(key, new Item(p.getInventory().getItemInMainHand()).getResistance());
             }
+            if (arenaPlayers.get(p).getBonusManaRegen().containsKey(key)){
+                arenaPlayers.get(p).getBonusManaRegen().replace(key, new Item(p.getInventory().getItemInMainHand()).getManaRegen());
+            }else {
+                arenaPlayers.get(p).getBonusManaRegen().put(key, new Item(p.getInventory().getItemInMainHand()).getManaRegen());
+            }
+            if (arenaPlayers.get(p).getBonusHpRegen().containsKey(key)){
+                arenaPlayers.get(p).getBonusHpRegen().replace(key, new Item(p.getInventory().getItemInMainHand()).getHealthRegen());
+            }else {
+                arenaPlayers.get(p).getBonusHpRegen().put(key, new Item(p.getInventory().getItemInMainHand()).getHealthRegen());
+            }
             return;
         }
         if (arenaPlayers.get(p).getBonusDefence().containsKey(key)){
@@ -468,6 +619,16 @@ public abstract class Game {
             arenaPlayers.get(p).getBonusMagicDefence().replace(key, 0.0);
         }else {
             arenaPlayers.get(p).getBonusMagicDefence().put(key, 0.0);
+        }
+        if (arenaPlayers.get(p).getBonusManaRegen().containsKey(key)){
+            arenaPlayers.get(p).getBonusManaRegen().replace(key, 0.0);
+        }else {
+            arenaPlayers.get(p).getBonusManaRegen().put(key, 0.0);
+        }
+        if (arenaPlayers.get(p).getBonusHpRegen().containsKey(key)){
+            arenaPlayers.get(p).getBonusHpRegen().replace(key, 0.0);
+        }else {
+            arenaPlayers.get(p).getBonusHpRegen().put(key, 0.0);
         }
     }
 

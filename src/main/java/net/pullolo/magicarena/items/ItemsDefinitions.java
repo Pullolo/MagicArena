@@ -260,22 +260,6 @@ public class ItemsDefinitions {
     }
 
     public static Item getItemFromPlayer(ItemStack item){
-        if (!isCustom(item)){
-            getLog().warning("This item isn't on custom items list!");
-        }
         return new Item(item);
-    }
-
-    private static boolean isCustom(ItemStack item){
-        if (item.getItemMeta().getLore()!=null){
-            for (String s : item.getItemMeta().getLore()){
-                if (s.contains("§8item_id:")){
-                    if (itemIds.contains(s.split(":")[1])){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 }

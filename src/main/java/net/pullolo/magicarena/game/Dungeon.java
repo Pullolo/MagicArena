@@ -138,7 +138,6 @@ public class Dungeon extends Game{
                 if (cmd.regionMatches(0, "s: ", 0, 3)){
                     if (cmd.contains(",")){
                         String[] cmds = cmd.split(",");
-                        int patchOfMobs = r.nextInt(cmds.length);
                         int j = 0;
                         for (String s : cmds){
                             if (!s.regionMatches(0, "s: ", 0, 3)){
@@ -152,9 +151,8 @@ public class Dungeon extends Game{
                                 canHaveKey=false;
                             }
                             int mobWithKey=-1;
-                            if (patchOfMobs==j && canHaveKey) {
-                                mobWithKey=r.nextInt(amount);
-                            }
+                            if (canHaveKey) mobWithKey=r.nextInt(amount);
+
                             for (int i = 0; i<amount; i++){
                                 x = r.nextDouble()*blockOffset;
                                 z = r.nextDouble()*blockOffset;

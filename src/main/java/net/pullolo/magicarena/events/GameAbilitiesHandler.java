@@ -145,7 +145,6 @@ public class GameAbilitiesHandler implements Listener {
                     en.setMarker(true);
                 });
                 as.teleport(as.getLocation().setDirection(p.getLocation().getDirection().clone().setY(0)));
-                getLog().warning(as.getLocation().getDirection().toString());
 
                 Location dest = p.getLocation().add(p.getLocation().getDirection().clone().setY(0).multiply(10));
                 Vector v = dest.subtract(p.getLocation()).toVector();

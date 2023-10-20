@@ -58,8 +58,8 @@ public class ArenaEntity extends ArenaEntityBlueprint{
         setBaseManaRegen(getLevel());
         if (isTester) setBaseHpRegen(getMaxHealth());
         else setBaseHpRegen(getLevel()/20+1);
-        setBaseDefence(getLevel()*5);
-        setBaseMagicDefence(getLevel()*5);
+        setBaseDefence(getLevel()*2);
+        setBaseMagicDefence(getLevel()*1.5);
         setBaseDamage((getLevel()/2+1)*5+getLevel());
         setBaseCritDamage(getLevel()*5+20);
         setBaseCritChance(getLevel()+2);

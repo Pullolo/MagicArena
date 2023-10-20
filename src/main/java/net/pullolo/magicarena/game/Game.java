@@ -377,6 +377,11 @@ public abstract class Game {
 
     private void updatePlayerStats(Player p){
         updatePlayerStatsItemHeld(p);
+        updatePlayerStatsArmorWorn(p);
+    }
+
+    private void updatePlayerStatsArmorWorn(Player p) {
+        //todo
     }
 
     private void updatePlayerStatsItemHeld(Player p){

@@ -209,7 +209,7 @@ public class GameDamageHandler implements Listener {
     private double calculateProjectileDamage(Entity damager, Entity damaged){
         if (!(damager instanceof Player)){
             double entityDamage = arenaEntities.get(damager).getDamage();
-            return entityDamage*2;
+            return entityDamage;
         }
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null){
             return arenaPlayers.get(damager).getDamage()/1.3;

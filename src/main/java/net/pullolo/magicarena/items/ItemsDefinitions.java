@@ -63,7 +63,7 @@ public class ItemsDefinitions {
         lore.add("&7Intelligence: &b+20");
         lore.add("");
         lore.add("&6Ability: Magic Missile &eRIGHT CLICK");
-        lore.add("&7Fires a magic missile dealing &3110%");
+        lore.add("&7Fires a magic missile dealing &320 + 110%");
         lore.add("&7your ability damage.");
         lore.add("&8Mana Cost: &330");
         lore.add("&8Cooldown: &a1.5s");

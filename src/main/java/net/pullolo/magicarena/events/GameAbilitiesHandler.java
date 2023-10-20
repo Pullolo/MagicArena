@@ -88,14 +88,14 @@ public class GameAbilitiesHandler implements Listener {
                                     if (as.getLocation().distanceSquared(entity.getLocation()) <= 3.5){
                                         if (!entity.equals(p)){
                                             if (entity instanceof Damageable){
-                                                if (entity instanceof Player){
+                                                if (entity instanceof Player && !arenaPlayers.get(p).getGame().getAllPlayersInPlayersTeam(p).contains(entity)){
                                                     if (isKillable(p ,(Player) entity)){
-                                                        arenaPlayers.get(entity).damage(p, entity, arenaPlayers.get(p).getMagicDamage()*1.1, true);
+                                                        arenaPlayers.get(entity).damage(p, entity, arenaPlayers.get(p).getMagicDamage()*1.1+20, true);
                                                         ((Damageable) entity).damage(0.01, p);
                                                     }
                                                 } else {
                                                     if (arenaEntities.containsKey(entity)){
-                                                        arenaEntities.get(entity).damage(p, entity, arenaPlayers.get(p).getMagicDamage()*1.1, true);
+                                                        arenaEntities.get(entity).damage(p, entity, arenaPlayers.get(p).getMagicDamage()*1.1+20, true);
                                                         ((Damageable) entity).damage(0.01, p);
                                                         if (arenaEntities.get(entity).getHealth()<=0){
                                                             new OnArenaEntityKilled(p, entity);

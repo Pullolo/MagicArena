@@ -82,6 +82,13 @@ public class GiveItem implements CommandExecutor, TabCompleter {
                 ((Player) sender).getInventory().addItem(new Item(solidStoneAxe, 0, 0).getItem());
             } else ((Player) sender).getInventory().addItem(solidStoneAxe.getItem());
         }
+        if (args[0].equalsIgnoreCase("storm_ruler")){
+            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
+                ((Player) sender).getInventory().addItem(new Item(stormRuler, 5, 100).getItem());
+            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
+                ((Player) sender).getInventory().addItem(new Item(stormRuler, 0, 0).getItem());
+            } else ((Player) sender).getInventory().addItem(stormRuler.getItem());
+        }
 
         return true;
     }
@@ -109,6 +116,7 @@ public class GiveItem implements CommandExecutor, TabCompleter {
             addToCompletion("long_bow", args[0], completion);
             addToCompletion("unstable_tome", args[0], completion);
             addToCompletion("solid_stone_axe", args[0], completion);
+            addToCompletion("storm_ruler", args[0], completion);
             return completion;
         }
         if (args.length==2 && !args[0].equalsIgnoreCase("blade_of_the_universe")){

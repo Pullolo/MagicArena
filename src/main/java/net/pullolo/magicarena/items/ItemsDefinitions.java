@@ -18,6 +18,7 @@ import static net.pullolo.magicarena.MagicArena.getLog;
 
 public class ItemsDefinitions {
 
+    //uncommon
     public static Item testItem;
     public static Item basicSword;
     public static Item stoneStick;
@@ -25,6 +26,8 @@ public class ItemsDefinitions {
     public static Item solidStoneAxe; //tank
     public static Item unstableTome; //dps
     public static Item longBow; //archer
+    //rare
+    public static Item stormRuler;
 
     public static Item bladeOfTheUniverse;
     public static final ArrayList<String> itemIds = new ArrayList<>();
@@ -38,7 +41,28 @@ public class ItemsDefinitions {
         createUnstableTome();
         createLongBow();
 
+        createStormRuler();
+
         createBladeOfTheUniverse();
+    }
+
+    private static void createStormRuler(){
+        String name = "&9Storm Ruler";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+30");
+        lore.add("&7Critical Chance: &c+10");
+        lore.add("");
+        lore.add("&6Ability: Storm King &eRIGHT CLICK");
+        lore.add("&7Fires a wave at the enemies dealing");
+        lore.add("&c110 + 112% &7your strength magic damage.");
+        lore.add("&8Cooldown: &a10s");
+        lore.add("");
+        lore.add("&9&lRARE GREAT SWORD");
+        lore.add("&8item_id:storm_ruler");
+        ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
+        stormRuler = new Item(item);
+        itemIds.add("storm_ruler");
     }
 
     private static void createLongBow(){

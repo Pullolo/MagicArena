@@ -32,7 +32,7 @@ public class ArmorDefinitions {
         lore1.add("&7Defence: &a+20");
         lore1.add("&7Resistance: &3+20");
         //lore1.add("&7Mana Regen: &b+20");
-        lore1.add("&7Damage: &c+20");
+//        lore1.add("&7Damage: &c+20");
         lore1.add("&7Critical Chance: &c+20");
         lore1.add("&7Critical Damage: &c+20");
         lore1.add("&7Intelligence: &b+20");
@@ -53,7 +53,7 @@ public class ArmorDefinitions {
         lore2.add("&7Defence: &a+20");
         lore2.add("&7Resistance: &3+20");
         //lore2.add("&7Mana Regen: &b+20");
-        lore2.add("&7Damage: &c+20");
+//        lore2.add("&7Damage: &c+20");
         lore2.add("&7Critical Chance: &c+20");
         lore2.add("&7Critical Damage: &c+20");
         lore2.add("&7Intelligence: &b+20");
@@ -74,7 +74,7 @@ public class ArmorDefinitions {
         lore3.add("&7Defence: &a+20");
         lore3.add("&7Resistance: &3+20");
         //lore3.add("&7Mana Regen: &b+20");
-        lore3.add("&7Damage: &c+20");
+//        lore3.add("&7Damage: &c+20");
         lore3.add("&7Critical Chance: &c+20");
         lore3.add("&7Critical Damage: &c+20");
         lore3.add("&7Intelligence: &b+20");
@@ -95,7 +95,7 @@ public class ArmorDefinitions {
         lore4.add("&7Defence: &a+20");
         lore4.add("&7Resistance: &3+20");
         //lore4.add("&7Mana Regen: &b+20");
-        lore4.add("&7Damage: &c+20");
+//        lore4.add("&7Damage: &c+20");
         lore4.add("&7Critical Chance: &c+20");
         lore4.add("&7Critical Damage: &c+20");
         lore4.add("&7Intelligence: &b+20");

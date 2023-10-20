@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomRareWeapon;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomUncommonWeapon;
 
 public class WishSystem {
@@ -100,6 +101,8 @@ public class WishSystem {
         if (wishType == WishType.WEAPON_WISH){
             if (wishRarity.equals(WishRarity.UNCOMMON)){
                 finalItem = new Item(getRandomUncommonWeapon(itemClass), stars, q).getItem();
+            } else if (wishRarity.equals(WishRarity.RARE)) {
+                finalItem = new Item(getRandomRareWeapon(itemClass), stars, q).getItem();
             } else {
                 finalItem = new ItemStack(Material.NETHERITE_SWORD);
                 ItemMeta im = finalItem.getItemMeta();

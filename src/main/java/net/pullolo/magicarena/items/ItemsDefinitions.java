@@ -215,7 +215,7 @@ public class ItemsDefinitions {
     }
 
     public static Item getRandomUncommonWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(3)+1; //1-1 range
+        int r = new Random().nextInt(3)+1; //1-3 range
         switch (r){
             case 1:
                 return basicSword;
@@ -232,6 +232,20 @@ public class ItemsDefinitions {
                     case TANK:
                         return solidStoneAxe;
                 }
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomRareWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        switch (r){
+            case 1:
+                return stormRuler;
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

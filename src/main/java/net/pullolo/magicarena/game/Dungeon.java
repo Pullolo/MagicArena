@@ -147,8 +147,12 @@ public class Dungeon extends Game{
                             String[] spawnArgs = s.split(": ")[1].split(" ");
                             String mobType = spawnArgs[0];
                             int amount = Integer.parseInt(spawnArgs[1]);
+                            boolean canHaveKey = true;
+                            if (spawnArgs.length>2 && spawnArgs[2].equalsIgnoreCase("nokey")){
+                                canHaveKey=false;
+                            }
                             int mobWithKey=-1;
-                            if (patchOfMobs==j) {
+                            if (patchOfMobs==j && canHaveKey) {
                                 mobWithKey=r.nextInt(amount);
                             }
                             for (int i = 0; i<amount; i++){
@@ -177,7 +181,12 @@ public class Dungeon extends Game{
                         String[] spawnArgs = cmd.split(": ")[1].split(" ");
                         String mobType = spawnArgs[0];
                         int amount = Integer.parseInt(spawnArgs[1]);
-                        int mobWithKey = r.nextInt(amount);
+                        boolean canHaveKey = true;
+                        if (spawnArgs.length>2 && spawnArgs[2].equalsIgnoreCase("nokey")){
+                            canHaveKey=false;
+                        }
+                        int mobWithKey = -1;
+                        if (canHaveKey) mobWithKey = r.nextInt(amount);
                         for (int i = 0; i<amount; i++){
                             x = r.nextDouble()*blockOffset;
                             z = r.nextDouble()*blockOffset;

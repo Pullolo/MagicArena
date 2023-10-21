@@ -106,7 +106,7 @@ public class GuiManager {
                     ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + getPlayerData(player).getWishes() + " ✧"));
         }));
         gui.addElement(new DynamicGuiElement('s', (viewer)->{
-            return new StaticGuiElement('s', new ItemStack(Material.PRISMARINE_SHARD),
+            return new StaticGuiElement('s', new ItemStack(Material.PRISMARINE_CRYSTALS),
                     ChatColor.translateAlternateColorCodes('&', "&r&7Your star essence: &a" + getPlayerData(player).getStarEssence() + " ✷"));
         }));
         gui.addElement(new DynamicGuiElement('d', (viewer)->{

@@ -2,6 +2,7 @@ package net.pullolo.magicarena.game;
 
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.data.PlayerData;
+import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.DungeonEntity;
@@ -34,6 +35,7 @@ public class Dungeon extends Game{
 
     private final ArrayList<BlockState> foundSecrets = new ArrayList<>();
     private int score = 0;
+    private int level;
     private int witherKeys = 0;
     private boolean bossKey = false;
 
@@ -53,6 +55,7 @@ public class Dungeon extends Game{
                 break;
         }
         int finalLevel = level;
+        this.level = finalLevel;
         for (Player p : allPlayers){
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
             updatePlayerItemStats(p);
@@ -239,6 +242,9 @@ public class Dungeon extends Game{
         if (won){
             broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.GREEN + "You have Won!" + ChatColor.GOLD + " " + score + " Score");
         } else broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.RED + "You have Lost!" + ChatColor.GOLD + " " + score + " Score");
+        for (Player p : allPlayers){
+            guiManager.createDungeonRewardMenu(p, score, level).show(p);
+        }
         super.finishDungeon(allPlayers, world, won);
     }
 

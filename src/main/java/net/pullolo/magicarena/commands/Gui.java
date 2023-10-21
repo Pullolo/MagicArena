@@ -47,7 +47,10 @@ public class Gui implements CommandExecutor, TabCompleter {
                     guiManager.createWishGui((Player) sender).show((HumanEntity) sender);
                 } else if (args[1].equalsIgnoreCase("menu")) {
                     guiManager.createMainMenuGui((Player) sender).show((HumanEntity) sender);
-                } else sender.sendMessage(ChatColor.RED + "Invalid gui!");
+                } else if (args[1].equalsIgnoreCase("dungeonEnd")) {
+                    guiManager.createDungeonRewardMenu((Player) sender, 1000, 1).show((HumanEntity) sender);
+                }
+                else sender.sendMessage(ChatColor.RED + "Invalid gui!");
             }
             if (args[0].equalsIgnoreCase("anim")){
                 if (args[1].equalsIgnoreCase("wish")){
@@ -77,6 +80,7 @@ public class Gui implements CommandExecutor, TabCompleter {
             addToCompletion("gameSelect", args[1], completion);
             addToCompletion("wish", args[1], completion);
             addToCompletion("menu", args[1], completion);
+            addToCompletion("dungeonEnd", args[1], completion);
             return completion;
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("anim")){

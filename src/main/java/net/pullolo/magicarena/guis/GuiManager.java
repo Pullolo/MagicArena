@@ -39,13 +39,65 @@ public class GuiManager {
         this.plugin = plugin;
     }
 
+    public InventoryGui createDungeonRewardMenu(Player player, int score, int level){
+        String[] guiSetup = {
+                "    s    ",
+                "  a b c  ",
+                "         "
+        };
+        if (score<200){
+            guiSetup[1] = guiSetup[1].replaceAll("a", "0");
+            guiSetup[1] = guiSetup[1].replaceAll("b", "0");
+            guiSetup[1] = guiSetup[1].replaceAll("c", "0");
+        } else if (score < 400) {
+            guiSetup[1] = guiSetup[1].replaceAll("b", "0");
+            guiSetup[1] = guiSetup[1].replaceAll("c", "0");
+        } else if (score < 600) {
+            guiSetup[1] = guiSetup[1].replaceAll("c", "0");
+        }
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Rewards", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+        gui.addElement(new DynamicGuiElement('s', (viewer)->{
+            return new StaticGuiElement('s', new ItemStack(Material.SUNFLOWER),
+                    ChatColor.translateAlternateColorCodes('&', "&r&fScore &a" + score + "&f ♦\n&7Your dungeon essence &a" + getPlayerData(player).getDungeonEssence()));
+        }));
+        gui.addElement(new DynamicGuiElement('a', (viewer)->{
+            return new StaticGuiElement('a', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTZkN2ZkYjUwZjE0YzczMWM3MjdiMGUwZDE4OWI2YTg3NDMxOWZjMGQ3OWM4YTA5OWFjZmM3N2M3YjJkOTE5NiJ9fX0="),
+                    click -> {
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&fOpen &aBasic &fChest ♦\n&7Free"));
+        }));
+        gui.addElement(new DynamicGuiElement('b', (viewer)->{
+            return new StaticGuiElement('b', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDUxYTVlOTUyNGU1ZGMzZDlmYTEzZmYzOTVlYjY4MjRmMjY3NjE1NTZhNjY5YTZiYTk0MDI5MGZkY2JiNjBmNSJ9fX0="),
+                    click -> {
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&fOpen &5Epic &fChest ♦\n&7Costs &5300 &7Dungeon Essence"));
+        }));
+        gui.addElement(new DynamicGuiElement('c', (viewer)->{
+            return new StaticGuiElement('c', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDQ1MjQwZmNmMWE5Nzk2MzI3ZGRhNTU5Mzk4NTM0M2FmOTEyMWE3MTU2YmM3NmUzZDZiMzQxYjAyZTZhNmU1MiJ9fX0="),
+                    click -> {
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&fOpen &dMythic &fChest ♦\n&7Costs &51000 &7Dungeon Essence"));
+        }));
+
+        gui.addElement(new DynamicGuiElement('0', (viewer)->{
+            return new StaticGuiElement('0', new ItemStack(Material.BARRIER),
+                    ChatColor.translateAlternateColorCodes('&', "&r&cYou need a higher score to get this reward!"));
+        }));
+
+        return gui;
+    }
+
     public InventoryGui createMainMenuGui(Player player){
         String[] guiSetup = {
                 "         ",
                 "r g p w i",
                 "         "
         };
-        InventoryGui gui = new InventoryGui(this.plugin, player, "Main Menu", guiSetup);
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Profile", guiSetup);
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         gui.addElement(new StaticGuiElement('g', new ItemStack (Material.COMPASS),
                 click -> {
@@ -493,6 +545,15 @@ public class GuiManager {
         sm.setOwningPlayer(p);
         skull.setItemMeta(sm);
         return skull;
+    }
+
+    private ItemStack addLoreToItem(ItemStack item, String lore1){
+        ItemMeta im = item.getItemMeta();
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.translateAlternateColorCodes('&', lore1));
+        im.setLore(lore);
+        item.setItemMeta(im);
+        return item;
     }
 
     private void startDungeon(Player p, int level){

@@ -44,6 +44,7 @@ public final class MagicArena extends JavaPlugin {
     public static String mainWorld;
     public static GameManager gameManager;
     public static PartyManager partyManager;
+    public static GuiManager guiManager;
     public static DbManager dbManager = new DbManager();
     public static JavaPlugin plugin;
 
@@ -58,7 +59,7 @@ public final class MagicArena extends JavaPlugin {
         setPlayerData();
         partyManager = new PartyManager();
         gameManager = new GameManager();
-        GuiManager guiManager = new GuiManager(this);
+        guiManager = new GuiManager(this);
         AnimationManager animationManager = new AnimationManager(this, guiManager);
         wishSystem = new WishSystem(animationManager);
         saveDefaultConfig();

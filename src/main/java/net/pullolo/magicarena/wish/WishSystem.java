@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.items.ArmorDefinitions.getRandomUncommonArmorPiece;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomRareWeapon;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomUncommonWeapon;
@@ -42,11 +43,9 @@ public class WishSystem {
 
     public boolean wish(Player player, WishType wishType){
 
-        //todo temp code to make wishes cost smth
-        if (player.getLevel()<1){
+        if (getPlayerData(player).getWishes()<1){
             return false;
-        } else player.setLevel(player.getLevel()-1);
-        //todo temp end
+        } else getPlayerData(player).setWishes(getPlayerData(player).getWishes()-1);
 
         ItemStack finalItem;
         Random r = new Random();

@@ -4,6 +4,7 @@ import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dbassett.skullcreator.SkullCreator;
+import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.items.ItemClass;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 import static net.pullolo.magicarena.wish.WishSystem.getRarityColorChar;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
@@ -59,6 +61,11 @@ public class GuiManager {
                 }, ChatColor.translateAlternateColorCodes('&', "&r&3✧ Wish")));
         gui.addElement(new DynamicGuiElement('p', (viewer)->{
             return new StaticGuiElement('p', getPlayerSkull(player),
+                    click -> {
+                        click.getGui().close();
+                        createProfileMenu((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                        return true;
+                    },
                     ChatColor.translateAlternateColorCodes('&', "&r&7✉ Your Profile"));
         }));
         gui.addElement(new StaticGuiElement('r', new ItemStack (Material.BEACON),
@@ -71,6 +78,41 @@ public class GuiManager {
                     click.getGui().close();
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Your Items")));
+
+        return gui;
+    }
+    public InventoryGui createProfileMenu(Player player){
+        String[] guiSetup = {
+                "    h    ",
+                "  lxwsd  ",
+                "         "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Select Game Mode", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1)); // fill the empty slots with this
+        gui.addElement(new DynamicGuiElement('h', (viewer)->{
+            return new StaticGuiElement('h', getPlayerSkull(player),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7✉ Profile &a" + getPlayerData(player).getName()));
+        }));
+        gui.addElement(new DynamicGuiElement('l', (viewer)->{
+            return new StaticGuiElement('l', new ItemStack(Material.ENCHANTING_TABLE),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your level: &a" + getPlayerData(player).getLevel() + " ≛"));
+        }));
+        gui.addElement(new DynamicGuiElement('x', (viewer)->{
+            return new StaticGuiElement('x', new ItemStack(Material.EXPERIENCE_BOTTLE),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your xp: &a" + getPlayerData(player).getXp() + " ❊"));
+        }));
+        gui.addElement(new DynamicGuiElement('w', (viewer)->{
+            return new StaticGuiElement('w', new ItemStack(Material.NETHER_STAR),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + getPlayerData(player).getWishes() + " ✧"));
+        }));
+        gui.addElement(new DynamicGuiElement('s', (viewer)->{
+            return new StaticGuiElement('s', new ItemStack(Material.PRISMARINE_SHARD),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your star essence: &a" + getPlayerData(player).getStarEssence() + " ✷"));
+        }));
+        gui.addElement(new DynamicGuiElement('d', (viewer)->{
+            return new StaticGuiElement('d', new ItemStack(Material.FIRE_CHARGE),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your dungeon essence: &a" + getPlayerData(player).getDungeonEssence() + " ✪"));
+        }));
 
         return gui;
     }
@@ -195,9 +237,7 @@ public class GuiManager {
                 ChatColor.translateAlternateColorCodes('&', "&r&cWish for Weapons! &a1 ✧")));
         gui.addElement(new DynamicGuiElement('n', (viewer)->{
             return new StaticGuiElement('n', new ItemStack(Material.NETHER_STAR),
-                    //todo temp set wishes to player level
-                    ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + player.getLevel() + " ✧"));
-                    //todo temp end
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + getPlayerData(player).getWishes() + " ✧"));
         }));
 
         return gui;

@@ -86,14 +86,14 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerBuild(BlockPlaceEvent event){
-        if (isPlayerInGame(event.getPlayer())){
+        if (isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")){
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerBreak(BlockBreakEvent event){
-        if (isPlayerInGame(event.getPlayer())){
+        if (isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")){
             event.setCancelled(true);
         }
     }

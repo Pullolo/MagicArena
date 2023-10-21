@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
@@ -46,6 +47,14 @@ public class GameEventsHandler implements Listener {
         if (itemIds.contains(new Item(event.getConsumable()).getItemId())){
             event.setCancelled(true);
             return;
+        }
+    }
+
+    @EventHandler
+    public void onEntityDrop(EntityDeathEvent event){
+        if (arenaEntities.containsKey(event.getEntity())){
+            event.getDrops().clear();
+            event.setDroppedExp(0);
         }
     }
 

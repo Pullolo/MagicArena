@@ -7,6 +7,7 @@ import dev.dbassett.skullcreator.SkullCreator;
 import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
+import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemClass;
 import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
@@ -475,7 +476,6 @@ public class GuiManager {
         return finishedList;
     }
 
-    //todo add item class
     private ArrayList<InventoryGui> createPulloutAnim(Player player, WishSystem.WishRarity wishRarity, WishSystem.WishType wishType, int stars, ItemClass itemClass, ItemStack finalItem){
         ArrayList<InventoryGui> finishedList = new ArrayList<>();
         String[] gui1 = {
@@ -521,7 +521,7 @@ public class GuiManager {
         starList.add(guiStars4);
         String[] guiFinal = {
                 "         ",
-                "c   i    ",
+                "c   i   e",
                 "         "
         };
         String s = "&r&" + getRarityColorChar(wishRarity) + "Wishing for " + wishType.toString().toLowerCase().split("_")[0].replace(String.valueOf(wishType.toString().toLowerCase().split("_")[0].toCharArray()[0]), String.valueOf(wishType.toString().toLowerCase().split("_")[0].toCharArray()[0]).toUpperCase());
@@ -583,10 +583,21 @@ public class GuiManager {
             return new StaticGuiElement('i', finalItem, click -> {
                 //todo temp open classes gui and add item there add db support
                 click.getWhoClicked().getInventory().addItem(finalItem);
-                //todo temp end
                 click.getGui().close();
                 return true;
             }, getItemAsString(finalItem));
+        }));
+        int starEssence = convertItemToEssence(finalItem, wishRarity);
+        finalgui.addElement(new DynamicGuiElement('e', (viewer)->{
+            return new StaticGuiElement('e', new ItemStack(Material.PRISMARINE_CRYSTALS),
+                    click -> {
+                        Player p = (Player) click.getWhoClicked();
+                        getPlayerData(p).setStarEssence(getPlayerData(p).getStarEssence() + starEssence);
+                        p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
+                        click.getGui().close();
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Get &a" + starEssence + "&7 star essence instead!"));
         }));
         addClosePrevention(finalgui);
 
@@ -693,6 +704,15 @@ public class GuiManager {
             new Dungeon(partyManager.getPlayersParty(p), level, Dungeon.getRandomDifficulty(), false);
         } else p.sendMessage(ChatColor.RED + "You need to be in a party and be it's owner to execute this command!");
         //todo end temp
+    }
+
+    private int convertItemToEssence(ItemStack itemStack, WishSystem.WishRarity wishRarity){
+        Item item = new Item(itemStack);
+
+        double essence = (item.getQuality()/100)*((double) item.getStars()/5);
+        essence*=getWishRarityAsInt(wishRarity)*40;
+
+        return (int) Math.round(essence);
     }
 
     private ItemStack getPlayerSkull(String base64){

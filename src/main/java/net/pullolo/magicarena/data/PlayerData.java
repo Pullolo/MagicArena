@@ -1,8 +1,13 @@
 package net.pullolo.magicarena.data;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+
+import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
+import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class PlayerData {
 
@@ -64,6 +69,14 @@ public class PlayerData {
 
     public void setLevel(int level) {
         this.level = level;
+        try {
+            Player p = Bukkit.getPlayer(name);
+            if (isPlayerInGame(p)){
+                arenaPlayers.get(p).setLevel(this.level);
+            }
+        } catch (Exception e){
+            getLog().warning("Couldn't set Player level!");
+        }
     }
 
     public void setStarEssence(int star_essence) {

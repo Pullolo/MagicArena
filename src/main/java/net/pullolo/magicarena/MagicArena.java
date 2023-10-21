@@ -85,6 +85,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new GetSkull(), "getskull");
         registerCommand(new SetCustomName(), "setcustomname");
         registerCommand(new GetCustomName(), "getcustomname");
+        registerCommand(new Data(), "data");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);

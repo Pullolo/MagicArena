@@ -84,7 +84,7 @@ public class DbManager {
     public PlayerData getPlayerData(String playerName) {
         PlayerData pd = null;
         if (!isPlayerInDb(playerName)){
-            addPlayer(playerName, 1, 0, 0, 0, 0);
+            addPlayer(playerName, 1, 0, 0, 10, 0);
         }
         try{
             Class.forName("org.sqlite.JDBC");

@@ -243,8 +243,25 @@ public class Dungeon extends Game{
             broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.GREEN + "You have Won!" + ChatColor.GOLD + " " + score + " Score");
         } else broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.RED + "You have Lost!" + ChatColor.GOLD + " " + score + " Score");
         for (Player p : allPlayers){
+            if (p.getGameMode().equals(GameMode.SPECTATOR)){
+                p.teleport(new Location(getWorld(), 0.5, config.getDouble("arenas-spawn-y"), 0.5).setDirection(new Location(getWorld(), 0.5, config.getDouble("arenas-spawn-y"), 0.5).getDirection().multiply(-1)));
+                p.setGameMode(GameMode.SURVIVAL);
+            }
+        }
+        for (Player p : allPlayers){
             guiManager.createDungeonRewardMenu(p, score, level).show(p);
         }
+        //warn players
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Player p : allPlayers){
+                    if (p!=null){
+                        p.sendMessage(ChatColor.GREEN + "You will be warped in 5 seconds!");
+                    }
+                }
+            }
+        }.runTaskLater(plugin, 200);
         super.finishDungeon(allPlayers, world, won);
     }
 

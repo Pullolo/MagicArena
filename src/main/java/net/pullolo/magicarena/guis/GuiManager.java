@@ -388,7 +388,17 @@ public class GuiManager {
                 ChatColor.translateAlternateColorCodes('&', "&r&cWish for Weapons! &a1 ✧")));
         gui.addElement(new DynamicGuiElement('n', (viewer)->{
             return new StaticGuiElement('n', new ItemStack(Material.NETHER_STAR),
-                    ChatColor.translateAlternateColorCodes('&', "&r&7Your wishes: &a" + getPlayerData(player).getWishes() + " ✧"));
+                    click -> {
+                        Player p = (Player) click.getWhoClicked();
+                        while (getPlayerData(p).getStarEssence()>=160){
+                            getPlayerData(p).setStarEssence(getPlayerData(p).getStarEssence() - 160);
+                            getPlayerData(p).setWishes(getPlayerData(p).getWishes() + 1);
+                        }
+                        click.getGui().draw();
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&fYour wishes: &a" + getPlayerData(player).getWishes() + " ✧" +
+                            "\n&e(click)&7 to get &a" + (int) Math.floor((double) getPlayerData(player).getStarEssence() / 160) + "&7 wishes!\n&71 wish = 160 star essence"));
         }));
 
         return gui;

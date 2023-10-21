@@ -14,9 +14,9 @@ public class DungeonChestSystem {
         MYTHIC
     }
 
-    public void createDungeonChest(Player p, int score, ChestType chestType){
+    public void createDungeonChest(Player p, int score, int level, ChestType chestType){
         Random rand = new Random();
-        int mul = 1;
+        int mul = (int) Math.floor(Math.pow(level, (double) 1/6));
         int add = 0;
         int val1 = rand.nextInt(10);
         int val2 = rand.nextInt(10);

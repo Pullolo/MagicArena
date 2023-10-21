@@ -709,8 +709,8 @@ public class GuiManager {
     private int convertItemToEssence(ItemStack itemStack, WishSystem.WishRarity wishRarity){
         Item item = new Item(itemStack);
 
-        double essence = (item.getQuality()/100)*((double) item.getStars()/5);
-        essence*=getWishRarityAsInt(wishRarity)*40;
+        double essence = (0.8+(item.getQuality()/100))*(0.6+((double) item.getStars()/5));
+        essence*=getWishRarityAsInt(wishRarity)*20;
 
         return (int) Math.round(essence);
     }

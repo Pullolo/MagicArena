@@ -54,7 +54,7 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
         setBaseHpRegen(getLevel()/20+1);
         setBaseDefence(getLevel()*5);
         setBaseMagicDefence(getLevel()*5);
-        setBaseDamage((getLevel()/2+1)*5+getLevel());
+        setBaseDamage(getLevel()*10+5);
         setBaseCritDamage(getLevel()*5+20);
         setBaseCritChance(getLevel()+2);
         setBaseMagicDamage(getLevel()*2);

@@ -1,6 +1,7 @@
 package net.pullolo.magicarena.game;
 
 import net.pullolo.magicarena.MagicArena;
+import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.DungeonEntity;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 
@@ -52,7 +54,7 @@ public class Dungeon extends Game{
         }
         int finalLevel = level;
         for (Player p : allPlayers){
-            new ArenaPlayer(p, 1, this);
+            new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
             p.setGameMode(GameMode.SURVIVAL);
             p.teleport(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).setDirection(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).getDirection().multiply(-1)));
             if (test){

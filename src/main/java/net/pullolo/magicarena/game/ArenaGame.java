@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static org.bukkit.Bukkit.getServer;
@@ -44,7 +45,7 @@ public class ArenaGame extends Game {
             p.teleport(new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), -config.getDouble("arenas-spawn-z")));
         }
         for (Player p : allPlayers){
-            new ArenaPlayer(p, 1, this);
+            new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
             p.setGameMode(GameMode.SURVIVAL);
             if (test){
                 p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");

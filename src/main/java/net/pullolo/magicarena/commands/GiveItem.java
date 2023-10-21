@@ -32,62 +32,12 @@ public class GiveItem implements CommandExecutor, TabCompleter {
         }
         if (args[0].equalsIgnoreCase("blade_of_the_universe")){
             ((Player) sender).getInventory().addItem(bladeOfTheUniverse.getItem());
-        }
-        if (args[0].equalsIgnoreCase("test_item")){
+        } else if (items.containsKey(args[0])){
             if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(testItem, 5, 100).getItem());
+                ((Player) sender).getInventory().addItem(new Item(items.get(args[0]), 5, 100).getItem());
             } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(testItem, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(testItem.getItem());
-        }
-        if (args[0].equalsIgnoreCase("basic_sword")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(basicSword, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(basicSword, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(basicSword.getItem());
-        }
-        if (args[0].equalsIgnoreCase("stone_stick")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(stoneStick, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(stoneStick, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(stoneStick.getItem());
-        }
-        if (args[0].equalsIgnoreCase("leeching_staff")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(leechingStaff, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(leechingStaff, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(leechingStaff.getItem());
-        }
-        if (args[0].equalsIgnoreCase("unstable_tome")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(unstableTome, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(unstableTome, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(unstableTome.getItem());
-        }
-        if (args[0].equalsIgnoreCase("long_bow")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(longBow, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(longBow, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(longBow.getItem());
-        }
-        if (args[0].equalsIgnoreCase("solid_stone_axe")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(solidStoneAxe, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(solidStoneAxe, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(solidStoneAxe.getItem());
-        }
-        if (args[0].equalsIgnoreCase("storm_ruler")){
-            if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(stormRuler, 5, 100).getItem());
-            } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(stormRuler, 0, 0).getItem());
-            } else ((Player) sender).getInventory().addItem(stormRuler.getItem());
+                ((Player) sender).getInventory().addItem(new Item(items.get(args[0]), 0, 0).getItem());
+            } else ((Player) sender).getInventory().addItem(items.get(args[0]).getItem());
         }
 
         return true;
@@ -108,15 +58,9 @@ public class GiveItem implements CommandExecutor, TabCompleter {
         if (args.length==1){
             ArrayList<String> completion = new ArrayList<>();
             addToCompletion("copy", args[0], completion);
-            addToCompletion("blade_of_the_universe", args[0], completion);
-            addToCompletion("test_item", args[0], completion);
-            addToCompletion("basic_sword", args[0], completion);
-            addToCompletion("stone_stick", args[0], completion);
-            addToCompletion("leeching_staff", args[0], completion);
-            addToCompletion("long_bow", args[0], completion);
-            addToCompletion("unstable_tome", args[0], completion);
-            addToCompletion("solid_stone_axe", args[0], completion);
-            addToCompletion("storm_ruler", args[0], completion);
+            for (String s : items.keySet()){
+                addToCompletion(s, args[0], completion);
+            }
             return completion;
         }
         if (args.length==2 && !args[0].equalsIgnoreCase("blade_of_the_universe")){

@@ -27,22 +27,19 @@ public class GiveArmor implements CommandExecutor, TabCompleter {
         if (args.length<1){
             return false;
         }
-        if (args[0].equalsIgnoreCase("test_armor")){
+        if (armorItems.containsKey(args[0])){
             if (args.length==2 && args[1].equalsIgnoreCase("maxed")){
-                ((Player) sender).getInventory().addItem(new Item(testHelmet, 5, 100).getItem());
-                ((Player) sender).getInventory().addItem(new Item(testChestplate, 5, 100).getItem());
-                ((Player) sender).getInventory().addItem(new Item(testLeggings, 5, 100).getItem());
-                ((Player) sender).getInventory().addItem(new Item(testBoots, 5, 100).getItem());
+                for (Item item : armorItems.get(args[0])){
+                    ((Player) sender).getInventory().addItem(new Item(item, 5, 100).getItem());
+                }
             } else if (args.length == 2 && args[1].equalsIgnoreCase("worst")) {
-                ((Player) sender).getInventory().addItem(new Item(testHelmet, 0, 0).getItem());
-                ((Player) sender).getInventory().addItem(new Item(testChestplate, 0, 0).getItem());
-                ((Player) sender).getInventory().addItem(new Item(testLeggings, 0, 0).getItem());
-                ((Player) sender).getInventory().addItem(new Item(testBoots, 0, 0).getItem());
+                for (Item item : armorItems.get(args[0])){
+                    ((Player) sender).getInventory().addItem(new Item(item, 0, 0).getItem());
+                }
             } else{
-                ((Player) sender).getInventory().addItem(testHelmet.getItem());
-                ((Player) sender).getInventory().addItem(testChestplate.getItem());
-                ((Player) sender).getInventory().addItem(testLeggings.getItem());
-                ((Player) sender).getInventory().addItem(testBoots.getItem());
+                for (Item item : armorItems.get(args[0])){
+                    ((Player) sender).getInventory().addItem(item.getItem());
+                }
             }
         }
 
@@ -63,7 +60,9 @@ public class GiveArmor implements CommandExecutor, TabCompleter {
         }
         if (args.length==1){
             ArrayList<String> completion = new ArrayList<>();
-            addToCompletion("test_armor", args[0], completion);
+            for (String s : armorItems.keySet()){
+                addToCompletion(s, args[0], completion);
+            }
             return completion;
         }
         if (args.length==2){

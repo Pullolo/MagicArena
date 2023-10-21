@@ -19,6 +19,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -189,7 +190,7 @@ public class GameDamageHandler implements Listener {
             return entityDamage;
         }
         double playerDamage = arenaPlayers.get(damager).getDamage();
-        if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null){
+        if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null || armorItemIds.contains(getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getItemId())){
             return 5*(1+playerDamage/100);
         }
         //todo add scaling for weapons and stuff
@@ -211,12 +212,13 @@ public class GameDamageHandler implements Listener {
             double entityDamage = arenaEntities.get(damager).getDamage();
             return entityDamage;
         }
-        if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null){
-            return arenaPlayers.get(damager).getDamage()/1.3;
+        double playerDamage = arenaPlayers.get(damager).getDamage();
+        if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null || armorItemIds.contains(getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getItemId())){
+            return 5*(1+playerDamage/100);
         }
         //todo add scaling for weapons and stuff
         Double itemDamage = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getDamage();
-        double playerDamage = arenaPlayers.get(damager).getDamage();
+
 
         return (5+itemDamage)*(1+playerDamage/100);
     }

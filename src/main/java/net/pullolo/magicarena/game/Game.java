@@ -527,7 +527,7 @@ public abstract class Game {
 
     private void updatePlayerStatsItemHeld(Player p){
         String key = "itemHeld";
-        if (p.getInventory().getItemInMainHand().getItemMeta() != null){
+        if (p.getInventory().getItemInMainHand().getItemMeta() != null && itemIds.contains(new Item(p.getInventory().getItemInMainHand()).getItemId())){
             if (arenaPlayers.get(p).getBonusDefence().containsKey(key)){
                 arenaPlayers.get(p).getBonusDefence().replace(key, new Item(p.getInventory().getItemInMainHand()).getDefence());
             }else {

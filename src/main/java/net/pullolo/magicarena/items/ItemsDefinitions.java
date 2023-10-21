@@ -11,6 +11,7 @@ import net.pullolo.magicarena.items.ItemClass;
 import org.bukkit.inventory.meta.PotionMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +32,7 @@ public class ItemsDefinitions {
 
     public static Item bladeOfTheUniverse;
     public static final ArrayList<String> itemIds = new ArrayList<>();
+    public static final HashMap<String, Item> items = new HashMap<>();
 
     public static void init(){
         createTestItem();
@@ -63,6 +65,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
         stormRuler = new Item(item);
         itemIds.add("storm_ruler");
+        items.put("storm_ruler", stormRuler);
     }
 
     private static void createLongBow(){
@@ -76,6 +79,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.BOW, name, lore);
         longBow = new Item(item);
         itemIds.add("long_bow");
+        items.put("long_bow", longBow);
     }
 
     private static void createUnstableTome(){
@@ -97,6 +101,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.BOOK, name, lore);
         unstableTome = new Item(item);
         itemIds.add("unstable_tome");
+        items.put("unstable_tome", unstableTome);
     }
 
     private static void createSolidStoneAxe(){
@@ -112,6 +117,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.STONE_AXE, name, lore);
         solidStoneAxe = new Item(item);
         itemIds.add("solid_stone_axe");
+        items.put("solid_stone_axe", solidStoneAxe);
     }
 
     private static void createLeechingStaff(){
@@ -132,6 +138,7 @@ public class ItemsDefinitions {
         item.setItemMeta(im);
         leechingStaff = new Item(item);
         itemIds.add("leeching_staff");
+        items.put("leeching_staff", leechingStaff);
     }
 
     private static void createStoneStick(){
@@ -145,6 +152,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
         stoneStick = new Item(item);
         itemIds.add("stone_stick");
+        items.put("stone_stick", stoneStick);
     }
 
     private static void createBasicSword(){
@@ -158,6 +166,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.WOODEN_SWORD, name, lore);
         basicSword = new Item(item);
         itemIds.add("basic_sword");
+        items.put("basic_sword", basicSword);
     }
 
     private static void createTestItem(){
@@ -180,6 +189,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
         testItem = new Item(item);
         itemIds.add("test_item");
+        items.put("test_item", testItem);
     }
 
     private static void createBladeOfTheUniverse(){
@@ -196,6 +206,7 @@ public class ItemsDefinitions {
         ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
         bladeOfTheUniverse = new Item(new Item(item), 5, 100);
         itemIds.add("blade_of_the_universe");
+        items.put("blade_of_the_universe", bladeOfTheUniverse);
     }
 
     private static ItemStack createItem(Material material, String displayName, List<String> lore){

@@ -45,7 +45,10 @@ public class ArenaGame extends Game {
             p.teleport(new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), -config.getDouble("arenas-spawn-z")));
         }
         for (Player p : allPlayers){
-            new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
+            ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
+            updatePlayerItemStats(p);
+            ap.updateStats();
+            ap.respawn();
             p.setGameMode(GameMode.SURVIVAL);
             if (test){
                 p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");

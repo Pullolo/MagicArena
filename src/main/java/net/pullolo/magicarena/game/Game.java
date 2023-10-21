@@ -8,7 +8,6 @@ import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -55,7 +54,7 @@ public abstract class Game {
             public void run() {
                 for (Player p : allPlayers){
                     if (p!=null && arenaPlayers.containsKey(p)){
-                        updatePlayerStats(p);
+                        updatePlayerItemStats(p);
                         float speed = (float) (arenaPlayers.get(p).getSpeed()/500);
                         p.setWalkSpeed(speed);
                         if (arenaPlayers.get(p).getHealth()<=0 || p.getLocation().getY() < -96){
@@ -377,7 +376,7 @@ public abstract class Game {
         return new ArrayList<>();
     }
 
-    private void updatePlayerStats(Player p){
+    public void updatePlayerItemStats(Player p){
         updatePlayerStatsItemHeld(p);
         updatePlayerStatsArmorWorn(p);
     }

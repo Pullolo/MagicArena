@@ -54,7 +54,10 @@ public class Dungeon extends Game{
         }
         int finalLevel = level;
         for (Player p : allPlayers){
-            new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
+            ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
+            updatePlayerItemStats(p);
+            ap.updateStats();
+            ap.respawn();
             p.setGameMode(GameMode.SURVIVAL);
             p.teleport(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).setDirection(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).getDirection().multiply(-1)));
             if (test){

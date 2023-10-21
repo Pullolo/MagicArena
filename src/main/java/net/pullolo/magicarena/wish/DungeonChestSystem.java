@@ -17,6 +17,9 @@ public class DungeonChestSystem {
     public void createDungeonChest(Player p, int score, ChestType chestType){
         Random rand = new Random();
         int mul = 1;
+        int add = 0;
+        int val1 = rand.nextInt(10);
+        int val2 = rand.nextInt(10);
         if (score>500){
             mul=2;
         }
@@ -29,6 +32,7 @@ public class DungeonChestSystem {
                 break;
             case MYTHIC:
                 mul+=3;
+                add=(int) Math.floor((double) score/300);
                 break;
         }
         if (rand.nextInt(100)+1>99-mul){
@@ -54,9 +58,9 @@ public class DungeonChestSystem {
 //            float q = ((float)((int) (rand.nextFloat()*1000)))/10;
             //todo add dungeon Item
             //temp
-            guiManager.createDungeonChestReward(p, 100*mul+rand.nextInt(10), 30*mul+rand.nextInt(10), chestType).show(p);
+            guiManager.createDungeonChestReward(p, 100*mul+val1+add, 30*mul+val2+add, chestType).show(p);
         } else {
-            guiManager.createDungeonChestReward(p, 100*mul+rand.nextInt(10), 30*mul+rand.nextInt(10), chestType).show(p);
+            guiManager.createDungeonChestReward(p, 100*mul+val1+add, 30*mul+val2+add, chestType).show(p);
         }
     }
 }

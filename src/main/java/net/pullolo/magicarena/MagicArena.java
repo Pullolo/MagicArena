@@ -14,6 +14,7 @@ import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
 import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.players.PartyManager;
+import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ public final class MagicArena extends JavaPlugin {
     public static GameManager gameManager;
     public static PartyManager partyManager;
     public static GuiManager guiManager;
+    public static DungeonChestSystem dungeonChestSystem;
     public static DbManager dbManager = new DbManager();
     public static JavaPlugin plugin;
 
@@ -62,6 +64,7 @@ public final class MagicArena extends JavaPlugin {
         guiManager = new GuiManager(this);
         AnimationManager animationManager = new AnimationManager(this, guiManager);
         wishSystem = new WishSystem(animationManager);
+        dungeonChestSystem = new DungeonChestSystem();
         saveDefaultConfig();
         WorldManager.init(this);
         config = getConfig();

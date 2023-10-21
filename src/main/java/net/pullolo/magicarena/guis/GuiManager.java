@@ -8,9 +8,11 @@ import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.items.ItemClass;
+import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -39,6 +41,79 @@ public class GuiManager {
         this.plugin = plugin;
     }
 
+    public InventoryGui createDungeonChestReward(Player player, int dungeonEssence, ItemStack finalItem, DungeonChestSystem.ChestType chestType){
+        String[] guiSetup = {
+                "    t    ",
+                "d   i    ",
+                "         "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Reward", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+
+        gui.addElement(new DynamicGuiElement('t', (viewer)->{
+            return new StaticGuiElement('t', getChestItemFromChestType(chestType),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Opened &a" + chestType.toString().toLowerCase() + " &7chest"));
+        }));
+        gui.addElement(new DynamicGuiElement('d', (viewer)->{
+            return new StaticGuiElement('d', new ItemStack(Material.FIRE_CHARGE),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Dungeon Essence &a+" + dungeonEssence));
+        }));
+        gui.addElement(new DynamicGuiElement('i', (viewer)->{
+            return new StaticGuiElement('i', finalItem,
+                    click -> {
+                        click.getGui().close();
+                        Player p = (Player) click.getWhoClicked();
+
+                        getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence() + dungeonEssence);
+                        p.getInventory().addItem(finalItem);
+                        p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
+
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', getItemAsString(finalItem)));
+        }));
+
+        return gui;
+    }
+    public InventoryGui createDungeonChestReward(Player player, int dungeonEssence, int starEssence, DungeonChestSystem.ChestType chestType){
+        String[] guiSetup = {
+                "    t    ",
+                "d   a    ",
+                "    c    "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Reward", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+
+        gui.addElement(new DynamicGuiElement('t', (viewer)->{
+            return new StaticGuiElement('t', getChestItemFromChestType(chestType),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Opened &a" + chestType.toString().toLowerCase() + " &7chest"));
+        }));
+        gui.addElement(new DynamicGuiElement('a', (viewer)->{
+            return new StaticGuiElement('a', new ItemStack(Material.PRISMARINE_CRYSTALS),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Star Essence &a+" + starEssence));
+        }));
+        gui.addElement(new DynamicGuiElement('d', (viewer)->{
+            return new StaticGuiElement('d', new ItemStack(Material.FIRE_CHARGE),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Dungeon Essence &a+" + dungeonEssence));
+        }));
+        gui.addElement(new DynamicGuiElement('c', (viewer)->{
+            return new StaticGuiElement('c', new ItemStack(Material.CHEST),
+                    click -> {
+                        click.getGui().close();
+                        Player p = (Player) click.getWhoClicked();
+
+                        getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence() + dungeonEssence);
+                        getPlayerData(p).setStarEssence(getPlayerData(p).getStarEssence() + starEssence);
+                        p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
+
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&aClaim!"));
+        }));
+
+        return gui;
+    }
+
     public InventoryGui createDungeonRewardMenu(Player player, int score, int level){
         String[] guiSetup = {
                 "    s    ",
@@ -64,6 +139,12 @@ public class GuiManager {
         gui.addElement(new DynamicGuiElement('a', (viewer)->{
             return new StaticGuiElement('a', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTZkN2ZkYjUwZjE0YzczMWM3MjdiMGUwZDE4OWI2YTg3NDMxOWZjMGQ3OWM4YTA5OWFjZmM3N2M3YjJkOTE5NiJ9fX0="),
                     click -> {
+                        click.getGui().close();
+                        Player p = (Player) click.getWhoClicked();
+
+                        dungeonChestSystem.createDungeonChest(p, score, DungeonChestSystem.ChestType.BASIC);
+                        p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
+
                         return true;
                     },
                     ChatColor.translateAlternateColorCodes('&', "&r&fOpen &aBasic &fChest ♦\n&7Free"));
@@ -71,6 +152,15 @@ public class GuiManager {
         gui.addElement(new DynamicGuiElement('b', (viewer)->{
             return new StaticGuiElement('b', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDUxYTVlOTUyNGU1ZGMzZDlmYTEzZmYzOTVlYjY4MjRmMjY3NjE1NTZhNjY5YTZiYTk0MDI5MGZkY2JiNjBmNSJ9fX0="),
                     click -> {
+                        Player p = (Player) click.getWhoClicked();
+
+                        if (getPlayerData(p).getDungeonEssence()>=300){
+                            click.getGui().close();
+                            getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence()-300);
+                            dungeonChestSystem.createDungeonChest(p, score, DungeonChestSystem.ChestType.EPIC);
+                            p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
+                        }
+
                         return true;
                     },
                     ChatColor.translateAlternateColorCodes('&', "&r&fOpen &5Epic &fChest ♦\n&7Costs &5300 &7Dungeon Essence"));
@@ -78,6 +168,15 @@ public class GuiManager {
         gui.addElement(new DynamicGuiElement('c', (viewer)->{
             return new StaticGuiElement('c', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDQ1MjQwZmNmMWE5Nzk2MzI3ZGRhNTU5Mzk4NTM0M2FmOTEyMWE3MTU2YmM3NmUzZDZiMzQxYjAyZTZhNmU1MiJ9fX0="),
                     click -> {
+                        Player p = (Player) click.getWhoClicked();
+
+                        if (getPlayerData(p).getDungeonEssence()>=1000){
+                            click.getGui().close();
+                            getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence()-1000);
+                            dungeonChestSystem.createDungeonChest(p, score, DungeonChestSystem.ChestType.MYTHIC);
+                            p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
+                        }
+
                         return true;
                     },
                     ChatColor.translateAlternateColorCodes('&', "&r&fOpen &dMythic &fChest ♦\n&7Costs &51000 &7Dungeon Essence"));
@@ -486,7 +585,7 @@ public class GuiManager {
         return finishedList;
     }
 
-    private void addClosePrevention(InventoryGui gui){
+    public void addClosePrevention(InventoryGui gui){
         gui.setCloseAction(close -> {
             new BukkitRunnable() {
                 @Override
@@ -495,6 +594,11 @@ public class GuiManager {
                 }
             }.runTaskLater(plugin, 1);
             return false;
+        });
+    }
+    public void removeClosePrevention(InventoryGui gui){
+        gui.setCloseAction(close -> {
+            return true;
         });
     }
 
@@ -554,6 +658,17 @@ public class GuiManager {
         im.setLore(lore);
         item.setItemMeta(im);
         return item;
+    }
+
+    public ItemStack getChestItemFromChestType(DungeonChestSystem.ChestType chestType){
+        switch (chestType){
+            case EPIC:
+                return getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDUxYTVlOTUyNGU1ZGMzZDlmYTEzZmYzOTVlYjY4MjRmMjY3NjE1NTZhNjY5YTZiYTk0MDI5MGZkY2JiNjBmNSJ9fX0=");
+            case MYTHIC:
+                return getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDQ1MjQwZmNmMWE5Nzk2MzI3ZGRhNTU5Mzk4NTM0M2FmOTEyMWE3MTU2YmM3NmUzZDZiMzQxYjAyZTZhNmU1MiJ9fX0=");
+            default:
+                return getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTZkN2ZkYjUwZjE0YzczMWM3MjdiMGUwZDE4OWI2YTg3NDMxOWZjMGQ3OWM4YTA5OWFjZmM3N2M3YjJkOTE5NiJ9fX0=");
+        }
     }
 
     private void startDungeon(Player p, int level){

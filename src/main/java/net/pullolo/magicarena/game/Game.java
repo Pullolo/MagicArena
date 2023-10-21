@@ -265,7 +265,7 @@ public abstract class Game {
         }
         for (Player p : allPlayers){
             if (p!=null){
-                p.sendMessage(ChatColor.GREEN + "You will be warped out in 20 seconds!");
+                p.sendMessage(ChatColor.GREEN + "You will be warped out in 15 seconds!");
             }
         }
         new BukkitRunnable() {
@@ -282,7 +282,7 @@ public abstract class Game {
                 }
                 WorldManager.removeWorld(world);
             }
-        }.runTaskLater(MagicArena.plugin, 400);
+        }.runTaskLater(MagicArena.plugin, 300);
     }
 
     public void forceEndGame(){

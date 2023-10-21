@@ -52,7 +52,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onEntityDrop(EntityDeathEvent event){
-        if (arenaEntities.containsKey(event.getEntity())){
+        if (event.getEntity().getWorld().getName().contains("temp_")){
             event.getDrops().clear();
             event.setDroppedExp(0);
         }

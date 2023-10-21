@@ -2,6 +2,7 @@ package net.pullolo.magicarena.events;
 
 import dev.dbassett.skullcreator.SkullCreator;
 import net.pullolo.magicarena.MagicArena;
+import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaEntity;
@@ -50,6 +51,8 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
+        PlayerData.savePlayerDataToDb(event.getPlayer(), dbManager);
+        PlayerData.removePlayerData(event.getPlayer());
         partyManager.leaveParty(event.getPlayer());
         if (arenaPlayers.containsKey(event.getPlayer())){
             arenaPlayers.get(event.getPlayer()).getGame().broadcast("[Arena] Player " + event.getPlayer().getDisplayName() + " has left the game!");
@@ -62,6 +65,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
+        PlayerData.setPlayerDataFromDb(event.getPlayer(), dbManager);
         if (event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
             if (event.getPlayer().isOp()) event.getPlayer().setGameMode(GameMode.CREATIVE);
             else event.getPlayer().setGameMode(GameMode.SURVIVAL);

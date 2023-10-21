@@ -1,6 +1,7 @@
 package net.pullolo.magicarena;
 
 import net.pullolo.magicarena.commands.*;
+import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.events.GameAbilitiesHandler;
 import net.pullolo.magicarena.events.GameDamageHandler;
 import net.pullolo.magicarena.data.DbManager;
@@ -22,6 +23,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -53,6 +55,7 @@ public final class MagicArena extends JavaPlugin {
         ItemsDefinitions.init();
         ArmorDefinitions.init();
         checkDb();
+        setPlayerData();
         partyManager = new PartyManager();
         gameManager = new GameManager();
         GuiManager guiManager = new GuiManager(this);
@@ -93,6 +96,7 @@ public final class MagicArena extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        savePlayers();
         dbManager.disconnect();
         deleteActiveTempWorlds();
     }
@@ -168,5 +172,17 @@ public final class MagicArena extends JavaPlugin {
         if (dbManager.isDbEnabled()){
             log.info("Database is operational");
         } else log.warning("Database is offline!");
+    }
+    private void setPlayerData() {
+        for (Player p : getServer().getOnlinePlayers()){
+            PlayerData.setPlayerDataFromDb(p, dbManager);
+        }
+    }
+
+    private void savePlayers(){
+        for (Player p : getServer().getOnlinePlayers()){
+            PlayerData.savePlayerDataToDb(p, dbManager);
+            PlayerData.removePlayerData(p);
+        }
     }
 }

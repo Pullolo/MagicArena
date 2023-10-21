@@ -48,7 +48,7 @@ public class Gui implements CommandExecutor, TabCompleter {
                 } else if (args[1].equalsIgnoreCase("menu")) {
                     guiManager.createMainMenuGui((Player) sender).show((HumanEntity) sender);
                 } else if (args[1].equalsIgnoreCase("dungeonEnd")) {
-                    guiManager.createDungeonRewardMenu((Player) sender, 1000, 1).show((HumanEntity) sender);
+                    guiManager.createDungeonRewardMenu((Player) sender, 1000, 1, true).show((HumanEntity) sender);
                 }
                 else sender.sendMessage(ChatColor.RED + "Invalid gui!");
             }

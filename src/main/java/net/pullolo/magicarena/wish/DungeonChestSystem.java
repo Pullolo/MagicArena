@@ -14,10 +14,10 @@ public class DungeonChestSystem {
         MYTHIC
     }
 
-    public void createDungeonChest(Player p, int score, int level, ChestType chestType){
+    public void createDungeonChest(Player p, int score, int level, ChestType chestType, boolean won){
         Random rand = new Random();
         int mul = (int) Math.floor(Math.pow(level, (double) 1/6));
-        int add = 0;
+        int add = 1;
         int val1 = rand.nextInt(10);
         int val2 = rand.nextInt(10);
         if (score>500){
@@ -35,6 +35,7 @@ public class DungeonChestSystem {
                 add=(int) Math.floor((double) score/300);
                 break;
         }
+        if (!won) mul=0;
         if (rand.nextInt(100)+1>99-mul){
 //            int stars = 1;
 //            int rarityChance = rand.nextInt(100)+1;

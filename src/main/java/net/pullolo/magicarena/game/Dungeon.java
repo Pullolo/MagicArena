@@ -241,7 +241,9 @@ public class Dungeon extends Game{
     public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won) {
         if (won){
             broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.GREEN + "You have Won!" + ChatColor.GOLD + " " + score + " Score");
-        } else broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.RED + "You have Lost!" + ChatColor.GOLD + " " + score + " Score");
+        } else{
+            broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.RED + "You have Lost!" + ChatColor.GOLD + " " + score + " Score");
+        }
         for (Player p : allPlayers){
             if (p.getGameMode().equals(GameMode.SPECTATOR)){
                 p.teleport(new Location(getWorld(), 0.5, config.getDouble("arenas-spawn-y"), 0.5).setDirection(new Location(getWorld(), 0.5, config.getDouble("arenas-spawn-y"), 0.5).getDirection().multiply(-1)));
@@ -249,7 +251,7 @@ public class Dungeon extends Game{
             }
         }
         for (Player p : allPlayers){
-            guiManager.createDungeonRewardMenu(p, score, level).show(p);
+            guiManager.createDungeonRewardMenu(p, score, level, won).show(p);
         }
         //warn players
         new BukkitRunnable() {

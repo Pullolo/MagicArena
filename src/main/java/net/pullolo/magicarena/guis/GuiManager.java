@@ -115,7 +115,7 @@ public class GuiManager {
         return gui;
     }
 
-    public InventoryGui createDungeonRewardMenu(Player player, int score, int level){
+    public InventoryGui createDungeonRewardMenu(Player player, int score, int level, boolean won){
         String[] guiSetup = {
                 "    s    ",
                 "  a b c  ",
@@ -143,7 +143,7 @@ public class GuiManager {
                         click.getGui().close();
                         Player p = (Player) click.getWhoClicked();
 
-                        dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.BASIC);
+                        dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.BASIC, won);
                         p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
 
                         return true;
@@ -158,7 +158,7 @@ public class GuiManager {
                         if (getPlayerData(p).getDungeonEssence()>=300){
                             click.getGui().close();
                             getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence()-300);
-                            dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.EPIC);
+                            dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.EPIC, won);
                             p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
                         }
 
@@ -174,7 +174,7 @@ public class GuiManager {
                         if (getPlayerData(p).getDungeonEssence()>=1000){
                             click.getGui().close();
                             getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence()-1000);
-                            dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.MYTHIC);
+                            dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.MYTHIC, won);
                             p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
                         }
 

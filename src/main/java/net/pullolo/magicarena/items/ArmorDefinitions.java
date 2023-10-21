@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class ArmorDefinitions {
 
@@ -182,6 +183,21 @@ public class ArmorDefinitions {
         pieces.add(testBoots);
 
         armorItems.put("test_armor", pieces);
+    }
+
+    public static Item getRandomUncommonArmorPiece(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        int piece = new Random().nextInt(4); //0-4 range
+        switch (r){
+            case 1:
+                return armorItems.get("wanderer_armor").get(piece);
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
     }
 
     private static ItemStack createItem(Material material, String displayName, List<String> lore){

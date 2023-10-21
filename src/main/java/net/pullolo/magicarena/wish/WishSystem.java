@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.items.ArmorDefinitions.getRandomUncommonArmorPiece;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomRareWeapon;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomUncommonWeapon;
 
@@ -127,26 +128,30 @@ public class WishSystem {
             }
 
         } else {
-            finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
-            ItemMeta im = finalItem.getItemMeta();
-
-            //todo temp
-            if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
-                im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
-            }
-
-            im.setDisplayName(im.getDisplayName() + starsStr);
-
-            List<String> lore;
-            if (finalItem.getItemMeta().getLore()==null){
-                lore = new ArrayList<>();
+            if (wishRarity.equals(WishRarity.UNCOMMON)){
+                finalItem = new Item(getRandomUncommonArmorPiece(itemClass), stars, q).getItem();
             } else {
-                //todo possibly move it 2nd to last
-                lore = finalItem.getItemMeta().getLore();
+                finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
+                ItemMeta im = finalItem.getItemMeta();
+
+                //todo temp
+                if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
+                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
+                }
+
+                im.setDisplayName(im.getDisplayName() + starsStr);
+
+                List<String> lore;
+                if (finalItem.getItemMeta().getLore()==null){
+                    lore = new ArrayList<>();
+                } else {
+                    //todo possibly move it 2nd to last
+                    lore = finalItem.getItemMeta().getLore();
+                }
+                lore.add(ChatColor.translateAlternateColorCodes('&', quality));
+                im.setLore(lore);
+                finalItem.setItemMeta(im);
             }
-            lore.add(ChatColor.translateAlternateColorCodes('&', quality));
-            im.setLore(lore);
-            finalItem.setItemMeta(im);
         }
 
 

@@ -35,7 +35,8 @@ public class Dungeon extends Game{
 
     private final ArrayList<BlockState> foundSecrets = new ArrayList<>();
     private int score = 0;
-    private int level;
+    private final int level;
+    private final int mobSpawningOffset = 2;
     private int witherKeys = 0;
     private boolean bossKey = false;
 
@@ -93,7 +94,7 @@ public class Dungeon extends Game{
                     }
                 }
                 if (i<1){
-                    convertArmorStandsToMobs(2, finalLevel);
+                    convertArmorStandsToMobs(mobSpawningOffset, finalLevel);
                     for (Player p : allPlayers){
                         if (p!=null){
                             p.sendMessage(ChatColor.GREEN + "Game started!");
@@ -353,6 +354,7 @@ public class Dungeon extends Game{
     }
     public void openWitherDoor(Location loc){
         witherKeys--;
+        convertArmorStandsToMobs(mobSpawningOffset, level);
         for (Location l: getAllNearBlocks(loc)){
             l.getBlock().setType(Material.AIR);
         }
@@ -360,6 +362,7 @@ public class Dungeon extends Game{
         broadcastSound(Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1, 0.5f);
     }
     public void openBossDoor(Location loc){
+        convertArmorStandsToMobs(mobSpawningOffset, level);
         for (Location l: getAllNearBlocks(loc)){
             l.getBlock().setType(Material.AIR);
         }

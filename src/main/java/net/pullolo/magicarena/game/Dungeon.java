@@ -254,6 +254,7 @@ public class Dungeon extends Game{
             if (p.getGameMode().equals(GameMode.SPECTATOR)){
                 p.teleport(new Location(getWorld(), 0.5, config.getDouble("arenas-spawn-y"), 0.5).setDirection(new Location(getWorld(), 0.5, config.getDouble("arenas-spawn-y"), 0.5).getDirection().multiply(-1)));
                 p.setGameMode(GameMode.SURVIVAL);
+                p.setInvulnerable(true);
             }
         }
         for (Player p : allPlayers){

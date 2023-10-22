@@ -278,6 +278,7 @@ public abstract class Game {
                         if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
                         else p.setGameMode(GameMode.SURVIVAL);
                         p.setHealth(p.getMaxHealth());
+                        p.setInvulnerable(false);
                     }
                 }
                 WorldManager.removeWorld(world);

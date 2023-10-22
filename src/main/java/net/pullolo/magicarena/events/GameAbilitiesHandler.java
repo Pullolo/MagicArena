@@ -234,7 +234,7 @@ public class GameAbilitiesHandler implements Listener {
                     BukkitRunnable healStop = new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (p!=null && arenaPlayers.containsKey(p)){
+                            if (arenaPlayers.containsKey(p)){
                                 arenaPlayers.get(p).getBonusHpRegen().replace("hs", 0.0);
                             }
                         }

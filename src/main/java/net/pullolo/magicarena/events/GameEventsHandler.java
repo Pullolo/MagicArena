@@ -103,6 +103,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
+        event.getPlayer().setInvulnerable(false);
         PlayerData.setPlayerDataFromDb(event.getPlayer(), dbManager);
         if (event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
             if (event.getPlayer().isOp()) event.getPlayer().setGameMode(GameMode.CREATIVE);

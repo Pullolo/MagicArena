@@ -59,6 +59,9 @@ public class GameDamageHandler implements Listener {
             }
             if (!(((EntityDamageByEntityEvent) event).getDamager() instanceof Player)){
                 if (!arenaEntities.containsKey(((EntityDamageByEntityEvent) event).getDamager())){
+                    if (((EntityDamageByEntityEvent) event).getDamager() instanceof EvokerFangs){
+                        arenaPlayers.get(damaged).damage(((EvokerFangs) ((EntityDamageByEntityEvent) event).getDamager()).getOwner(), damaged, calculateDamage(event.getDamage(), ((EvokerFangs) ((EntityDamageByEntityEvent) event).getDamager()).getOwner(), damaged), true);
+                    }
                     return;
                 }
             } else if (arenaPlayers.get((Player) ((EntityDamageByEntityEvent) event).getDamager()).getGame().getAllPlayersInPlayersTeam((Player) ((EntityDamageByEntityEvent) event).getDamager()).contains(damaged)){

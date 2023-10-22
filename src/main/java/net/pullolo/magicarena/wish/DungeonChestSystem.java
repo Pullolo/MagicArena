@@ -24,7 +24,8 @@ public class DungeonChestSystem {
 
     public void createDungeonChest(Player p, int score, int level, ChestType chestType, boolean won){
         Random rand = new Random();
-        int mul = (int) Math.floor(Math.pow(level, (double) 1/6));
+        int mul = level/20;
+        if (mul<1) mul=1;
         int wepVal = 0;
         int add = 1;
         int val1 = rand.nextInt(10);

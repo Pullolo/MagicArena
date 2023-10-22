@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class SetCustomName implements CommandExecutor, TabCompleter {
         if (args.length>=1){
             Entity target = null;
             for (Entity e : p.getWorld().getNearbyEntities(p.getLocation(), 2, 2, 2)){
-                if (!(e instanceof Player)){
+                if (!(e instanceof Player || e instanceof ItemFrame)){
                     target=e;
                     break;
                 }

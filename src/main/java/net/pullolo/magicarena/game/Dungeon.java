@@ -217,6 +217,7 @@ public class Dungeon extends Game{
                     }
                 }
             } catch (Exception e){
+                getLog().warning("Couldn't spawn: " + as.getLocation().toString());
                 continue;
             }
         }
@@ -357,8 +358,8 @@ public class Dungeon extends Game{
         broadcastSound(Sound.ENTITY_ITEM_PICKUP, 1, 1.3f);
     }
     public void openWitherDoor(Location loc){
-        witherKeys--;
         convertArmorStandsToMobs(mobSpawningOffset, level);
+        witherKeys--;
         for (Location l: getAllNearBlocks(loc)){
             l.getBlock().setType(Material.AIR);
         }

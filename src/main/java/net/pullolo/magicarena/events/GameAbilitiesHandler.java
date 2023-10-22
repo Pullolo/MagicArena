@@ -46,9 +46,9 @@ public class GameAbilitiesHandler implements Listener {
 
         if (item.getItemId().equalsIgnoreCase("unstable_tome")){
             if (!CooldownApi.isOnCooldown("UT", p)){
-                if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(30, p)){
+                if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(10, p)){
                     CooldownApi.addCooldown("UT", p, 1.5);
-                    arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses(30, p));
+                    arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses(10, p));
 
                     ArmorStand as = p.getWorld().spawn(p.getLocation().add(0, 1.5, 0), ArmorStand.class, en -> {
                         en.setVisible(false);

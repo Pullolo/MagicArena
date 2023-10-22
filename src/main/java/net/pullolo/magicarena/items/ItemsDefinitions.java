@@ -27,8 +27,14 @@ public class ItemsDefinitions {
     public static Item solidStoneAxe; //tank
     public static Item unstableTome; //dps
     public static Item longBow; //archer
+    public static Item undeadSword; //dungeonItem
     //rare
     public static Item stormRuler;
+    public static Item healingStaff; //healer
+    public static Item golemSword; //tank
+    public static Item aspectOfTheEnd; //dps
+    public static Item flamingBow; //archer
+    public static Item brutalityBlade; //dungeonItem
 
     public static Item bladeOfTheUniverse;
     public static final ArrayList<String> itemIds = new ArrayList<>();
@@ -42,10 +48,137 @@ public class ItemsDefinitions {
         createSolidStoneAxe();
         createUnstableTome();
         createLongBow();
+        createUndeadSword();
 
         createStormRuler();
+        createHealingStaff();
+        createGolemSword();
+        createAspectOfTheEnd();
+        createFlamingBow();
+        createBrutalityBlade();
 
         createBladeOfTheUniverse();
+    }
+
+    private static void createBrutalityBlade(){
+        String name = "&9Brutality Blade";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+55");
+        lore.add("&7Critical Chance: &c+10");
+        lore.add("&7Critical Damage: &c+40");
+        lore.add("");
+        lore.add("&6Item Ability: Brutality");
+        lore.add("&7If the target is below &a50% &7health");
+        lore.add("&7deal &c200% &7damage.");
+        lore.add("");
+        lore.add("&9&lRARE BOW");
+        lore.add("&8item_id:brutality_blade");
+        ItemStack item = createItem(Material.NETHERITE_AXE, name, lore);
+        brutalityBlade = new Item(item);
+        itemIds.add(brutalityBlade.getItemId());
+        items.put(brutalityBlade.getItemId(), brutalityBlade);
+    }
+
+    private static void createFlamingBow(){
+        String name = "&9Flaming Bow";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+40");
+        lore.add("&7Critical Chance: &c+30");
+        lore.add("&7Critical Damage: &c+110");
+        lore.add("");
+        lore.add("&6Item Ability: Ignition");
+        lore.add("&7Set anyone on fire for 3 seconds.");
+        lore.add("");
+        lore.add("&9&lRARE BOW");
+        lore.add("&8item_id:flaming_bow");
+        ItemStack item = createItem(Material.BOW, name, lore);
+        flamingBow = new Item(item);
+        itemIds.add(flamingBow.getItemId());
+        items.put(flamingBow.getItemId(), flamingBow);
+    }
+
+    private static void createAspectOfTheEnd(){
+        String name = "&9Aspect Of The End";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+60");
+        lore.add("&7Intelligence: &b+50");
+        lore.add("&7Critical Chance: &c+20");
+        lore.add("&7Critical Damage: &c+80");
+        lore.add("");
+        lore.add("&6Item Ability: Instant Transmission &eRIGHT CLICK");
+        lore.add("&7Teleport &a8 blocks&7 ahead of you.");
+        lore.add("&8Mana Cost: &350");
+        lore.add("");
+        lore.add("&9&lRARE SWORD");
+        lore.add("&8item_id:aspect_of_the_end");
+        ItemStack item = createItem(Material.DIAMOND_SWORD, name, lore);
+        aspectOfTheEnd = new Item(item);
+        itemIds.add(aspectOfTheEnd.getItemId());
+        items.put(aspectOfTheEnd.getItemId(), aspectOfTheEnd);
+    }
+
+    private static void createGolemSword(){
+        String name = "&9Golem Sword";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+8");
+        lore.add("&7Intelligence: &b+40");
+        lore.add("&7Defence: &a+80");
+        lore.add("&7Resistance: &3+60");
+        lore.add("");
+        lore.add("&6Item Ability: Iron Punch &eRIGHT CLICK");
+        lore.add("&7A giant pile of iron appears above you");
+        lore.add("&7and powerfully slams the ground dealing");
+        lore.add("&c300% &7weapon's damage.");
+        lore.add("&8Mana Cost: &3140");
+        lore.add("");
+        lore.add("&9&lRARE SWORD");
+        lore.add("&8item_id:golem_sword");
+        ItemStack item = createItem(Material.IRON_SWORD, name, lore);
+        golemSword = new Item(item);
+        itemIds.add(golemSword.getItemId());
+        items.put(golemSword.getItemId(), golemSword);
+    }
+
+    private static void createHealingStaff(){
+        String name = "&9Healing Staff";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+9");
+        lore.add("&7Health Regen: &4+1");
+        lore.add("");
+        lore.add("&6Item Ability: Medium Heal &eRIGHT CLICK");
+        lore.add("&7Gives you regeneration for &a5s.");
+        lore.add("&8Mana Cost: &340");
+        lore.add("&8Cooldown: &a15s");
+        lore.add("");
+        lore.add("&9&lRARE STAFF");
+        lore.add("&8item_id:healing_staff");
+        ItemStack item = createItem(Material.STICK, name, lore);
+        healingStaff = new Item(item);
+        itemIds.add(healingStaff.getItemId());
+        items.put(healingStaff.getItemId(), healingStaff);
+    }
+
+    private static void createUndeadSword(){
+        String name = "&aUndead Sword";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+15");
+        lore.add("&7Health Regen: &4+1");
+        lore.add("");
+        lore.add("&6Ability: Smite");
+        lore.add("&7Deal &c2x &7damage to skeletons and zombies.");
+        lore.add("");
+        lore.add("&a&lUNCOMMON SWORD");
+        lore.add("&8item_id:undead_sword");
+        ItemStack item = createItem(Material.STONE_SWORD, name, lore);
+        undeadSword = new Item(item);
+        itemIds.add(undeadSword.getItemId());
+        items.put(undeadSword.getItemId(), undeadSword);
     }
 
     private static void createStormRuler(){
@@ -253,10 +386,21 @@ public class ItemsDefinitions {
     }
 
     public static Item getRandomRareWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(1)+1; //1-1 range
+        int r = new Random().nextInt(2)+1; //1-2 range
         switch (r){
             case 1:
                 return stormRuler;
+            case 2:
+                switch (itemClass){
+                    case DPS:
+                        return aspectOfTheEnd;
+                    case HEALER:
+                        return healingStaff;
+                    case ARCHER:
+                        return flamingBow;
+                    case TANK:
+                        return golemSword;
+                }
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

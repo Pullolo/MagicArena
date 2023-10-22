@@ -8,8 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -193,8 +192,8 @@ public class GameDamageHandler implements Listener {
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null || armorItemIds.contains(getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getItemId())){
             return 5*(1+playerDamage/100);
         }
-        //todo add scaling for weapons and stuff
         Item playersItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
+        Double itemDamage = playersItem.getDamage();
         if (playersItem.getItemId().equalsIgnoreCase("leeching_staff")){
             arenaPlayers.get(damager).setHealth(arenaPlayers.get(damager).getHealth()+2);
             damager.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, damager.getLocation().add(0, 1, 0), 20, 0.2, 0.6, 0.2, 1);
@@ -202,7 +201,20 @@ public class GameDamageHandler implements Listener {
             //easter egg
             if(((Player) damager).getDisplayName().equalsIgnoreCase("yaemikujo") && new Random().nextInt(50)==0) damager.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cKocham cię Słonko &7<&5od &aMikołaja&5 <3&7>"));
         }
-        Double itemDamage = playersItem.getDamage();
+        if (playersItem.getItemId().equalsIgnoreCase("undead_sword") && (damaged instanceof Zombie || damaged instanceof Skeleton)){
+            return (5+itemDamage)*(1+playerDamage/100)*2;
+        }
+        if (playersItem.getItemId().equalsIgnoreCase("brutality_blade")){
+            if (damaged instanceof Player){
+                if (arenaPlayers.get(damaged).getHealth()<arenaPlayers.get(damaged).getMaxHealth()/2){
+                    return (5+itemDamage)*(1+playerDamage/100)*2;
+                }
+            } else {
+                if (arenaEntities.get(damaged).getHealth()<arenaEntities.get(damaged).getMaxHealth()/2){
+                    return (5+itemDamage)*(1+playerDamage/100)*2;
+                }
+            }
+        }
 
         return (5+itemDamage)*(1+playerDamage/100);
     }
@@ -213,12 +225,15 @@ public class GameDamageHandler implements Listener {
             return entityDamage;
         }
         double playerDamage = arenaPlayers.get(damager).getDamage();
+        Item playerItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
+        Double itemDamage = playerItem.getDamage();
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null || armorItemIds.contains(getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getItemId())){
             return 5*(1+playerDamage/100);
         }
         //todo add scaling for weapons and stuff
-        Double itemDamage = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getDamage();
-
+        if (playerItem.getItemId().equalsIgnoreCase("flaming_bow")){
+            damaged.setFireTicks(60);
+        }
 
         return (5+itemDamage)*(1+playerDamage/100);
     }

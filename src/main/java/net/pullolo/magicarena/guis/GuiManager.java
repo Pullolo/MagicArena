@@ -116,6 +116,7 @@ public class GuiManager {
     }
 
     public InventoryGui createDungeonRewardMenu(Player player, int score, int level, boolean won){
+        int money = getPlayerData(player).getDungeonEssence();
         String[] guiSetup = {
                 "    s    ",
                 "  a b c  ",
@@ -130,6 +131,12 @@ public class GuiManager {
             guiSetup[1] = guiSetup[1].replaceAll("c", "0");
         } else if (score < 600) {
             guiSetup[1] = guiSetup[1].replaceAll("c", "0");
+        }
+        if (money<300){
+            guiSetup[1] = guiSetup[1].replaceAll("b", "1");
+            guiSetup[1] = guiSetup[1].replaceAll("c", "1");
+        } else if (money < 1000) {
+            guiSetup[1] = guiSetup[1].replaceAll("c", "1");
         }
         InventoryGui gui = new InventoryGui(this.plugin, player, "Rewards", guiSetup);
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
@@ -186,6 +193,10 @@ public class GuiManager {
         gui.addElement(new DynamicGuiElement('0', (viewer)->{
             return new StaticGuiElement('0', new ItemStack(Material.BARRIER),
                     ChatColor.translateAlternateColorCodes('&', "&r&cYou need a higher score to get this reward!"));
+        }));
+        gui.addElement(new DynamicGuiElement('1', (viewer)->{
+            return new StaticGuiElement('1', new ItemStack(Material.BARRIER),
+                    ChatColor.translateAlternateColorCodes('&', "&r&cYou don't have enough essence to get this reward!"));
         }));
 
         return gui;

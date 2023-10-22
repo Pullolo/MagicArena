@@ -72,7 +72,7 @@ public class ItemsDefinitions {
         lore.add("&7If the target is below &a50% &7health");
         lore.add("&7deal &c200% &7damage.");
         lore.add("");
-        lore.add("&9&lRARE BOW");
+        lore.add("&9&lRARE AXE");
         lore.add("&8item_id:brutality_blade");
         ItemStack item = createItem(Material.NETHERITE_AXE, name, lore);
         brutalityBlade = new Item(item);

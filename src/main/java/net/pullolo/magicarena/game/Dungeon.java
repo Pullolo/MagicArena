@@ -39,6 +39,7 @@ public class Dungeon extends Game{
     private final int mobSpawningOffset = 2;
     private int witherKeys = 0;
     private boolean bossKey = false;
+    private boolean doesBossKeyExist= false;
 
     public Dungeon(ArrayList<Player> allPlayers, int level, Difficulty difficulty, boolean test){
         final double spawnX = 0.5, spawnZ = 0.5;
@@ -220,10 +221,13 @@ public class Dungeon extends Game{
             }
         }
         //create boss key
-        if (getAllEntities().size()>0){
-            Entity e = getAllEntities().get(getAllEntities().size()-1);
-            if (arenaEntities.get(e) instanceof DungeonEntity){
-                ((DungeonEntity) arenaEntities.get(e)).setBossKey(true);
+        if (!doesBossKeyExist){
+            if (getAllEntities().size()>0){
+                Entity e = getAllEntities().get(getAllEntities().size()-1);
+                if (arenaEntities.get(e) instanceof DungeonEntity){
+                    ((DungeonEntity) arenaEntities.get(e)).setBossKey(true);
+                    doesBossKeyExist=true;
+                }
             }
         }
     }

@@ -4,22 +4,24 @@ import dev.dbassett.skullcreator.SkullCreator;
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.game.Dungeon;
+import net.pullolo.magicarena.game.Game;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaEntity;
+import net.pullolo.magicarena.players.DungeonEntity;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntitySpellCastEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +34,33 @@ import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class GameEventsHandler implements Listener {
+
+    @EventHandler
+    public void onMobSpawn(CreatureSpawnEvent event){
+        if (!event.getEntity().getWorld().getName().contains("temp_")){
+            return;
+        }
+        if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPELL)){
+            Game g = null;
+            for (Player p : event.getEntity().getWorld().getPlayers()){
+                if (isPlayerInGame(p)){
+                    g = arenaPlayers.get(p).getGame();
+                    break;
+                }
+            }
+            if (g==null){
+                event.getEntity().remove();
+                return;
+            }
+            if (event.getEntity() instanceof Vex){
+                int level = 1;
+                if (g instanceof Dungeon){
+                    level = ((Dungeon) g).getLevel();
+                }
+                arenaEntities.put(event.getEntity(), new DungeonEntity(event.getEntity(), level, g, false));
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerBow(EntityShootBowEvent event){

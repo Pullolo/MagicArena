@@ -394,4 +394,7 @@ public class Dungeon extends Game{
                 return Difficulty.NORMAL;
         }
     }
+    public int getLevel(){
+        return level;
+    }
 }

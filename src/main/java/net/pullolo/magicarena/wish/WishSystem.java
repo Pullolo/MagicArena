@@ -17,8 +17,7 @@ import java.util.Random;
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.items.ArmorDefinitions.getRandomUncommonArmorPiece;
-import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomRareWeapon;
-import static net.pullolo.magicarena.items.ItemsDefinitions.getRandomUncommonWeapon;
+import static net.pullolo.magicarena.items.ItemsDefinitions.*;
 
 public class WishSystem {
 
@@ -99,34 +98,21 @@ public class WishSystem {
         //todo add a proper wishing system (getItem(itemClass, rarity))
 
         if (wishType == WishType.WEAPON_WISH){
+            finalItem=null;
             if (wishRarity.equals(WishRarity.UNCOMMON)){
                 finalItem = new Item(getRandomUncommonWeapon(itemClass), stars, q).getItem();
             } else if (wishRarity.equals(WishRarity.RARE)) {
                 finalItem = new Item(getRandomRareWeapon(itemClass), stars, q).getItem();
-            } else {
-                finalItem = new ItemStack(Material.NETHERITE_SWORD);
-                ItemMeta im = finalItem.getItemMeta();
-
-                //todo temp
-                if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
-                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
-                }
-
-                im.setDisplayName(im.getDisplayName() + starsStr);
-
-                List<String> lore;
-                if (finalItem.getItemMeta().getLore()==null){
-                    lore = new ArrayList<>();
-                } else {
-                    //todo possibly move it 2nd to last
-                    lore = finalItem.getItemMeta().getLore();
-                }
-                lore.add(ChatColor.translateAlternateColorCodes('&', quality));
-                im.setLore(lore);
-                finalItem.setItemMeta(im);
+            } else if (wishRarity.equals(WishRarity.EPIC)) {
+                finalItem = new Item(getRandomEpicWeapon(itemClass), stars, q).getItem();
+            } else if (wishRarity.equals(WishRarity.LEGENDARY)) {
+                finalItem = new Item(getRandomLegendaryWeapon(itemClass), stars, q).getItem();
+            } else if (wishRarity.equals(WishRarity.MYTHIC)){
+                finalItem = new Item(getRandomMythicWeapon(itemClass), stars, q).getItem();
             }
 
         } else {
+            finalItem=null;
             if (wishRarity.equals(WishRarity.UNCOMMON)){
                 finalItem = new Item(getRandomUncommonArmorPiece(itemClass), stars, q).getItem();
             } else {
@@ -156,6 +142,100 @@ public class WishSystem {
 
         anims.playWishAnim(player, wishRarity, wishType, stars, itemClass, finalItem, 10);
         return true;
+    }
+
+    public static Item getRandomUncommonWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(3)+1; //1-3 range
+        switch (r){
+            case 1:
+                return basicSword;
+            case 2:
+                return stoneStick;
+            case 3:
+                switch (itemClass){
+                    case DPS:
+                        return unstableTome;
+                    case HEALER:
+                        return leechingStaff;
+                    case ARCHER:
+                        return longBow;
+                    case TANK:
+                        return solidStoneAxe;
+                }
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomRareWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(2)+1; //1-2 range
+        switch (r){
+            case 1:
+                return stormRuler;
+            case 2:
+                switch (itemClass){
+                    case DPS:
+                        return aspectOfTheEnd;
+                    case HEALER:
+                        return healingStaff;
+                    case ARCHER:
+                        return flamingBow;
+                    case TANK:
+                        return golemSword;
+                }
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomEpicWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-2 range
+        switch (r){
+            case 1:
+                return leapingSword;
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomLegendaryWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-2 range
+        switch (r){
+            case 1:
+                return auroraStaff;
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomMythicWeapon(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-2 range
+        switch (r){
+            case 1:
+                return kusumibaru;
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
     }
 
     public static int getWishRarityAsInt(WishRarity wishRarity){

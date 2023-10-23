@@ -35,6 +35,12 @@ public class ItemsDefinitions {
     public static Item aspectOfTheEnd; //dps
     public static Item flamingBow; //archer
     public static Item brutalityBlade; //dungeonItem
+    //epic
+    public static Item leapingSword;
+    //legendary
+    public static Item auroraStaff;
+    //mythic
+    public static Item kusumibaru;
 
     public static Item bladeOfTheUniverse;
     public static final ArrayList<String> itemIds = new ArrayList<>();
@@ -57,7 +63,81 @@ public class ItemsDefinitions {
         createFlamingBow();
         createBrutalityBlade();
 
+        createLeapingSword();
+
+        createAuroraStaff();
+
+        createKusumibaru();
+
         createBladeOfTheUniverse();
+    }
+
+    private static void createKusumibaru(){
+        String name = "&dKusumibaru";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+230");
+        lore.add("&7Critical Chance: &c+40");
+        lore.add("&7Critical Damage: &c+180");
+        lore.add("");
+        lore.add("&6Item Ability: Dash n Slice &eRIGHT CLICK");
+        lore.add("&7Dash through the enemies to deal");
+        lore.add("&c100 &7damage.");
+        lore.add("");
+        lore.add("&d&lMYTHIC SWORD");
+        lore.add("&8item_id:kusumibaru");
+        ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
+        kusumibaru = new Item(item);
+        itemIds.add(kusumibaru.getItemId());
+        items.put(kusumibaru.getItemId(), kusumibaru);
+    }
+
+    private static void createAuroraStaff(){
+        String name = "&6Aurora Staff";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+1");
+        lore.add("&7Intelligence: &b+300");
+        lore.add("&7Ability Damage: &3+130");
+        lore.add("&7Critical Chance: &c+50");
+        lore.add("&7Critical Damage: &c+80");
+        lore.add("");
+        lore.add("&6Item Ability: Arcane Zap &eRIGHT CLICK");
+        lore.add("&7Fires a beam of runic energy dealing");
+        lore.add("&3100 &7damage. The more distance");
+        lore.add("&7travelled the less damage it");
+        lore.add("&7deals.");
+        lore.add("&8Mana Cost: &310");
+        lore.add("&8Cooldown: &a1s");
+        lore.add("");
+        lore.add("&6&lLEGENDARY STAFF");
+        lore.add("&8item_id:aurora_staff");
+        ItemStack item = createItem(Material.BLAZE_ROD, name, lore);
+        auroraStaff = new Item(item);
+        itemIds.add(auroraStaff.getItemId());
+        items.put(auroraStaff.getItemId(), auroraStaff);
+    }
+
+    private static void createLeapingSword(){
+        String name = "&5Leaping Sword";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+85");
+        lore.add("&7Critical Chance: &c+20");
+        lore.add("&7Critical Damage: &c+120");
+        lore.add("");
+        lore.add("&6Item Ability: Leap &eRIGHT CLICK");
+        lore.add("&7Leap into the air and deal &a100%");
+        lore.add("&7base damage to nearby enemies.");
+        lore.add("&8Mana Cost: &3100");
+        lore.add("&8Cooldown: &a10s");
+        lore.add("");
+        lore.add("&5&lEPIC SWORD");
+        lore.add("&8item_id:leaping_sword");
+        ItemStack item = createItem(Material.IRON_SWORD, name, lore);
+        leapingSword = new Item(item);
+        itemIds.add(leapingSword.getItemId());
+        items.put(leapingSword.getItemId(), leapingSword);
     }
 
     private static void createBrutalityBlade(){
@@ -356,58 +436,6 @@ public class ItemsDefinitions {
         item.setItemMeta(meta);
 
         return item;
-    }
-
-    public static Item getRandomUncommonWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(3)+1; //1-3 range
-        switch (r){
-            case 1:
-                return basicSword;
-            case 2:
-                return stoneStick;
-            case 3:
-                switch (itemClass){
-                    case DPS:
-                        return unstableTome;
-                    case HEALER:
-                        return leechingStaff;
-                    case ARCHER:
-                        return longBow;
-                    case TANK:
-                        return solidStoneAxe;
-                }
-            default:
-                ItemStack nullItem = new ItemStack(Material.BARRIER);
-                ItemMeta im = nullItem.getItemMeta();
-                im.setDisplayName("NULL");
-                nullItem.setItemMeta(im);
-                return new Item(nullItem);
-        }
-    }
-
-    public static Item getRandomRareWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(2)+1; //1-2 range
-        switch (r){
-            case 1:
-                return stormRuler;
-            case 2:
-                switch (itemClass){
-                    case DPS:
-                        return aspectOfTheEnd;
-                    case HEALER:
-                        return healingStaff;
-                    case ARCHER:
-                        return flamingBow;
-                    case TANK:
-                        return golemSword;
-                }
-            default:
-                ItemStack nullItem = new ItemStack(Material.BARRIER);
-                ItemMeta im = nullItem.getItemMeta();
-                im.setDisplayName("NULL");
-                nullItem.setItemMeta(im);
-                return new Item(nullItem);
-        }
     }
 
     private static ItemStack getSkull(String base64) {

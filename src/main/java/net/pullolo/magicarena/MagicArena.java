@@ -170,6 +170,13 @@ public final class MagicArena extends JavaPlugin {
     public static Logger getLog(){
         return log;
     }
+    public static void debugLog(String msg, boolean warning){
+        if (!config.getBoolean("indev")){
+            return;
+        }
+        if (warning) log.warning("[MagicArena:Debug] " + msg);
+        else log.info("[MagicArena:Debug] " + msg);
+    }
     public static WishSystem getWishSystem() {
         return wishSystem;
     }

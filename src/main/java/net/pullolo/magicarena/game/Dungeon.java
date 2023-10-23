@@ -95,7 +95,6 @@ public class Dungeon extends Game{
                     }
                 }
                 if (i<1){
-                    convertArmorStandsToMobs(mobSpawningOffset, finalLevel);
                     for (Player p : allPlayers){
                         if (p!=null){
                             p.sendMessage(ChatColor.GREEN + "Game started!");
@@ -133,12 +132,14 @@ public class Dungeon extends Game{
         }
     }
 
-    public void convertArmorStandsToMobs(int blockOffset, int level){
+    public void convertArmorStandsToMobs(int blockOffset, Entity[] entities){
         Random r = new Random();
+        int level = getLevel();
         double x;
         double z;
+        int converted = 0;
         World w = getWorld();
-        for (Entity en : w.getEntities()){
+        for (Entity en : entities){
             if (!(en instanceof ArmorStand)){
                 continue;
             }
@@ -219,6 +220,7 @@ public class Dungeon extends Game{
                             if (i == mobWithKey) ((DungeonEntity) arenaEntities.get(e)).setWitherKey(true);
                         }
                     }
+                    converted++;
                 }
             } catch (Exception e){
                 getLog().warning("Couldn't spawn: " + as.getLocation().toString());
@@ -235,6 +237,7 @@ public class Dungeon extends Game{
                 }
             }
         }
+        if (converted>0) debugLog("Converted " + converted + " armor stands.", false);
     }
 
     public void findSecret(BlockState b, Player p){
@@ -363,7 +366,6 @@ public class Dungeon extends Game{
         broadcastSound(Sound.ENTITY_ITEM_PICKUP, 1, 1.3f);
     }
     public void openWitherDoor(Location loc){
-        convertArmorStandsToMobs(mobSpawningOffset, level);
         witherKeys--;
         for (Location l: getAllNearBlocks(loc)){
             l.getBlock().setType(Material.AIR);
@@ -372,7 +374,6 @@ public class Dungeon extends Game{
         broadcastSound(Sound.ENTITY_ENDER_DRAGON_AMBIENT, 1, 0.5f);
     }
     public void openBossDoor(Location loc){
-        convertArmorStandsToMobs(mobSpawningOffset, level);
         for (Location l: getAllNearBlocks(loc)){
             l.getBlock().setType(Material.AIR);
         }

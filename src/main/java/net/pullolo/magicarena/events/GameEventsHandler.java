@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpellCastEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -34,6 +35,24 @@ import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 
 public class GameEventsHandler implements Listener {
+
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event){
+        if (!event.getWorld().getName().contains("temp_")){
+            return;
+        }
+        Game g = null;
+        for (Player p : event.getWorld().getPlayers()){
+            if (isPlayerInGame(p)){
+                g = arenaPlayers.get(p).getGame();
+                break;
+            }
+        }
+        if (!(g instanceof Dungeon)){
+            return;
+        }
+        ((Dungeon) g).convertArmorStandsToMobs(2, event.getChunk().getEntities());
+    }
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event){

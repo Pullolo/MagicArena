@@ -76,13 +76,14 @@ public class ItemsDefinitions {
         String name = "&dKusumibaru";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+230");
-        lore.add("&7Critical Chance: &c+40");
-        lore.add("&7Critical Damage: &c+180");
+        lore.add("&7Damage: &c+240");
+        lore.add("&7Critical Chance: &c+50");
+        lore.add("&7Critical Damage: &c+280");
         lore.add("");
-        lore.add("&6Item Ability: Dash n Slice &eRIGHT CLICK");
+        lore.add("&6Item Ability: Dash & Slice &eRIGHT CLICK");
         lore.add("&7Dash through the enemies to deal");
-        lore.add("&c100 &7damage.");
+        lore.add("&c500% &7damage.");
+        lore.add("&8Cooldown: &a6s");
         lore.add("");
         lore.add("&d&lMYTHIC SWORD");
         lore.add("&8item_id:kusumibaru");
@@ -104,9 +105,8 @@ public class ItemsDefinitions {
         lore.add("");
         lore.add("&6Item Ability: Arcane Zap &eRIGHT CLICK");
         lore.add("&7Fires a beam of runic energy dealing");
-        lore.add("&3100 &7damage. The more distance");
-        lore.add("&7travelled the less damage it");
-        lore.add("&7deals.");
+        lore.add("&3300 + 300% &7ability damage. The more distance");
+        lore.add("&7travelled the less damage it deals.");
         lore.add("&8Mana Cost: &310");
         lore.add("&8Cooldown: &a1s");
         lore.add("");
@@ -127,7 +127,7 @@ public class ItemsDefinitions {
         lore.add("&7Critical Damage: &c+120");
         lore.add("");
         lore.add("&6Item Ability: Leap &eRIGHT CLICK");
-        lore.add("&7Leap into the air and deal &a100%");
+        lore.add("&7Leap into the air and deal &a180%");
         lore.add("&7base damage to nearby enemies.");
         lore.add("&8Mana Cost: &3100");
         lore.add("&8Cooldown: &a10s");

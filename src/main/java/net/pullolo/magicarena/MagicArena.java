@@ -171,7 +171,7 @@ public final class MagicArena extends JavaPlugin {
         return log;
     }
     public static void debugLog(String msg, boolean warning){
-        if (!config.getBoolean("indev")){
+        if (!config.getBoolean("debug")){
             return;
         }
         if (warning) log.warning("[MagicArena:Debug] " + msg);

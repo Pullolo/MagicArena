@@ -1,4 +1,5 @@
 indev: true
+debug: true
 main-world: world
 main-menu-item-disabled-worlds:
   - arena1

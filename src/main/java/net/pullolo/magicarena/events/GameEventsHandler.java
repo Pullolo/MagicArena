@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpellCastEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -37,9 +38,28 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 public class GameEventsHandler implements Listener {
 
     @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event){
+        if (!event.getWorld().getName().contains("temp_")){
+            return;
+        }
+        for (Entity e : event.getChunk().getEntities()){
+            if (!arenaEntities.containsKey(e)){
+                continue;
+            }
+            arenaEntities.get(e).setLoaded(false);
+        }
+    }
+
+    @EventHandler
     public void onChunkLoad(ChunkLoadEvent event){
         if (!event.getWorld().getName().contains("temp_")){
             return;
+        }
+        for (Entity e : event.getChunk().getEntities()){
+            if (!arenaEntities.containsKey(e)) {
+                continue;
+            }
+            arenaEntities.get(e).setLoaded(true);
         }
         Game g = null;
         for (Player p : event.getWorld().getPlayers()){

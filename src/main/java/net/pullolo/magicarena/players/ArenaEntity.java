@@ -4,6 +4,7 @@ import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 
 import java.util.HashMap;
 
@@ -12,10 +13,14 @@ public class ArenaEntity extends ArenaEntityBlueprint{
     private final Game game;
     private final Entity entity;
     private final boolean isTester;
+    private boolean loaded = true;
 
     public static HashMap<Entity, ArenaEntity> arenaEntities = new HashMap<>();
 
     public ArenaEntity(Entity entity, int level, Game game, boolean isTester){
+        if (entity instanceof LivingEntity){
+            ((LivingEntity) entity).setRemoveWhenFarAway(false);
+        }
         if (arenaEntities.containsKey(entity)){
             throw new RuntimeException("Cannot convert entity that is already converted!");
         } else arenaEntities.put(entity, this);
@@ -69,6 +74,9 @@ public class ArenaEntity extends ArenaEntityBlueprint{
 
     @Override
     public void updateStats() {
+        if (!loaded){
+            return;
+        }
         fixedUpdateStats();
         performChecksAndCalc();
         updateName();
@@ -81,5 +89,13 @@ public class ArenaEntity extends ArenaEntityBlueprint{
 
     public Game getGame() {
         return game;
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
     }
 }

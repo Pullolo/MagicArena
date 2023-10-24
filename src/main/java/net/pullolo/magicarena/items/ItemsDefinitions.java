@@ -106,7 +106,7 @@ public class ItemsDefinitions {
 
         lore.add("&7Damage: &c+175");
         lore.add("&7Critical Chance: &c+100");
-        lore.add("&7Critical Damage: &c+50");
+        lore.add("&7Critical Damage: &c+110");
         lore.add("");
         lore.add("&6Item Ability: Backstab");
         lore.add("&7Your Crit deals &c2x &7damage from");

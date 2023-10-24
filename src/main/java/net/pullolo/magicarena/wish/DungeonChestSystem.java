@@ -24,6 +24,7 @@ public class DungeonChestSystem {
 
     public void createDungeonChest(Player p, int score, int level, ChestType chestType, boolean won){
         Random rand = new Random();
+        boolean skipUncommons = false;
         int mul = level/20;
         if (mul<1) mul=1;
         int wepVal = 0;
@@ -38,20 +39,35 @@ public class DungeonChestSystem {
         }
         switch (chestType){
             case EPIC:
+                if (level>=100){
+                    wepVal=100;
+                } else if (level >= 50) {
+                    wepVal=12;
+                } else wepVal=2;
                 mul+=1;
-                wepVal=2;
                 break;
             case MYTHIC:
+                if (level>=100){
+                    wepVal=100;
+                    skipUncommons=true;
+                } else if (level >= 50) {
+                    wepVal=50;
+                } else wepVal=12;
                 mul+=3;
-                wepVal=12;
                 add=(int) Math.floor((double) score/300);
                 break;
         }
+
         if (!won) mul=0;
         if (rand.nextInt(100)+1>96-mul-wepVal){
             int stars = 1;
             int rarityChance = rand.nextInt(100)+1;
             WishSystem.WishRarity wishRarity;
+            if (rarityChance<=80 && skipUncommons){
+                if (rand.nextInt(10)==0){
+                    rarityChance = 80 + rand.nextInt(20)+1;
+                } else rarityChance=81;
+            }
             if (rarityChance>99){
                 wishRarity = WishSystem.WishRarity.MYTHIC;
             } else if (rarityChance>97) {

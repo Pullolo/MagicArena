@@ -76,6 +76,28 @@ public class ItemsDefinitions {
         createBladeOfTheUniverse();
     }
 
+    private static void createScorpionChainDart(){
+        String name = "&dScorpion Chain Dart";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+1");
+        lore.add("&7Ability Damage: &3+180");
+        lore.add("&7Critical Chance: &c+50");
+        lore.add("&7Critical Damage: &c+120");
+        lore.add("");
+        lore.add("&6Item Ability: Pull &eRIGHT CLICK");
+        lore.add("&7Throws out a whip, which if you pull");
+        lore.add("&7back deals &3400 + 300% &7ability damage ");
+        lore.add("&7to the target and set it on hellfire.");
+        lore.add("");
+        lore.add("&d&lMYTHIC DUNGEON WHIP");
+        lore.add("&8item_id:scorpion_chain_dart");
+        ItemStack item = createItem(Material.FISHING_ROD, name, lore);
+        scorpionChainDart = new Item(item);
+        itemIds.add(scorpionChainDart.getItemId());
+        items.put(scorpionChainDart.getItemId(), scorpionChainDart);
+    }
+
     private static void createPriscillasDagger(){
         String name = "&6Priscilla's Dagger";
         List<String> lore = new ArrayList<>();

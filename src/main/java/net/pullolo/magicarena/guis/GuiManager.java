@@ -42,14 +42,34 @@ public class GuiManager {
         this.plugin = plugin;
     }
 
-    public InventoryGui createDungeonChestReward(Player player, int dungeonEssence, ItemStack finalItem, DungeonChestSystem.ChestType chestType){
+    public InventoryGui createDungeonChestReward(Player player, int dungeonEssence, ItemStack finalItem, DungeonChestSystem.ChestType chestType, WishSystem.WishRarity rarity){
+        int starEssence = convertItemToEssence(finalItem, rarity);
         String[] guiSetup = {
                 "    t    ",
-                "d   i    ",
+                "d   i   e",
                 "         "
         };
         InventoryGui gui = new InventoryGui(this.plugin, player, "Reward", guiSetup);
-        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+        switch (rarity){
+            case UNCOMMON:
+                gui.setFiller(new ItemStack(Material.LIME_STAINED_GLASS_PANE, 1));
+                break;
+            case RARE:
+                gui.setFiller(new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE, 1));
+                break;
+            case EPIC:
+                gui.setFiller(new ItemStack(Material.MAGENTA_STAINED_GLASS_PANE, 1));
+                break;
+            case LEGENDARY:
+                gui.setFiller(new ItemStack(Material.YELLOW_STAINED_GLASS_PANE, 1));
+                break;
+            case MYTHIC:
+                gui.setFiller(new ItemStack(Material.PINK_STAINED_GLASS_PANE, 1));
+                break;
+            default:
+                gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+                break;
+        }
 
         gui.addElement(new DynamicGuiElement('t', (viewer)->{
             return new StaticGuiElement('t', getChestItemFromChestType(chestType),
@@ -72,6 +92,19 @@ public class GuiManager {
                         return true;
                     },
                     ChatColor.translateAlternateColorCodes('&', getItemAsString(finalItem)));
+        }));
+        gui.addElement(new DynamicGuiElement('e', (viewer)->{
+            return new StaticGuiElement('e', new ItemStack(Material.PRISMARINE_CRYSTALS),
+                    click -> {
+                        Player p = (Player) click.getWhoClicked();
+
+                        getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence() + dungeonEssence);
+                        getPlayerData(p).setStarEssence(getPlayerData(p).getStarEssence() + starEssence);
+                        p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
+                        click.getGui().close();
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Get &a" + starEssence + "&7 star essence instead!"));
         }));
 
         return gui;

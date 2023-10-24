@@ -85,7 +85,7 @@ public class DungeonChestSystem {
                     item.setItemMeta(im);
                     finalItem=new Item(item);
             }
-            guiManager.createDungeonChestReward(p, 100*mul+val1+add, new Item(finalItem, stars, q).getItem(), chestType).show(p);
+            guiManager.createDungeonChestReward(p, 100*mul+val1+add, new Item(finalItem, stars, q).getItem(), chestType, wishRarity).show(p);
         } else {
             guiManager.createDungeonChestReward(p, 100*mul+val1+add, 30*mul+val2+add, chestType).show(p);
         }

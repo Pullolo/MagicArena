@@ -219,7 +219,11 @@ public class GameDamageHandler implements Listener {
                 }
             }
         }
-
+        if (playersItem.getItemId().equalsIgnoreCase("priscillas_dagger")){
+            if (isBehind(damager, damaged)){
+                return (5+itemDamage)*(1+playerDamage/100)*2;
+            }
+        }
         return (5+itemDamage)*(1+playerDamage/100);
     }
 

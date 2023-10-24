@@ -101,6 +101,9 @@ public class DungeonChestSystem {
                 case LEGENDARY:
                     finalItem=getRandomLegendaryDungeonWeapon();
                     break;
+                case MYTHIC:
+                    finalItem=getRandomMythicDungeonWeapon();
+                    break;
                 default:
                     ItemStack item = new ItemStack(Material.WOODEN_SWORD);
                     ItemMeta im = item.getItemMeta();
@@ -164,6 +167,20 @@ public class DungeonChestSystem {
         switch (r){
             case 1:
                 return priscillasDagger;
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomMythicDungeonWeapon(){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        switch (r){
+            case 1:
+                return scorpionChainDart;
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

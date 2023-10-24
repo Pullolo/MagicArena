@@ -59,6 +59,9 @@ public class GameAbilitiesHandler implements Listener {
             } else {
                 arenaEntities.get(e).damage(p, e, arenaPlayers.get(p).getMagicDamage()*3+400,true);
                 ((Damageable) e).damage(0.01, p);
+                if (arenaEntities.get(e).getHealth()<=0){
+                    new OnArenaEntityKilled(p, e);
+                }
             }
             return;
         }
@@ -515,6 +518,98 @@ public class GameAbilitiesHandler implements Listener {
 
                 return;
             } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("KU", p)/100)/10 + "s.");
+        }
+        if (item.getItemId().equalsIgnoreCase("rod_of_chaos")){
+            if (!CooldownApi.isOnCooldown("ROC", p)){
+                if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(45, p)){
+                    CooldownApi.addCooldown("ROC", p, 0.5);
+                    arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses(45, p));
+
+                    ArmorStand as = p.getWorld().spawn(p.getLocation().add(0, 1.5, 0), ArmorStand.class, en -> {
+                        en.setVisible(false);
+                        en.setGravity(false);
+                        en.setSmall(true);
+                        en.setMarker(true);
+                    });
+
+                    Location dest = p.getLocation().add(p.getLocation().getDirection().multiply(10));
+                    Vector v = dest.subtract(p.getLocation()).toVector();
+
+                    double s = 0.8;
+                    int d = 40;
+
+                    new BukkitRunnable(){
+                        final Random r = new Random();
+                        final int distance = d;
+                        final double speed = s;
+                        int i = 1;
+
+                        @Override
+                        public void run() {
+                            if (p == null){
+                                as.remove();
+                                cancel();
+                            }
+
+                            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.fromRGB(115, 0, 0), 1);
+                            as.getWorld().spawnParticle(Particle.REDSTONE, as.getLocation(), 1, 0, 0, 0, 1, dustOptions);
+                            as.teleport(as.getLocation().add(v.normalize().multiply(s)));
+
+                            double damageAmount = arenaPlayers.get(p).getMagicDamage()+25;
+
+                            for (Entity entity : as.getLocation().getChunk().getEntities()){
+                                if (!as.isDead()){
+                                    if (entity.equals(as)){
+                                        continue;
+                                    }
+                                    if (as.getLocation().distanceSquared(entity.getLocation()) <= 3.5){
+                                        if (!entity.equals(p)){
+                                            if (entity instanceof Damageable){
+                                                if (entity instanceof Player && !arenaPlayers.get(p).getGame().getAllPlayersInPlayersTeam(p).contains(entity)){
+                                                    if (isKillable(p ,(Player) entity)){
+                                                        arenaPlayers.get(entity).damage(p, entity, damageAmount, true);
+                                                        ((Damageable) entity).damage(0.01, p);
+                                                        arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth()+25);
+                                                    }
+                                                } else {
+                                                    if (arenaEntities.containsKey(entity)){
+                                                        arenaEntities.get(entity).damage(p, entity, damageAmount, true);
+                                                        ((Damageable) entity).damage(0.01, p);
+                                                        arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth()+25);
+                                                        if (arenaEntities.get(entity).getHealth()<=0){
+                                                            new OnArenaEntityKilled(p, entity);
+                                                        }
+                                                    }
+                                                }
+                                                as.remove();
+                                                cancel();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (!as.getLocation().add(0, 1, 0).getBlock().isPassable()){
+                                if (!as.isDead()){
+                                    as.remove();
+                                    cancel();
+                                }
+                            }
+
+                            if (i > distance){
+                                if (!as.isDead()){
+                                    as.remove();
+                                    cancel();
+                                }
+                            }
+                            i++;
+                        }
+                    }.runTaskTimer(plugin, 0, 1);
+                    event.setCancelled(true);
+
+                    return;
+                } else p.sendMessage(ChatColor.RED + "You dont have enough Mana!");
+            } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("ROC", p)/100)/10 + "s.");
         }
     }
 

@@ -83,3 +83,5 @@ commands:
     description: Let's you modify player data
   open:
     usage: /<command> <chest> args...
+    permission: ma.items
+    description: Let's you open chests

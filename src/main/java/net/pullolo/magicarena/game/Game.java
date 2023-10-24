@@ -93,8 +93,9 @@ public abstract class Game {
                         }
                     }
                 }
+                ArrayList<Entity> toDel = new ArrayList<>();
                 for (Entity e : allEntities){
-                    ArrayList<Entity> toDel = new ArrayList<>();
+
                     if (e!=null && arenaEntities.containsKey(e)){
                         if (arenaEntities.get(e).getHealth()<=0 || e.getLocation().getY() < -96){
                             arenaEntities.get(e).updateStats();
@@ -106,17 +107,17 @@ public abstract class Game {
                             ((Damageable) e).setHealth(40);
                         }
                     }
-                    for (Entity en : toDel){
-                        allEntities.remove(en);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (en != null){
-                                    en.remove();
-                                }
+                }
+                for (Entity en : toDel){
+                    allEntities.remove(en);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (en != null){
+                                en.remove();
                             }
-                        }.runTaskLater(plugin, 20);
-                    }
+                        }
+                    }.runTaskLater(plugin, 20);
                 }
                 update1t();
             }

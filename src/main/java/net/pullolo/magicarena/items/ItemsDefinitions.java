@@ -40,6 +40,7 @@ public class ItemsDefinitions {
     public static Item rodOfChaos; //dungeonItem
     //legendary
     public static Item auroraStaff;
+    public static Item priscillasDagger;
     //mythic
     public static Item kusumibaru;
 
@@ -68,10 +69,31 @@ public class ItemsDefinitions {
         createRodOfChaos();
 
         createAuroraStaff();
+        createPriscillasDagger();
 
         createKusumibaru();
 
         createBladeOfTheUniverse();
+    }
+
+    private static void createPriscillasDagger(){
+        String name = "&6Priscilla's Dagger";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+175");
+        lore.add("&7Critical Chance: &c+100");
+        lore.add("&7Critical Damage: &c+50");
+        lore.add("");
+        lore.add("&6Item Ability: Backstab");
+        lore.add("&7Your Crit deals &c2x &7damage from");
+        lore.add("&7behind the target.");
+        lore.add("");
+        lore.add("&6&lLEGENDARY DUNGEON DAGGER");
+        lore.add("&8item_id:priscillas_dagger");
+        ItemStack item = createItem(Material.IRON_SWORD, name, lore);
+        priscillasDagger = new Item(item);
+        itemIds.add(priscillasDagger.getItemId());
+        items.put(priscillasDagger.getItemId(), priscillasDagger);
     }
 
     private static void createRodOfChaos(){

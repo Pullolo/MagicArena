@@ -3,12 +3,14 @@ package net.pullolo.magicarena.players;
 import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
 public class ArenaPlayer extends ArenaEntityBlueprint {
 
     private final Game game;
+    private ItemStack lastHeldItemStack;
     private boolean inGame = true;
 
     public static HashMap<Player, ArenaPlayer> arenaPlayers = new HashMap<>();
@@ -84,5 +86,13 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
             return arenaPlayers.get(p).isInGame();
         }
         return false;
+    }
+
+    public ItemStack getLastHeldItemStack() {
+        return lastHeldItemStack;
+    }
+
+    public void setLastHeldItemStack(ItemStack lastHeldItemStack) {
+        this.lastHeldItemStack = lastHeldItemStack;
     }
 }

@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.items.Item;
+import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
@@ -527,127 +528,138 @@ public abstract class Game {
     }
 
     private void updatePlayerStatsItemHeld(Player p){
+        ArenaPlayer player = arenaPlayers.get(p);
+        ItemStack heldItem = p.getInventory().getItemInMainHand();
+        ItemStack lastHeldItemStack = player.getLastHeldItemStack();
+
+        if (lastHeldItemStack!=null){
+            if (lastHeldItemStack.equals(heldItem)){
+                return;
+            }
+        }
+
         double prevBonusHp, prevBonusMana, newBonusHp = 0, newBonusMana = 0, healthPerc, manaPerc;
         String key = "itemHeld";
 
         //to add player mana and hp when swapping weapons
-        manaPerc = arenaPlayers.get(p).getMana()/arenaPlayers.get(p).getMaxMana();
-        if (arenaPlayers.get(p).getBonusMaxMana().containsKey(key)) {
-            prevBonusMana = arenaPlayers.get(p).getBonusMaxMana().get(key);
+        manaPerc = player.getMana()/player.getMaxMana();
+        if (player.getBonusMaxMana().containsKey(key)) {
+            prevBonusMana = player.getBonusMaxMana().get(key);
         } else prevBonusMana = 0;
-        healthPerc = arenaPlayers.get(p).getHealth()/arenaPlayers.get(p).getMaxHealth();
-        if (arenaPlayers.get(p).getBonusMaxHealth().containsKey(key)){
-            prevBonusHp = arenaPlayers.get(p).getBonusMaxHealth().get(key);
+        healthPerc = player.getHealth()/player.getMaxHealth();
+        if (player.getBonusMaxHealth().containsKey(key)){
+            prevBonusHp = player.getBonusMaxHealth().get(key);
         } else prevBonusHp = 0;
 
-        if (p.getInventory().getItemInMainHand().getItemMeta() != null && itemIds.contains(new Item(p.getInventory().getItemInMainHand()).getItemId())){
-            if (arenaPlayers.get(p).getBonusDefence().containsKey(key)){
-                arenaPlayers.get(p).getBonusDefence().replace(key, new Item(p.getInventory().getItemInMainHand()).getDefence());
+        if (heldItem.getItemMeta() != null && itemIds.contains(new Item(heldItem).getItemId())){
+            if (player.getBonusDefence().containsKey(key)){
+                player.getBonusDefence().replace(key, new Item(heldItem).getDefence());
             }else {
-                arenaPlayers.get(p).getBonusDefence().put(key, new Item(p.getInventory().getItemInMainHand()).getDefence());
+                player.getBonusDefence().put(key, new Item(heldItem).getDefence());
             }
-            if (arenaPlayers.get(p).getBonusMaxMana().containsKey(key)){
-                arenaPlayers.get(p).getBonusMaxMana().replace(key, new Item(p.getInventory().getItemInMainHand()).getIntelligence());
+            if (player.getBonusMaxMana().containsKey(key)){
+                player.getBonusMaxMana().replace(key, new Item(heldItem).getIntelligence());
             }else {
-                arenaPlayers.get(p).getBonusMaxMana().put(key, new Item(p.getInventory().getItemInMainHand()).getIntelligence());
+                player.getBonusMaxMana().put(key, new Item(heldItem).getIntelligence());
             }
-            newBonusMana = arenaPlayers.get(p).getBonusMaxMana().get(key);
-            if (arenaPlayers.get(p).getBonusSpeed().containsKey(key)){
-                arenaPlayers.get(p).getBonusSpeed().replace(key, new Item(p.getInventory().getItemInMainHand()).getSpeed());
+            newBonusMana = player.getBonusMaxMana().get(key);
+            if (player.getBonusSpeed().containsKey(key)){
+                player.getBonusSpeed().replace(key, new Item(heldItem).getSpeed());
             }else {
-                arenaPlayers.get(p).getBonusSpeed().put(key, new Item(p.getInventory().getItemInMainHand()).getSpeed());
+                player.getBonusSpeed().put(key, new Item(heldItem).getSpeed());
             }
-            if (arenaPlayers.get(p).getBonusCritDamage().containsKey(key)){
-                arenaPlayers.get(p).getBonusCritDamage().replace(key, new Item(p.getInventory().getItemInMainHand()).getCritDamage());
+            if (player.getBonusCritDamage().containsKey(key)){
+                player.getBonusCritDamage().replace(key, new Item(heldItem).getCritDamage());
             }else {
-                arenaPlayers.get(p).getBonusCritDamage().put(key, new Item(p.getInventory().getItemInMainHand()).getCritDamage());
+                player.getBonusCritDamage().put(key, new Item(heldItem).getCritDamage());
             }
-            if (arenaPlayers.get(p).getBonusCritChance().containsKey(key)){
-                arenaPlayers.get(p).getBonusCritChance().replace(key, new Item(p.getInventory().getItemInMainHand()).getCritChance());
+            if (player.getBonusCritChance().containsKey(key)){
+                player.getBonusCritChance().replace(key, new Item(heldItem).getCritChance());
             }else {
-                arenaPlayers.get(p).getBonusCritChance().put(key, new Item(p.getInventory().getItemInMainHand()).getCritChance());
+                player.getBonusCritChance().put(key, new Item(heldItem).getCritChance());
             }
-            if (arenaPlayers.get(p).getBonusMaxHealth().containsKey(key)){
-                arenaPlayers.get(p).getBonusMaxHealth().replace(key, new Item(p.getInventory().getItemInMainHand()).getHealth());
+            if (player.getBonusMaxHealth().containsKey(key)){
+                player.getBonusMaxHealth().replace(key, new Item(heldItem).getHealth());
             }else {
-                arenaPlayers.get(p).getBonusMaxHealth().put(key, new Item(p.getInventory().getItemInMainHand()).getHealth());
+                player.getBonusMaxHealth().put(key, new Item(heldItem).getHealth());
             }
-            newBonusHp = arenaPlayers.get(p).getBonusMaxHealth().get(key);
-            if (arenaPlayers.get(p).getBonusMagicDamage().containsKey(key)){
-                arenaPlayers.get(p).getBonusMagicDamage().replace(key, new Item(p.getInventory().getItemInMainHand()).getAbilityPower());
+            newBonusHp = player.getBonusMaxHealth().get(key);
+            if (player.getBonusMagicDamage().containsKey(key)){
+                player.getBonusMagicDamage().replace(key, new Item(heldItem).getAbilityPower());
             }else {
-                arenaPlayers.get(p).getBonusMagicDamage().put(key, new Item(p.getInventory().getItemInMainHand()).getAbilityPower());
+                player.getBonusMagicDamage().put(key, new Item(heldItem).getAbilityPower());
             }
-            if (arenaPlayers.get(p).getBonusMagicDefence().containsKey(key)){
-                arenaPlayers.get(p).getBonusMagicDefence().replace(key, new Item(p.getInventory().getItemInMainHand()).getResistance());
+            if (player.getBonusMagicDefence().containsKey(key)){
+                player.getBonusMagicDefence().replace(key, new Item(heldItem).getResistance());
             }else {
-                arenaPlayers.get(p).getBonusMagicDefence().put(key, new Item(p.getInventory().getItemInMainHand()).getResistance());
+                player.getBonusMagicDefence().put(key, new Item(heldItem).getResistance());
             }
-            if (arenaPlayers.get(p).getBonusManaRegen().containsKey(key)){
-                arenaPlayers.get(p).getBonusManaRegen().replace(key, new Item(p.getInventory().getItemInMainHand()).getManaRegen());
+            if (player.getBonusManaRegen().containsKey(key)){
+                player.getBonusManaRegen().replace(key, new Item(heldItem).getManaRegen());
             }else {
-                arenaPlayers.get(p).getBonusManaRegen().put(key, new Item(p.getInventory().getItemInMainHand()).getManaRegen());
+                player.getBonusManaRegen().put(key, new Item(heldItem).getManaRegen());
             }
-            if (arenaPlayers.get(p).getBonusHpRegen().containsKey(key)){
-                arenaPlayers.get(p).getBonusHpRegen().replace(key, new Item(p.getInventory().getItemInMainHand()).getHealthRegen());
+            if (player.getBonusHpRegen().containsKey(key)){
+                player.getBonusHpRegen().replace(key, new Item(heldItem).getHealthRegen());
             }else {
-                arenaPlayers.get(p).getBonusHpRegen().put(key, new Item(p.getInventory().getItemInMainHand()).getHealthRegen());
+                player.getBonusHpRegen().put(key, new Item(heldItem).getHealthRegen());
             }
         } else {
-            if (arenaPlayers.get(p).getBonusDefence().containsKey(key)){
-                arenaPlayers.get(p).getBonusDefence().replace(key, 0.0);
+            if (player.getBonusDefence().containsKey(key)){
+                player.getBonusDefence().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusDefence().put(key, 0.0);
+                player.getBonusDefence().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusMaxMana().containsKey(key)){
-                arenaPlayers.get(p).getBonusMaxMana().replace(key, 0.0);
+            if (player.getBonusMaxMana().containsKey(key)){
+                player.getBonusMaxMana().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusMaxMana().put(key, 0.0);
+                player.getBonusMaxMana().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusSpeed().containsKey(key)){
-                arenaPlayers.get(p).getBonusSpeed().replace(key, 0.0);
+            if (player.getBonusSpeed().containsKey(key)){
+                player.getBonusSpeed().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusSpeed().put(key, 0.0);
+                player.getBonusSpeed().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusCritDamage().containsKey(key)){
-                arenaPlayers.get(p).getBonusCritDamage().replace(key, 0.0);
+            if (player.getBonusCritDamage().containsKey(key)){
+                player.getBonusCritDamage().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusCritDamage().put(key, 0.0);
+                player.getBonusCritDamage().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusCritChance().containsKey(key)){
-                arenaPlayers.get(p).getBonusCritChance().replace(key, 0.0);
+            if (player.getBonusCritChance().containsKey(key)){
+                player.getBonusCritChance().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusCritChance().put(key, 0.0);
+                player.getBonusCritChance().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusMaxHealth().containsKey(key)){
-                arenaPlayers.get(p).getBonusMaxHealth().replace(key, 0.0);
+            if (player.getBonusMaxHealth().containsKey(key)){
+                player.getBonusMaxHealth().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusMaxHealth().put(key, 0.0);
+                player.getBonusMaxHealth().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusMagicDamage().containsKey(key)){
-                arenaPlayers.get(p).getBonusMagicDamage().replace(key, 0.0);
+            if (player.getBonusMagicDamage().containsKey(key)){
+                player.getBonusMagicDamage().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusMagicDamage().put(key, 0.0);
+                player.getBonusMagicDamage().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusMagicDefence().containsKey(key)){
-                arenaPlayers.get(p).getBonusMagicDefence().replace(key, 0.0);
+            if (player.getBonusMagicDefence().containsKey(key)){
+                player.getBonusMagicDefence().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusMagicDefence().put(key, 0.0);
+                player.getBonusMagicDefence().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusManaRegen().containsKey(key)){
-                arenaPlayers.get(p).getBonusManaRegen().replace(key, 0.0);
+            if (player.getBonusManaRegen().containsKey(key)){
+                player.getBonusManaRegen().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusManaRegen().put(key, 0.0);
+                player.getBonusManaRegen().put(key, 0.0);
             }
-            if (arenaPlayers.get(p).getBonusHpRegen().containsKey(key)){
-                arenaPlayers.get(p).getBonusHpRegen().replace(key, 0.0);
+            if (player.getBonusHpRegen().containsKey(key)){
+                player.getBonusHpRegen().replace(key, 0.0);
             }else {
-                arenaPlayers.get(p).getBonusHpRegen().put(key, 0.0);
+                player.getBonusHpRegen().put(key, 0.0);
             }
         }
-        arenaPlayers.get(p).updateStats();
-        if (prevBonusHp!=newBonusHp) arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getMaxHealth()*healthPerc);
-        if (prevBonusMana!=newBonusMana) arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMaxMana()*manaPerc);
+        player.updateStats();
+        if (prevBonusHp!=newBonusHp) player.setHealth(player.getMaxHealth()*healthPerc);
+        if (prevBonusMana!=newBonusMana) player.setMana(player.getMaxMana()*manaPerc);
+        player.setLastHeldItemStack(heldItem);
     }
 
     public void addEntity(Entity e){

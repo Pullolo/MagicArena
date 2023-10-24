@@ -13,11 +13,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
 
+import static net.pullolo.magicarena.MagicArena.debugLog;
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
@@ -58,18 +60,24 @@ public class GameDamageHandler implements Listener {
             if (event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)){
                 return;
             }
-            if (!(((EntityDamageByEntityEvent) event).getDamager() instanceof Player)){
-                if (!arenaEntities.containsKey(((EntityDamageByEntityEvent) event).getDamager())){
-                    if (((EntityDamageByEntityEvent) event).getDamager() instanceof EvokerFangs){
-                        arenaPlayers.get(damaged).damage(((EvokerFangs) ((EntityDamageByEntityEvent) event).getDamager()).getOwner(), damaged, calculateDamage(event.getDamage(), ((EvokerFangs) ((EntityDamageByEntityEvent) event).getDamager()).getOwner(), damaged), true);
+            Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+            if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)){
+                if (damager instanceof Firework){
+                    damager = (Entity) ((Firework) damager).getShooter();
+                }
+            }
+            if (!(damager instanceof Player)){
+                if (!arenaEntities.containsKey(damager)){
+                    if (damager instanceof EvokerFangs){
+                        arenaPlayers.get(damaged).damage(((EvokerFangs) damager).getOwner(), damaged, calculateDamage(event.getDamage(), ((EvokerFangs) damager).getOwner(), damaged), true);
                     }
                     return;
                 }
-            } else if (arenaPlayers.get((Player) ((EntityDamageByEntityEvent) event).getDamager()).getGame().getAllPlayersInPlayersTeam((Player) ((EntityDamageByEntityEvent) event).getDamager()).contains(damaged)){
+            } else if (arenaPlayers.get((Player) damager).getGame().getAllPlayersInPlayersTeam((Player) damager).contains(damaged)){
                 event.setCancelled(true);
                 return;
             }
-            arenaPlayers.get(damaged).damage(((EntityDamageByEntityEvent) event).getDamager(), damaged, calculateDamage(event.getDamage(), ((EntityDamageByEntityEvent) event).getDamager(), damaged), false);
+            arenaPlayers.get(damaged).damage(damager, damaged, calculateDamage(event.getDamage(), damager, damaged), false);
             return;
         }
 
@@ -170,6 +178,11 @@ public class GameDamageHandler implements Listener {
             return;
         }
         Entity damager = event.getDamager();
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)){
+            if (damager instanceof Firework){
+                damager = (Entity) ((Firework) damager).getShooter();
+            }
+        }
 
         if (damager instanceof Player){
             if (!isPlayerInGame((Player) damager)){

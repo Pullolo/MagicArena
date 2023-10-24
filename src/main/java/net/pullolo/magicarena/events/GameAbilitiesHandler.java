@@ -7,6 +7,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
@@ -19,8 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static net.pullolo.magicarena.MagicArena.getLog;
-import static net.pullolo.magicarena.MagicArena.plugin;
+import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -28,6 +28,41 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 import static org.bukkit.Bukkit.getServer;
 
 public class GameAbilitiesHandler implements Listener {
+
+    @EventHandler
+    public void onPlayerFish(PlayerFishEvent event){
+        Player p = event.getPlayer();
+        if (!isPlayerInGame(p)){
+            return;
+        }
+        if (!arenaPlayers.get(event.getPlayer()).getGame().hasStarted()){
+            return;
+        }
+        if (event.getHook().getHookedEntity()==null){
+            return;
+        }
+        Entity e = event.getHook().getHookedEntity();
+        if (!arenaEntities.containsKey(e)){
+            return;
+        }
+        if (event.getPlayer().getInventory().getItemInMainHand().getItemMeta()==null){
+            return;
+        }
+        Item item = new Item(event.getPlayer().getInventory().getItemInMainHand());
+        if (!itemIds.contains(item.getItemId())){
+            return;
+        }
+        if (item.getItemId().equalsIgnoreCase("scorpion_chain_dart")){
+            if (e instanceof Player && !arenaPlayers.get(p).getGame().getAllPlayersInPlayersTeam(p).contains(e)){
+                arenaPlayers.get(e).damage(p, e, arenaPlayers.get(p).getMagicDamage()*3+400, true);
+                ((Player) e).damage(0.01, p);
+            } else {
+                arenaEntities.get(e).damage(p, e, arenaPlayers.get(p).getMagicDamage()*3+400,true);
+                ((Damageable) e).damage(0.01, p);
+            }
+            return;
+        }
+    }
 
     @EventHandler
     public void onPlayerClick(PlayerInteractEvent event){

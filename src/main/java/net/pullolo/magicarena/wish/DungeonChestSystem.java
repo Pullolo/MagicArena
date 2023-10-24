@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.guiManager;
@@ -31,11 +33,11 @@ public class DungeonChestSystem {
         int add = 1;
         int val1 = rand.nextInt(10);
         int val2 = rand.nextInt(10);
-        if (score>500){
-            mul=2;
+        if (score>=500){
+            mul+=2;
         }
-        if (score>1000){
-            mul=3;
+        if (score>=1000){
+            mul+=3;
         }
         switch (chestType){
             case EPIC:
@@ -97,6 +99,9 @@ public class DungeonChestSystem {
                 default:
                     ItemStack item = new ItemStack(Material.WOODEN_SWORD);
                     ItemMeta im = item.getItemMeta();
+                    List<String> lore = new ArrayList<>();
+                    lore.add("null");
+                    im.setLore(lore);
                     im.setDisplayName(ChatColor.RED + wishRarity.toString() + " not implemented yet");
                     item.setItemMeta(im);
                     finalItem=new Item(item);

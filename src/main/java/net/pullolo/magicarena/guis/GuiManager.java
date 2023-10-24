@@ -162,10 +162,10 @@ public class GuiManager {
         } else if (score < 400) {
             guiSetup[1] = guiSetup[1].replaceAll("b", "0");
             guiSetup[1] = guiSetup[1].replaceAll("c", "0");
-        } else if (score < 600) {
+        } else if (score < 800) {
             guiSetup[1] = guiSetup[1].replaceAll("c", "0");
         }
-        if (money<300){
+        if (money<400){
             guiSetup[1] = guiSetup[1].replaceAll("b", "1");
             guiSetup[1] = guiSetup[1].replaceAll("c", "1");
         } else if (money < 1000) {
@@ -195,16 +195,16 @@ public class GuiManager {
                     click -> {
                         Player p = (Player) click.getWhoClicked();
 
-                        if (getPlayerData(p).getDungeonEssence()>=300){
+                        if (getPlayerData(p).getDungeonEssence()>=400){
                             click.getGui().close();
-                            getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence()-300);
+                            getPlayerData(p).setDungeonEssence(getPlayerData(p).getDungeonEssence()-400);
                             dungeonChestSystem.createDungeonChest(p, score, level, DungeonChestSystem.ChestType.EPIC, won);
                             p.playSound(p, Sound.BLOCK_ENDER_CHEST_OPEN, 0.5f, 1.2f);
                         }
 
                         return true;
                     },
-                    ChatColor.translateAlternateColorCodes('&', "&r&fOpen &5Epic &fChest ♦\n&7Costs &5300 &7Dungeon Essence"));
+                    ChatColor.translateAlternateColorCodes('&', "&r&fOpen &5Epic &fChest ♦\n&7Costs &5400 &7Dungeon Essence"));
         }));
         gui.addElement(new DynamicGuiElement('c', (viewer)->{
             return new StaticGuiElement('c', getPlayerSkull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDQ1MjQwZmNmMWE5Nzk2MzI3ZGRhNTU5Mzk4NTM0M2FmOTEyMWE3MTU2YmM3NmUzZDZiMzQxYjAyZTZhNmU1MiJ9fX0="),

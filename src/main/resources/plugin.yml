@@ -78,6 +78,8 @@ commands:
     permission: ma.mobs
     description: Gives you a name of a mob
   data:
-    usage: /<data> args
+    usage: /<command> args...
     permission: ma.data
     description: Let's you modify player data
+  open:
+    usage: /<command> <chest> args...

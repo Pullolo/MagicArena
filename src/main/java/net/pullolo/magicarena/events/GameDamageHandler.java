@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.util.Vector;
 
 import java.util.Random;
 
@@ -245,5 +246,16 @@ public class GameDamageHandler implements Listener {
         if (arenaEntities.get(e).getHealth()<=0){
             new OnArenaEntityKilled(p, e);
         }
+    }
+
+    private boolean isBehind(Entity damager, Entity damaged){
+        Vector pDir = damager.getLocation().getDirection();
+        Vector eDir = damaged.getLocation().getDirection();
+        double xv = pDir.getX() * eDir.getZ() - pDir.getZ() * eDir.getX();
+        double zv = pDir.getX() * eDir.getX() + pDir.getZ() * eDir.getZ();
+        double angle = Math.atan2(xv, zv); // Value between -π and +π
+        double angleInDegrees = (angle * 180) / Math.PI;
+
+        return angleInDegrees >= -32 && angleInDegrees <= 60;
     }
 }

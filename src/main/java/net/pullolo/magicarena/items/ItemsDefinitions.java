@@ -43,6 +43,7 @@ public class ItemsDefinitions {
     public static Item priscillasDagger;
     //mythic
     public static Item kusumibaru;
+    public static Item scorpionChainDart;
 
     public static Item bladeOfTheUniverse;
     public static final ArrayList<String> itemIds = new ArrayList<>();
@@ -72,6 +73,7 @@ public class ItemsDefinitions {
         createPriscillasDagger();
 
         createKusumibaru();
+        createScorpionChainDart();
 
         createBladeOfTheUniverse();
     }

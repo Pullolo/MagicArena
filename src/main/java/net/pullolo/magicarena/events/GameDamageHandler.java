@@ -108,6 +108,9 @@ public class GameDamageHandler implements Listener {
     }
 
     public void onEntityProjectileDamage(ProjectileHitEvent event){
+        if (event.getEntity() instanceof FishHook){
+            return;
+        }
         Entity damaged = event.getHitEntity();
         Entity damager = (Entity) event.getEntity().getShooter();
 

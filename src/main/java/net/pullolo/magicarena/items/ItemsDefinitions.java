@@ -37,6 +37,7 @@ public class ItemsDefinitions {
     public static Item brutalityBlade; //dungeonItem
     //epic
     public static Item leapingSword;
+    public static Item rodOfChaos; //dungeonItem
     //legendary
     public static Item auroraStaff;
     //mythic
@@ -64,12 +65,34 @@ public class ItemsDefinitions {
         createBrutalityBlade();
 
         createLeapingSword();
+        createRodOfChaos();
 
         createAuroraStaff();
 
         createKusumibaru();
 
         createBladeOfTheUniverse();
+    }
+
+    private static void createRodOfChaos(){
+        String name = "&5Rod of Chaos";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+1");
+        lore.add("&7Ability Damage: &3+75");
+        lore.add("&7Intelligence: &b+50");
+        lore.add("");
+        lore.add("&6Ability: Life Steal &eRIGHT CLICK");
+        lore.add("&7Steals &425 &7health from enemies.");
+        lore.add("&8Mana Cost: &345");
+        lore.add("&8Cooldown: &a0.5s");
+        lore.add("");
+        lore.add("&5&lEPIC DUNGEON ROD");
+        lore.add("&8item_id:rod_of_chaos");
+        ItemStack item = createItem(Material.AMETHYST_SHARD, name, lore);
+        rodOfChaos = new Item(item);
+        itemIds.add(rodOfChaos.getItemId());
+        items.put(rodOfChaos.getItemId(), rodOfChaos);
     }
 
     private static void createKusumibaru(){

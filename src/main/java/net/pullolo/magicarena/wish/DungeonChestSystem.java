@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.guiManager;
-import static net.pullolo.magicarena.items.ItemsDefinitions.brutalityBlade;
-import static net.pullolo.magicarena.items.ItemsDefinitions.undeadSword;
+import static net.pullolo.magicarena.items.ItemsDefinitions.*;
 
 public class DungeonChestSystem {
 
@@ -96,6 +95,9 @@ public class DungeonChestSystem {
                 case RARE:
                     finalItem=getRandomRareDungeonWeapon();
                     break;
+                case EPIC:
+                    finalItem=getRandomEpicDungeonWeapon();
+                    break;
                 default:
                     ItemStack item = new ItemStack(Material.WOODEN_SWORD);
                     ItemMeta im = item.getItemMeta();
@@ -131,6 +133,20 @@ public class DungeonChestSystem {
         switch (r){
             case 1:
                 return brutalityBlade;
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomEpicDungeonWeapon(){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        switch (r){
+            case 1:
+                return rodOfChaos;
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

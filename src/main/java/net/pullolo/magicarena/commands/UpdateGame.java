@@ -33,7 +33,6 @@ public class UpdateGame implements CommandExecutor, TabCompleter {
             for (Player p : Bukkit.getOnlinePlayers()){
                 getPlayerData(p).setUpdated(false);
                 updatePlayer(p);
-                getPlayerData(p).setUpdated(true);
             }
             return true;
         }

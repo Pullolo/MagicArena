@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 import static net.pullolo.magicarena.MagicArena.debugLog;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.items;
 
@@ -23,6 +24,7 @@ public class UpdateManager {
             p.getInventory().setItem(slot, updatePlayerItem(i).getItem());
             debugLog("Updated " + i.getItemId(), false);
         }
+        getPlayerData(p).setUpdated(true);
         debugLog("Finished updating Player " + p.getName(), false);
     }
 

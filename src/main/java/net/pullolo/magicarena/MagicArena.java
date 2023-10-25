@@ -56,6 +56,7 @@ public final class MagicArena extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
+        config = getConfig();
         dbManager.init();
         ItemsDefinitions.init();
         ArmorDefinitions.init();
@@ -69,7 +70,6 @@ public final class MagicArena extends JavaPlugin {
         dungeonChestSystem = new DungeonChestSystem();
         saveDefaultConfig();
         WorldManager.init(this);
-        config = getConfig();
         setMainWorld();
         createCooldowns();
         registerCommand(new CreateWorld(), "createworld");

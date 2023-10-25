@@ -15,14 +15,16 @@ public class PlayerData {
     private final String name;
     private int level, star_essence, wishes, dungeon_essence;
     private double xp;
+    private boolean updated;
 
-    public PlayerData(String name, int level, double xp, int star_essence, int wishes, int dungeon_essence) {
+    public PlayerData(String name, int level, double xp, int star_essence, int wishes, int dungeon_essence, boolean updated) {
         this.name = name;
         this.level = level;
         this.xp = xp;
         this.star_essence = star_essence;
         this.wishes = wishes;
         this.dungeon_essence = dungeon_essence;
+        this.updated = updated;
     }
 
     public static PlayerData getPlayerData(Player p){
@@ -36,7 +38,7 @@ public class PlayerData {
 
     public static void savePlayerDataToDb(Player p, DbManager db){
         String playerName = p.getName();
-        db.updatePlayer(playerName, playerData.get(p).getLevel(), playerData.get(p).getXp(), playerData.get(p).getStarEssence(), playerData.get(p).getWishes(), playerData.get(p).getDungeonEssence());
+        db.updatePlayer(playerName, playerData.get(p).getLevel(), playerData.get(p).getXp(), playerData.get(p).getStarEssence(), playerData.get(p).getWishes(), playerData.get(p).getDungeonEssence(), playerData.get(p).isUpdated());
     }
 
     public static void removePlayerData(Player p){
@@ -93,5 +95,13 @@ public class PlayerData {
 
     public void setXp(double xp) {
         this.xp = xp;
+    }
+
+    public boolean isUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(boolean updated) {
+        this.updated = updated;
     }
 }

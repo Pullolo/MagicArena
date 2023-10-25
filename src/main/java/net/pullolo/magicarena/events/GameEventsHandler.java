@@ -8,6 +8,7 @@ import net.pullolo.magicarena.game.Game;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.DungeonEntity;
+import net.pullolo.magicarena.players.UpdateManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -30,10 +31,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
+import static net.pullolo.magicarena.data.PlayerData.setPlayerDataFromDb;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
 
 public class GameEventsHandler implements Listener {
 
@@ -146,7 +150,10 @@ public class GameEventsHandler implements Listener {
             event.getPlayer().kickPlayer("Invalid Name!");
         }
         event.getPlayer().setInvulnerable(false);
-        PlayerData.setPlayerDataFromDb(event.getPlayer(), dbManager);
+        setPlayerDataFromDb(event.getPlayer(), dbManager);
+        if (!getPlayerData(event.getPlayer()).isUpdated()){
+            updatePlayer(event.getPlayer());
+        }
         if (event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)){
             if (event.getPlayer().isOp()) event.getPlayer().setGameMode(GameMode.CREATIVE);
             else event.getPlayer().setGameMode(GameMode.SURVIVAL);

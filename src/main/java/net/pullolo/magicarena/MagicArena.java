@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
+import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
 import static net.pullolo.magicarena.worlds.WorldManager.*;
 
 public final class MagicArena extends JavaPlugin {
@@ -91,6 +93,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new GetCustomName(), "getcustomname");
         registerCommand(new Data(), "data");
         registerCommand(new Open(), "open");
+        registerCommand(new UpdateGame(), "updategame");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);
@@ -194,6 +197,9 @@ public final class MagicArena extends JavaPlugin {
     private void setPlayerData() {
         for (Player p : getServer().getOnlinePlayers()){
             PlayerData.setPlayerDataFromDb(p, dbManager);
+            if (!getPlayerData(p).isUpdated()){
+                updatePlayer(p);
+            }
         }
     }
 

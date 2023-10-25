@@ -85,3 +85,7 @@ commands:
     usage: /<command> <chest> args...
     permission: ma.items
     description: Let's you open chests
+  updategame:
+    usage: /<command> <all/single player>
+    permission: ma.update
+    description: After changing items this should be used to update them

@@ -521,9 +521,9 @@ public class GameAbilitiesHandler implements Listener {
         }
         if (item.getItemId().equalsIgnoreCase("rod_of_chaos")){
             if (!CooldownApi.isOnCooldown("ROC", p)){
-                if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(45, p)){
+                if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses((int) (arenaPlayers.get(p).getMaxMana()/2), p)){
                     CooldownApi.addCooldown("ROC", p, 0.5);
-                    arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses(45, p));
+                    arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses((int) (arenaPlayers.get(p).getMaxMana()/2), p));
 
                     ArmorStand as = p.getWorld().spawn(p.getLocation().add(0, 1.5, 0), ArmorStand.class, en -> {
                         en.setVisible(false);
@@ -569,13 +569,13 @@ public class GameAbilitiesHandler implements Listener {
                                                     if (isKillable(p ,(Player) entity)){
                                                         arenaPlayers.get(entity).damage(p, entity, damageAmount, true);
                                                         ((Damageable) entity).damage(0.01, p);
-                                                        arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth()+25);
+                                                        arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth() + arenaPlayers.get(entity).getMaxHealth()/10);
                                                     }
                                                 } else {
                                                     if (arenaEntities.containsKey(entity)){
                                                         arenaEntities.get(entity).damage(p, entity, damageAmount, true);
                                                         ((Damageable) entity).damage(0.01, p);
-                                                        arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth()+25);
+                                                        arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth() + arenaEntities.get(entity).getMaxHealth()/10);
                                                         if (arenaEntities.get(entity).getHealth()<=0){
                                                             new OnArenaEntityKilled(p, entity);
                                                         }

@@ -83,9 +83,9 @@ public class ItemsDefinitions {
         List<String> lore = new ArrayList<>();
 
         lore.add("&7Damage: &c+1");
-        lore.add("&7Ability Damage: &3+180");
+        lore.add("&7Ability Damage: &3+390");
         lore.add("&7Critical Chance: &c+50");
-        lore.add("&7Critical Damage: &c+120");
+        lore.add("&7Critical Damage: &c+150");
         lore.add("");
         lore.add("&6Item Ability: Pull &eRIGHT CLICK");
         lore.add("&7Throws out a whip, which if you pull");
@@ -104,7 +104,7 @@ public class ItemsDefinitions {
         String name = "&6Priscilla's Dagger";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+175");
+        lore.add("&7Damage: &c+310");
         lore.add("&7Critical Chance: &c+100");
         lore.add("&7Critical Damage: &c+110");
         lore.add("");
@@ -125,12 +125,12 @@ public class ItemsDefinitions {
         List<String> lore = new ArrayList<>();
 
         lore.add("&7Damage: &c+1");
-        lore.add("&7Ability Damage: &3+75");
+        lore.add("&7Ability Damage: &3+135");
         lore.add("&7Intelligence: &b+50");
         lore.add("");
         lore.add("&6Ability: Life Steal &eRIGHT CLICK");
-        lore.add("&7Steals &425 &7health from enemies.");
-        lore.add("&8Mana Cost: &345");
+        lore.add("&7Steals &410% &7health from enemies.");
+        lore.add("&8Mana Cost: &350%");
         lore.add("&8Cooldown: &a0.5s");
         lore.add("");
         lore.add("&5&lEPIC DUNGEON ROD");
@@ -145,9 +145,9 @@ public class ItemsDefinitions {
         String name = "&dKusumibaru";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+240");
+        lore.add("&7Damage: &c+440");
         lore.add("&7Critical Chance: &c+50");
-        lore.add("&7Critical Damage: &c+280");
+        lore.add("&7Critical Damage: &c+290");
         lore.add("");
         lore.add("&6Item Ability: Dash & Slice &eRIGHT CLICK");
         lore.add("&7Dash through the enemies to deal");
@@ -168,7 +168,7 @@ public class ItemsDefinitions {
 
         lore.add("&7Damage: &c+1");
         lore.add("&7Intelligence: &b+300");
-        lore.add("&7Ability Damage: &3+130");
+        lore.add("&7Ability Damage: &3+290");
         lore.add("&7Critical Chance: &c+50");
         lore.add("&7Critical Damage: &c+80");
         lore.add("");
@@ -191,7 +191,7 @@ public class ItemsDefinitions {
         String name = "&5Leaping Sword";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+85");
+        lore.add("&7Damage: &c+165");
         lore.add("&7Critical Chance: &c+20");
         lore.add("&7Critical Damage: &c+120");
         lore.add("");
@@ -213,7 +213,7 @@ public class ItemsDefinitions {
         String name = "&9Brutality Blade";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+55");
+        lore.add("&7Damage: &c+85");
         lore.add("&7Critical Chance: &c+10");
         lore.add("&7Critical Damage: &c+40");
         lore.add("");
@@ -233,7 +233,7 @@ public class ItemsDefinitions {
         String name = "&9Flaming Bow";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+40");
+        lore.add("&7Damage: &c+80");
         lore.add("&7Critical Chance: &c+30");
         lore.add("&7Critical Damage: &c+110");
         lore.add("");
@@ -252,7 +252,7 @@ public class ItemsDefinitions {
         String name = "&9Aspect Of The End";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+60");
+        lore.add("&7Damage: &c+110");
         lore.add("&7Intelligence: &b+50");
         lore.add("&7Critical Chance: &c+20");
         lore.add("&7Critical Damage: &c+80");
@@ -273,10 +273,10 @@ public class ItemsDefinitions {
         String name = "&9Golem Sword";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+8");
-        lore.add("&7Intelligence: &b+40");
-        lore.add("&7Defence: &a+80");
-        lore.add("&7Resistance: &3+60");
+        lore.add("&7Damage: &c+30");
+        lore.add("&7Intelligence: &b+50");
+        lore.add("&7Defence: &a+180");
+        lore.add("&7Resistance: &3+90");
         lore.add("");
         lore.add("&6Item Ability: Iron Punch &eRIGHT CLICK");
         lore.add("&7A giant pile of iron appears above you");
@@ -316,7 +316,7 @@ public class ItemsDefinitions {
         String name = "&aUndead Sword";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+15");
+        lore.add("&7Damage: &c+25");
         lore.add("&7Health Regen: &4+1");
         lore.add("");
         lore.add("&6Ability: Smite");
@@ -334,7 +334,7 @@ public class ItemsDefinitions {
         String name = "&9Storm Ruler";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+30");
+        lore.add("&7Damage: &c+70");
         lore.add("&7Critical Chance: &c+10");
         lore.add("");
         lore.add("&6Ability: Storm King &eRIGHT CLICK");

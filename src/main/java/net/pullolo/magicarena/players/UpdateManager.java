@@ -25,12 +25,12 @@ public class UpdateManager {
             debugLog("Updated " + i.getItemId(), false);
         }
         for (int slot = 0; slot < p.getEnderChest().getSize(); slot++){
-            ItemStack item = p.getInventory().getItem(slot);
+            ItemStack item = p.getEnderChest().getItem(slot);
             if (item==null) continue;
             if (item.getItemMeta()==null) continue;
             Item i = new Item(item);
             if (i.getItemId().equalsIgnoreCase("NULL")) continue;
-            p.getInventory().setItem(slot, updatePlayerItem(i).getItem());
+            p.getEnderChest().setItem(slot, updatePlayerItem(i).getItem());
             debugLog("Updated " + i.getItemId(), false);
         }
         getPlayerData(p).setUpdated(true);

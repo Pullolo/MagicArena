@@ -67,7 +67,7 @@ public class ArenaEntity extends ArenaEntityBlueprint{
         setBaseMagicDefence(getLevel()*1.5);
         setBaseDamage((getLevel()/2+1)*5+getLevel());
         setBaseCritDamage(getLevel()*5+20);
-        setBaseCritChance(getLevel()+2);
+        setBaseCritChance(10);
         setBaseMagicDamage(getLevel()*2);
         setBaseSpeed(100);
     }

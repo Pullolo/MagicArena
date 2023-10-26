@@ -210,6 +210,11 @@ public class GameEventsHandler implements Listener {
                     d.broadcastSound(Sound.ENTITY_PLAYER_LEVELUP, 1, 1.3f);
                 }
             }
+            if (isSkullEqual((Skull) b, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGI2OTc1YWY3MDcyNGQ2YTQ0ZmQ1OTQ2ZTYwYjI3MTc3MzdkZmRiNTQ1YjRkYWIxODkzMzUxYTljOWRkMTgzYyJ9fX0=")){
+                event.getClickedBlock().setType(Material.AIR);
+                d.reviveAll(event.getPlayer(), event.getClickedBlock().getLocation());
+                d.broadcastSound(Sound.BLOCK_AMETHYST_CLUSTER_HIT, 1, 0.3f);
+            }
         }
     }
 

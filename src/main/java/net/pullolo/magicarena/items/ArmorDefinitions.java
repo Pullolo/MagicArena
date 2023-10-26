@@ -22,6 +22,11 @@ public class ArmorDefinitions {
     public static Item wandererChestplate;
     public static Item wandererLeggings;
     public static Item wandererBoots;
+    //rare
+    public static Item hardenedDiamondHelmet;
+    public static Item hardenedDiamondChestplate;
+    public static Item hardenedDiamondLeggings;
+    public static Item hardenedDiamondBoots;
 
     public static final ArrayList<String> armorItemIds = new ArrayList<>();
     public static final HashMap<String, ArrayList<Item>> armorItems = new HashMap<>();
@@ -30,6 +35,71 @@ public class ArmorDefinitions {
         createTestArmor();
 
         createWandererArmor();
+
+        createHardenedDiamondArmor();
+    }
+
+    private static void createHardenedDiamondArmor(){
+        ArrayList<Item> pieces = new ArrayList<>();
+        String name1 = "&9Hardened Diamond Helmet";
+        List<String> lore1 = new ArrayList<>();
+
+        lore1.add("&7Health: &4+50");
+        lore1.add("&7Defence: &a+80");
+        lore1.add("&7Resistance: &3+20");
+        lore1.add("");
+        lore1.add("&9&9RARE HELMET");
+        lore1.add("&8item_id:hardened_diamond_helmet");
+        ItemStack item1 = createItem(Material.DIAMOND_HELMET, name1, lore1);
+        hardenedDiamondHelmet = new Item(item1);
+        armorItemIds.add(hardenedDiamondHelmet.getItemId());
+        pieces.add(hardenedDiamondHelmet);
+
+        String name2 = "&9Hardened Diamond Chestplate";
+        List<String> lore2 = new ArrayList<>();
+
+        lore2.add("&7Health: &4+100");
+        lore2.add("&7Defence: &a+120");
+        lore2.add("&7Resistance: &3+20");
+        lore2.add("&7Speed: &f-5");
+        lore2.add("");
+        lore2.add("&a&9RARE CHESTPLATE");
+        lore2.add("&8item_id:hardened_diamond_chestplate");
+        ItemStack item2 = createItem(Material.DIAMOND_CHESTPLATE, name2, lore2);
+        hardenedDiamondChestplate = new Item(item2);
+        armorItemIds.add(hardenedDiamondChestplate.getItemId());
+        pieces.add(hardenedDiamondChestplate);
+
+        String name3 = "&9Hardened Diamond Leggings";
+        List<String> lore3 = new ArrayList<>();
+
+        lore3.add("&7Health: &4+50");
+        lore3.add("&7Defence: &a+90");
+        lore3.add("&7Resistance: &3+20");
+        lore3.add("&7Speed: &f-3");
+        lore3.add("");
+        lore3.add("&9&lRARE LEGGINGS");
+        lore3.add("&8item_id:hardened_diamond_leggings");
+        ItemStack item3 = createItem(Material.DIAMOND_LEGGINGS, name3, lore3);
+        hardenedDiamondLeggings = new Item(item3);
+        armorItemIds.add(hardenedDiamondLeggings.getItemId());
+        pieces.add(hardenedDiamondLeggings);
+
+        String name4 = "&9Hardened Diamond Boots";
+        List<String> lore4 = new ArrayList<>();
+
+        lore4.add("&7Health: &4+50");
+        lore4.add("&7Defence: &a+70");
+        lore4.add("&7Resistance: &3+20");
+        lore4.add("");
+        lore4.add("&9&9RARE BOOTS");
+        lore4.add("&8item_id:hardened_diamond_boots");
+        ItemStack item4 = createItem(Material.DIAMOND_BOOTS, name4, lore4);
+        hardenedDiamondBoots = new Item(item4);
+        armorItemIds.add(hardenedDiamondBoots.getItemId());
+        pieces.add(hardenedDiamondBoots);
+
+        armorItems.put("hardened_diamond_armor", pieces);
     }
 
     private static void createWandererArmor(){
@@ -191,6 +261,21 @@ public class ArmorDefinitions {
         switch (r){
             case 1:
                 return armorItems.get("wanderer_armor").get(piece);
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomRareArmorPiece(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        int piece = new Random().nextInt(4); //0-4 range
+        switch (r){
+            case 1:
+                return armorItems.get("hardened_diamond_armor").get(piece);
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

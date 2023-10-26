@@ -1,10 +1,13 @@
 package net.pullolo.magicarena.items;
 
+import dev.dbassett.skullcreator.SkullCreator;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +30,11 @@ public class ArmorDefinitions {
     public static Item hardenedDiamondChestplate;
     public static Item hardenedDiamondLeggings;
     public static Item hardenedDiamondBoots;
+    //epic
+    public static Item angelHelmet;
+    public static Item angelChestplate;
+    public static Item angelLeggings;
+    public static Item angelBoots;
 
     public static final ArrayList<String> armorItemIds = new ArrayList<>();
     public static final HashMap<String, ArrayList<Item>> armorItems = new HashMap<>();
@@ -37,6 +45,8 @@ public class ArmorDefinitions {
         createWandererArmor();
 
         createHardenedDiamondArmor();
+
+        createAngelArmor();
     }
 
     private static void createHardenedDiamondArmor(){
@@ -48,7 +58,7 @@ public class ArmorDefinitions {
         lore1.add("&7Defence: &a+80");
         lore1.add("&7Resistance: &3+20");
         lore1.add("");
-        lore1.add("&9&9RARE HELMET");
+        lore1.add("&9&lRARE HELMET");
         lore1.add("&8item_id:hardened_diamond_helmet");
         ItemStack item1 = createItem(Material.DIAMOND_HELMET, name1, lore1);
         hardenedDiamondHelmet = new Item(item1);
@@ -63,7 +73,7 @@ public class ArmorDefinitions {
         lore2.add("&7Resistance: &3+20");
         lore2.add("&7Speed: &f-5");
         lore2.add("");
-        lore2.add("&a&9RARE CHESTPLATE");
+        lore2.add("&9&lRARE CHESTPLATE");
         lore2.add("&8item_id:hardened_diamond_chestplate");
         ItemStack item2 = createItem(Material.DIAMOND_CHESTPLATE, name2, lore2);
         hardenedDiamondChestplate = new Item(item2);
@@ -92,7 +102,7 @@ public class ArmorDefinitions {
         lore4.add("&7Defence: &a+70");
         lore4.add("&7Resistance: &3+20");
         lore4.add("");
-        lore4.add("&9&9RARE BOOTS");
+        lore4.add("&9&lRARE BOOTS");
         lore4.add("&8item_id:hardened_diamond_boots");
         ItemStack item4 = createItem(Material.DIAMOND_BOOTS, name4, lore4);
         hardenedDiamondBoots = new Item(item4);
@@ -285,9 +295,57 @@ public class ArmorDefinitions {
         }
     }
 
+    public static Item getRandomEpicArmorPiece(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        int piece = new Random().nextInt(4); //0-4 range
+        switch (r){
+            case 1:
+                return armorItems.get("angel_armor").get(piece);
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
     private static ItemStack createItem(Material material, String displayName, List<String> lore){
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        List<String> newLore = new ArrayList<>();
+        for (String s : lore){
+            newLore.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        meta.setLore(newLore);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    private static ItemStack createSkullItem(String displayName, List<String> lore, String base64){
+        ItemStack item = SkullCreator.itemFromBase64(base64);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        List<String> newLore = new ArrayList<>();
+        for (String s : lore){
+            newLore.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        meta.setLore(newLore);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    private static ItemStack createColoredItem(Material material, Color color, String displayName, List<String> lore){
+        ItemStack item = new ItemStack(material, 1);
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setColor(color);
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);

@@ -2,6 +2,7 @@ package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemsDefinitions;
+import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.DungeonEntity;
 import org.bukkit.ChatColor;
@@ -15,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
@@ -22,6 +24,7 @@ import java.util.Random;
 import static net.pullolo.magicarena.MagicArena.debugLog;
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
+import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -56,6 +59,7 @@ public class GameDamageHandler implements Listener {
             return;
         }
 
+
         if (event instanceof EntityDamageByEntityEvent){
             if (event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)){
                 return;
@@ -77,10 +81,27 @@ public class GameDamageHandler implements Listener {
                 event.setCancelled(true);
                 return;
             }
+            if (doesHaveFullSetBonus(damaged, "angel_armor")){
+                if (!CooldownApi.isOnCooldown("ARM", damaged)){
+                    CooldownApi.addCooldown("ARM", damaged, 20);
+                    damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
+                    damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
+                    event.setCancelled(true);
+                    return;
+                }
+            }
             arenaPlayers.get(damaged).damage(damager, damaged, calculateDamage(event.getDamage(), damager, damaged), false);
             return;
         }
-
+        if (doesHaveFullSetBonus(damaged, "angel_armor")){
+            if (!CooldownApi.isOnCooldown("ARM", damaged)){
+                CooldownApi.addCooldown("ARM", damaged, 20);
+                damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
+                damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
+                event.setCancelled(true);
+                return;
+            }
+        }
         arenaPlayers.get(damaged).damage(damaged, event.getDamage()*5, false);
     }
 
@@ -93,11 +114,20 @@ public class GameDamageHandler implements Listener {
             onEntityProjectileDamage(event);
             return;
         }
+        Player damaged = (Player) event.getHitEntity();
+        if (doesHaveFullSetBonus(damaged, "angel_armor")){
+            if (!CooldownApi.isOnCooldown("ARM", damaged)){
+                CooldownApi.addCooldown("ARM", damaged, 20);
+                damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
+                damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
+                event.setCancelled(true);
+                return;
+            }
+        }
         if (!(event.getEntity().getShooter() instanceof Player)){
             onProjectileDamagePlayer(event);
             return;
         }
-        Player damaged = (Player) event.getHitEntity();
         Player damager = (Player) event.getEntity().getShooter();
         if (!(isPlayerInGame(damaged) && isPlayerInGame(damager))){
             return;
@@ -112,6 +142,7 @@ public class GameDamageHandler implements Listener {
             event.setCancelled(true);
             return;
         }
+
         arenaPlayers.get(damaged).damage(damager, damaged, calculateProjectileDamage(damager, damaged), false);
     }
 
@@ -277,5 +308,41 @@ public class GameDamageHandler implements Listener {
         double angleInDegrees = (angle * 180) / Math.PI;
 
         return angleInDegrees >= -32 && angleInDegrees <= 60;
+    }
+
+    private boolean doesHaveFullSetBonus(Player p, String armorSet){
+        ItemStack helmetItem = p.getInventory().getHelmet();
+        ItemStack chestplateItem = p.getInventory().getChestplate();
+        ItemStack leggingsItem = p.getInventory().getLeggings();
+        ItemStack bootsItem = p.getInventory().getBoots();
+
+        if (helmetItem==null || helmetItem.getItemMeta()==null){
+            return false;
+        }
+        if (chestplateItem==null || chestplateItem.getItemMeta()==null){
+            return false;
+        }
+        if (leggingsItem==null || leggingsItem.getItemMeta()==null){
+            return false;
+        }
+        if (bootsItem==null || bootsItem.getItemMeta()==null){
+            return false;
+        }
+
+        Item helmet = new Item(helmetItem);
+        Item chestplate = new Item(chestplateItem);
+        Item leggings = new Item(leggingsItem);
+        Item boots = new Item(bootsItem);
+
+        for (Item i : armorItems.get(armorSet)){
+            if (i.getItemId().equalsIgnoreCase(helmet.getItemId())
+            || i.getItemId().equalsIgnoreCase(chestplate.getItemId())
+            || i.getItemId().equalsIgnoreCase(leggings.getItemId())
+            || i.getItemId().equalsIgnoreCase(boots.getItemId())){
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }

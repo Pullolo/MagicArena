@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
+import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -653,6 +655,14 @@ public class GameAbilitiesHandler implements Listener {
         if (arenaPlayers.get(damager).getGame().getAllPlayersInPlayersTeam(damager).contains(damaged)){
             return false;
         }
+        if (doesHaveFullSetBonus(damaged, "angel_armor")){
+            if (!CooldownApi.isOnCooldown("ARM", damaged)){
+                CooldownApi.addCooldown("ARM", damaged, 20);
+                damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
+                damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
+                return false;
+            }
+        }
         return true;
     }
 
@@ -663,5 +673,41 @@ public class GameAbilitiesHandler implements Listener {
         double z = vector.getX() * -sin + vector.getZ() * cos;
 
         return vector.setX(x).setZ(z);
+    }
+
+    private boolean doesHaveFullSetBonus(Player p, String armorSet){
+        ItemStack helmetItem = p.getInventory().getHelmet();
+        ItemStack chestplateItem = p.getInventory().getChestplate();
+        ItemStack leggingsItem = p.getInventory().getLeggings();
+        ItemStack bootsItem = p.getInventory().getBoots();
+
+        if (helmetItem==null || helmetItem.getItemMeta()==null){
+            return false;
+        }
+        if (chestplateItem==null || chestplateItem.getItemMeta()==null){
+            return false;
+        }
+        if (leggingsItem==null || leggingsItem.getItemMeta()==null){
+            return false;
+        }
+        if (bootsItem==null || bootsItem.getItemMeta()==null){
+            return false;
+        }
+
+        Item helmet = new Item(helmetItem);
+        Item chestplate = new Item(chestplateItem);
+        Item leggings = new Item(leggingsItem);
+        Item boots = new Item(bootsItem);
+
+        for (Item i : armorItems.get(armorSet)){
+            if (i.getItemId().equalsIgnoreCase(helmet.getItemId())
+                    || i.getItemId().equalsIgnoreCase(chestplate.getItemId())
+                    || i.getItemId().equalsIgnoreCase(leggings.getItemId())
+                    || i.getItemId().equalsIgnoreCase(boots.getItemId())){
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }

@@ -382,10 +382,12 @@ public class Dungeon extends Game{
         finishDungeon(getAllPlayers(), getWorld(), true);
     }
     public void reviveAll(Player reviver, Location loc){
+        int i = 0;
         for (Player p : getAllPlayers()){
             if (arenaPlayers.containsKey(p)){
                 continue;
             }
+            i++;
             score-=100;
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
             updatePlayerItemStats(p);
@@ -395,6 +397,9 @@ public class Dungeon extends Game{
             p.setInvulnerable(false);
             p.teleport(loc);
             broadcast(ChatColor.DARK_RED + "[Dungeon] Player " + ChatColor.LIGHT_PURPLE + p.getDisplayName() + ChatColor.DARK_RED + " has been revived by " + ChatColor.LIGHT_PURPLE + reviver.getDisplayName() + ChatColor.DARK_RED + "!");
+        }
+        if (i<1){
+            broadcast(ChatColor.DARK_RED + "[Dungeon] No player was revived!" + ChatColor.GOLD + " +20 Score");
         }
     }
     public int getWitherKeys(){

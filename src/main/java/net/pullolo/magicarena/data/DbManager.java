@@ -27,7 +27,7 @@ public class DbManager {
     public boolean connect(){
         try{
             Class.forName("org.sqlite.JDBC");
-            this.conn = DriverManager.getConnection("jdbc:sqlite:data.db");
+            this.conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
             Statement stmt = conn.createStatement();
             String sql = "create table if not exists plugin_data (name TEXT PRIMARY KEY NOT NULL, level INT NOT NULL, xp TEXT NOT NULL," +
                     " star_essence INT NOT NULL, wishes INT NOT NULL, dungeon_essence INT NOT NULL, updated BOOLEAN NOT NULL);";

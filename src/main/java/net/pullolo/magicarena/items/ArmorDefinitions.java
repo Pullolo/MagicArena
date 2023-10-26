@@ -49,6 +49,91 @@ public class ArmorDefinitions {
         createAngelArmor();
     }
 
+    private  static void createAngelArmor(){
+        ArrayList<Item> pieces = new ArrayList<>();
+        String name1 = "&5Angel Helmet";
+        List<String> lore1 = new ArrayList<>();
+
+        lore1.add("&7Health: &4+190");
+        lore1.add("&7Defense: &a+135");
+        lore1.add("&7Resistance: &3+130");
+        lore1.add("&7Critical Damage: &c+20");
+        lore1.add("&7Critical Chance: &c+5");
+        lore1.add("");
+        lore1.add("&6Full Set Bonus: Salvation");
+        lore1.add("&7You negate the &a1st&7 hit.");
+        lore1.add("&8Cooldown: &a20s");
+        lore1.add("");
+        lore1.add("&5&lEPIC HELMET");
+        lore1.add("&8item_id:angel_helmet");
+        ItemStack item1 = createSkullItem(name1, lore1, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2ZlNWRjNTEyZGQ1OTFhYjAyZWJkMzcyYzI4NWY0ODFjODc2YjQ5MWNiYWQyMDU2NjUzZGQxMTg5Yzg0ZGVmZiJ9fX0=");
+        angelHelmet = new Item(item1);
+        armorItemIds.add(angelHelmet.getItemId());
+        pieces.add(angelHelmet);
+
+        String name2 = "&5Angel Chestplate";
+        List<String> lore2 = new ArrayList<>();
+
+        lore2.add("&7Health: &4+230");
+        lore2.add("&7Defense: &a+150");
+        lore2.add("&7Resistance: &3+180");
+        lore2.add("&7Critical Damage: &c+20");
+        lore2.add("&7Critical Chance: &c+5");
+        lore2.add("");
+        lore2.add("&6Full Set Bonus: Salvation");
+        lore2.add("&7You negate the &a1st&7 hit.");
+        lore2.add("&8Cooldown: &a20s");
+        lore2.add("");
+        lore2.add("&5&lEPIC CHESTPLATE");
+        lore2.add("&8item_id:angel_chestplate");
+        ItemStack item2 = createItem(Material.GOLDEN_CHESTPLATE, name2, lore2);
+        angelChestplate = new Item(item2);
+        armorItemIds.add(angelChestplate.getItemId());
+        pieces.add(angelChestplate);
+
+        String name3 = "&5Angel Leggings";
+        List<String> lore3 = new ArrayList<>();
+
+        lore3.add("&7Health: &4+175");
+        lore3.add("&7Defence: &a+100");
+        lore3.add("&7Resistance: &3+20");
+        lore3.add("&7Critical Damage: &c+20");
+        lore3.add("&7Critical Chance: &c+5");
+        lore3.add("");
+        lore3.add("&6Full Set Bonus: Salvation");
+        lore3.add("&7You negate the &a1st&7 hit.");
+        lore3.add("&8Cooldown: &a20s");
+        lore3.add("");
+        lore3.add("&5&lEPIC LEGGINGS");
+        lore3.add("&8item_id:angel_leggings");
+        ItemStack item3 = createColoredItem(Material.LEATHER_LEGGINGS, Color.WHITE,name3, lore3);
+        angelLeggings = new Item(item3);
+        armorItemIds.add(angelLeggings.getItemId());
+        pieces.add(angelLeggings);
+
+        String name4 = "&5Angel Boots";
+        List<String> lore4 = new ArrayList<>();
+
+        lore4.add("&7Health: &4+120");
+        lore4.add("&7Defence: &a+70");
+        lore4.add("&7Resistance: &3+20");
+        lore4.add("&7Critical Damage: &c+20");
+        lore4.add("&7Critical Chance: &c+5");
+        lore4.add("");
+        lore4.add("&6Full Set Bonus: Salvation");
+        lore4.add("&7You negate the &a1st&7 hit.");
+        lore4.add("&8Cooldown: &a20s");
+        lore4.add("");
+        lore4.add("&5&lEPIC BOOTS");
+        lore4.add("&8item_id:angel_boots");
+        ItemStack item4 = createColoredItem(Material.LEATHER_BOOTS, Color.WHITE, name4, lore4);
+        angelBoots = new Item(item4);
+        armorItemIds.add(angelBoots.getItemId());
+        pieces.add(angelBoots);
+
+        armorItems.put("angel_armor", pieces);
+    }
+
     private static void createHardenedDiamondArmor(){
         ArrayList<Item> pieces = new ArrayList<>();
         String name1 = "&9Hardened Diamond Helmet";

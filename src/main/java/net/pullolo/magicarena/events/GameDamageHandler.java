@@ -115,16 +115,16 @@ public class GameDamageHandler implements Listener {
             return;
         }
         Player damaged = (Player) event.getHitEntity();
-        if (doesHaveFullSetBonus(damaged, "angel_armor")){
-            if (!CooldownApi.isOnCooldown("ARM", damaged)){
-                CooldownApi.addCooldown("ARM", damaged, 20);
-                damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
-                damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
-                event.setCancelled(true);
-                return;
-            }
-        }
         if (!(event.getEntity().getShooter() instanceof Player)){
+            if (doesHaveFullSetBonus(damaged, "angel_armor")){
+                if (!CooldownApi.isOnCooldown("ARM", damaged)){
+                    CooldownApi.addCooldown("ARM", damaged, 20);
+                    damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
+                    damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
+                    event.setCancelled(true);
+                    return;
+                }
+            }
             onProjectileDamagePlayer(event);
             return;
         }
@@ -141,6 +141,15 @@ public class GameDamageHandler implements Listener {
         if (arenaPlayers.get(damager).getGame().getAllPlayersInPlayersTeam(damager).contains(damaged)){
             event.setCancelled(true);
             return;
+        }
+        if (doesHaveFullSetBonus(damaged, "angel_armor")){
+            if (!CooldownApi.isOnCooldown("ARM", damaged)){
+                CooldownApi.addCooldown("ARM", damaged, 20);
+                damaged.playSound(damaged, Sound.ITEM_SHIELD_BLOCK, 1, 1);
+                damaged.getWorld().spawnParticle(Particle.FLASH, damaged.getLocation(), 4, 0.1, 1, 0.1);
+                event.setCancelled(true);
+                return;
+            }
         }
 
         arenaPlayers.get(damaged).damage(damager, damaged, calculateProjectileDamage(damager, damaged), false);

@@ -45,7 +45,7 @@ public class GameDamageHandler implements Listener {
                 onEntityDamagedByEntity((EntityDamageByEntityEvent) event);
                 return;
             }
-            onEntityDamage(event.getEntity(), event.getDamage());
+            onEntityDamage(event.getEntity(), event.getCause(), event.getDamage());
             return;
         }
         if (!isPlayerInGame((Player) event.getEntity())){
@@ -102,7 +102,8 @@ public class GameDamageHandler implements Listener {
                 return;
             }
         }
-        arenaPlayers.get(damaged).trueDamage(damaged, arenaPlayers.get(damaged).getMaxHealth()/20);
+        if (event.getCause().equals(EntityDamageEvent.DamageCause.FALL)) arenaPlayers.get(damaged).damage(damaged, event.getDamage()*5, false);
+        else arenaPlayers.get(damaged).trueDamage(damaged, arenaPlayers.get(damaged).getMaxHealth()/20);
     }
 
     @EventHandler
@@ -199,11 +200,12 @@ public class GameDamageHandler implements Listener {
         arenaPlayers.get(damaged).damage(damager, damaged, calculateProjectileDamage(damager, damaged), false);
     }
 
-    public void onEntityDamage(Entity damaged, double damage){
+    public void onEntityDamage(Entity damaged, EntityDamageEvent.DamageCause damageCause, double damage){
         if (!arenaEntities.containsKey(damaged)){
             return;
         }
-        arenaEntities.get(damaged).trueDamage(damaged, arenaEntities.get(damaged).getMaxHealth()/20);
+        if (damageCause.equals(EntityDamageEvent.DamageCause.FALL)) arenaEntities.get(damaged).damage(damaged, damage*5, false);
+        else arenaEntities.get(damaged).trueDamage(damaged, arenaEntities.get(damaged).getMaxHealth()/20);
         if (arenaEntities.get(damaged).getHealth()<=0){
             new OnArenaEntityKilled(damaged);
         }

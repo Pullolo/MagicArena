@@ -30,8 +30,8 @@ public class XpManager {
 
     private static void levelUp(Player p, PlayerData playerData, int i){
         final int wishes = new Random().nextInt(5)+1; //1-5
-        playerData.setLevel(playerData.getLevel()+wishes);
-        playerData.setWishes(playerData.getWishes()+1);
+        playerData.setLevel(playerData.getLevel()+1);
+        playerData.setWishes(playerData.getWishes()+wishes);
         final int newLevel = playerData.getLevel();
         new BukkitRunnable() {
             @Override

@@ -2,6 +2,7 @@ package net.pullolo.magicarena.game;
 
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.data.PlayerData;
+import net.pullolo.magicarena.data.XpManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
@@ -265,6 +266,7 @@ public class Dungeon extends Game{
             }
         }
         for (Player p : allPlayers){
+            XpManager.addXp(p, getLevel()*50);
             guiManager.createDungeonRewardMenu(p, score, level, won).show(p);
         }
         //warn players

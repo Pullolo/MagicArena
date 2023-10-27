@@ -5,6 +5,7 @@ import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dbassett.skullcreator.SkullCreator;
 import net.pullolo.magicarena.data.PlayerData;
+import net.pullolo.magicarena.data.XpManager;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.items.Item;
@@ -24,8 +25,12 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
@@ -278,6 +283,15 @@ public class GuiManager {
         return gui;
     }
     public InventoryGui createProfileMenu(Player player){
+        long xp = (long) Math.floor(getPlayerData(player).getXp());
+        long reqXp = (long) Math.floor(XpManager.getAmountToLevelUp(getPlayerData(player)));
+
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
+        symbols.setGroupingSeparator(' ');
+        formatter.setDecimalFormatSymbols(symbols);
+
         String[] guiSetup = {
                 "    h    ",
                 "  lxwsd  ",
@@ -295,7 +309,7 @@ public class GuiManager {
         }));
         gui.addElement(new DynamicGuiElement('x', (viewer)->{
             return new StaticGuiElement('x', new ItemStack(Material.EXPERIENCE_BOTTLE),
-                    ChatColor.translateAlternateColorCodes('&', "&r&7Your xp: &a" + getPlayerData(player).getXp() + " ❊"));
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your xp: &a" + formatter.format(xp) + "/" + formatter.format(reqXp) + " ❊"));
         }));
         gui.addElement(new DynamicGuiElement('w', (viewer)->{
             return new StaticGuiElement('w', new ItemStack(Material.NETHER_STAR),
@@ -303,11 +317,11 @@ public class GuiManager {
         }));
         gui.addElement(new DynamicGuiElement('s', (viewer)->{
             return new StaticGuiElement('s', new ItemStack(Material.PRISMARINE_CRYSTALS),
-                    ChatColor.translateAlternateColorCodes('&', "&r&7Your star essence: &a" + getPlayerData(player).getStarEssence() + " ✷"));
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your star essence: &a" + formatter.format(getPlayerData(player).getStarEssence()) + " ✷"));
         }));
         gui.addElement(new DynamicGuiElement('d', (viewer)->{
             return new StaticGuiElement('d', new ItemStack(Material.FIRE_CHARGE),
-                    ChatColor.translateAlternateColorCodes('&', "&r&7Your dungeon essence: &a" + getPlayerData(player).getDungeonEssence() + " ✪"));
+                    ChatColor.translateAlternateColorCodes('&', "&r&7Your dungeon essence: &a" + formatter.format(getPlayerData(player).getDungeonEssence()) + " ✪"));
         }));
 
         return gui;

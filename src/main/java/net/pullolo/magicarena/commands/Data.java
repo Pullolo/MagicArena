@@ -1,5 +1,6 @@
 package net.pullolo.magicarena.commands;
 
+import net.pullolo.magicarena.data.XpManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -62,6 +63,7 @@ public class Data implements CommandExecutor, TabCompleter {
                     else if (operation.equalsIgnoreCase("add")) getPlayerData(p).setXp(getPlayerData(p).getXp() + Double.parseDouble(value));
                     else if (operation.equalsIgnoreCase("remove")) getPlayerData(p).setXp(getPlayerData(p).getXp() - Double.parseDouble(value));
                     if (getPlayerData(p).getXp()<0) getPlayerData(p).setXp(0);
+                    XpManager.checkForLevelUp(p, getPlayerData(p));
                     break;
                 case "level":
                     if (operation.equalsIgnoreCase("set")) getPlayerData(p).setLevel(Integer.parseInt(value));

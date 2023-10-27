@@ -38,6 +38,7 @@ import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
+import static net.pullolo.magicarena.wish.WishSystem.lastArmorSet;
 
 public class GameEventsHandler implements Listener {
 
@@ -142,6 +143,7 @@ public class GameEventsHandler implements Listener {
         }
 
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
+        lastArmorSet.remove(event.getPlayer());
     }
 
     @EventHandler

@@ -11,15 +11,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import static net.pullolo.magicarena.MagicArena.debugLog;
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.items.ArmorDefinitions.*;
 import static net.pullolo.magicarena.items.ItemsDefinitions.*;
 
 public class WishSystem {
+
+    public static final HashMap<Player, PreviousWishData> lastArmorSet = new HashMap<>();
 
     public enum WishType{
         WEAPON_WISH,
@@ -141,11 +145,43 @@ public class WishSystem {
                 im.setLore(lore);
                 finalItem.setItemMeta(im);
             }
+
+            //add a 50% chance for the next armor piece to be the same set
+            if (lastArmorSet.containsKey(player)){
+                if (armorItems.containsKey(lastArmorSet.get(player).getLastArmorSet())){
+                    if (!lastArmorSet.get(player).getLastWishRarity().equals(WishRarity.UNCOMMON)){
+                        if (r.nextBoolean()){
+                            ArrayList<Item> pieces = armorItems.get(lastArmorSet.get(player).getLastArmorSet());
+                            finalItem = new Item(pieces.get(r.nextInt(pieces.size())), stars, q).getItem();
+                            wishRarity=lastArmorSet.get(player).getLastWishRarity();
+                            itemClass=lastArmorSet.get(player).getLastItemClass();
+                        } else lastArmorSet.replace(player, new PreviousWishData(wishRarity, itemClass, getArmorId(finalItem)));
+                    } else lastArmorSet.remove(player);
+                } else lastArmorSet.remove(player);
+            } else if (!wishRarity.equals(WishRarity.UNCOMMON)) lastArmorSet.put(player, new PreviousWishData(wishRarity, itemClass, getArmorId(finalItem)));
         }
 
 
         anims.playWishAnim(player, wishRarity, wishType, stars, itemClass, finalItem, 10);
         return true;
+    }
+
+    private String getArmorId(ItemStack itemStack){
+        if (itemStack.getItemMeta()==null){
+            return null;
+        }
+        Item item = new Item(itemStack);
+        if (item.getItemId().equalsIgnoreCase("NULL")){
+            return null;
+        }
+        for (String s : armorItems.keySet()){
+            for (Item i : armorItems.get(s)){
+                if (i.getItemId().equalsIgnoreCase(item.getItemId())){
+                    return s;
+                }
+            }
+        }
+        return null;
     }
 
     public static Item getRandomUncommonWeapon(ItemClass itemClass){

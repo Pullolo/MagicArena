@@ -91,7 +91,7 @@ public abstract class ArenaEntityBlueprint {
         setHealth(getHealth() - amount);
         new DamageIndicator(damaged, amount, false);
     }
-    public void trueDamage(Player damaged, double amount){
+    public void trueDamage(Entity damaged, double amount){
         setHealth(getHealth() - amount);
         new DamageIndicator(damaged, amount, false);
     }

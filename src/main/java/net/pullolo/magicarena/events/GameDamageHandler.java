@@ -102,7 +102,7 @@ public class GameDamageHandler implements Listener {
                 return;
             }
         }
-        arenaPlayers.get(damaged).damage(damaged, event.getDamage()*5, false);
+        arenaPlayers.get(damaged).trueDamage(damaged, arenaPlayers.get(damaged).getMaxHealth()/20);
     }
 
     @EventHandler
@@ -203,7 +203,7 @@ public class GameDamageHandler implements Listener {
         if (!arenaEntities.containsKey(damaged)){
             return;
         }
-        arenaEntities.get(damaged).damage(damaged, damage*5, false);
+        arenaEntities.get(damaged).trueDamage(damaged, arenaEntities.get(damaged).getMaxHealth()/20);
         if (arenaEntities.get(damaged).getHealth()<=0){
             new OnArenaEntityKilled(damaged);
         }

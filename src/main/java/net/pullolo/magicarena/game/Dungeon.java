@@ -388,6 +388,7 @@ public class Dungeon extends Game{
         int i = 0;
         for (Player p : getAllPlayers()){
             if (arenaPlayers.containsKey(p)){
+                arenaPlayers.get(p).respawn();
                 continue;
             }
             i++;

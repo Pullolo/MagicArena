@@ -266,7 +266,8 @@ public class Dungeon extends Game{
             }
         }
         for (Player p : allPlayers){
-            XpManager.addXp(p, getLevel()*50);
+            if (won) XpManager.addXp(p, getLevel() * 50);
+            else XpManager.addXp(p, getLevel());
             guiManager.createDungeonRewardMenu(p, score, level, won).show(p);
         }
         //warn players

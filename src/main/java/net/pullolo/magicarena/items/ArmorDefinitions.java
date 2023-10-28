@@ -106,7 +106,7 @@ public class ArmorDefinitions {
         lore3.add("");
         lore3.add("&5&lEPIC LEGGINGS");
         lore3.add("&8item_id:angel_leggings");
-        ItemStack item3 = createColoredItem(Material.LEATHER_LEGGINGS, Color.WHITE,name3, lore3);
+        ItemStack item3 = createColoredItem(Material.LEATHER_LEGGINGS, Color.WHITE, name3, lore3);
         angelLeggings = new Item(item3);
         armorItemIds.add(angelLeggings.getItemId());
         pieces.add(angelLeggings);

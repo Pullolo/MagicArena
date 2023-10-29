@@ -39,7 +39,7 @@ public class GameDamageHandler implements Listener {
         }
         if (event instanceof EntityDamageByEntityEvent){
             if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player && isPlayerInGame((Player) ((EntityDamageByEntityEvent) event).getDamager())){
-                if (event.getEntity() instanceof ItemFrame || event.getEntity() instanceof GlowItemFrame){
+                if (event.getEntity() instanceof Hanging){
                     event.setCancelled(true);
                     return;
                 }
@@ -118,6 +118,12 @@ public class GameDamageHandler implements Listener {
     public void onProjectileHit(ProjectileHitEvent event){
         if (event.isCancelled()){
             return;
+        }
+        if (event.getEntity().getShooter() instanceof Player && isPlayerInGame((Player) event.getEntity().getShooter())){
+            if (event.getHitEntity() instanceof Hanging){
+                event.setCancelled(true);
+                return;
+            }
         }
         if (!(event.getHitEntity() instanceof Player)){
             onEntityProjectileDamage(event);

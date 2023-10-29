@@ -68,8 +68,8 @@ public class GameEventsHandler implements Listener {
             arenaEntities.get(e).setLoaded(true);
         }
         Game g = null;
-        for (Player p : event.getWorld().getPlayers()){
-            if (isPlayerInGame(p)){
+        for (Player p : Bukkit.getOnlinePlayers()){
+            if (p.getWorld().equals(event.getWorld()) && isPlayerInGame(p)){
                 g = arenaPlayers.get(p).getGame();
                 break;
             }
@@ -188,9 +188,7 @@ public class GameEventsHandler implements Listener {
         if (!isPlayerInGame((Player) event.getRemover())){
             return;
         }
-        if (event.getEntity() instanceof ItemFrame || event.getEntity() instanceof GlowItemFrame){
-            event.setCancelled(true);
-        }
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -198,7 +196,7 @@ public class GameEventsHandler implements Listener {
         if (!isPlayerInGame(event.getPlayer())){
             return;
         }
-        if (event.getRightClicked() instanceof ItemFrame || event.getRightClicked() instanceof GlowItemFrame){
+        if (event.getRightClicked() instanceof Hanging){
             event.setCancelled(true);
             return;
         }

@@ -261,6 +261,9 @@ public class GameDamageHandler implements Listener {
 
     private double calculateDamage(double eventDamage, Entity damager, Entity damaged){
         if (!(damager instanceof Player)){
+            if (!arenaEntities.containsKey(damaged)){
+                return 0;
+            }
             double entityDamage = arenaEntities.get(damager).getDamage();
             return entityDamage;
         }

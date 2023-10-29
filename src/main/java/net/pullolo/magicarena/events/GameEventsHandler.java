@@ -23,6 +23,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpellCastEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -180,9 +181,39 @@ public class GameEventsHandler implements Listener {
     }
 
     @EventHandler
+    public void onItemFrameBreak(HangingBreakByEntityEvent event){
+        if (!(event.getRemover() instanceof Player)){
+            return;
+        }
+        if (!isPlayerInGame((Player) event.getRemover())){
+            return;
+        }
+        if (event.getEntity() instanceof ItemFrame || event.getEntity() instanceof GlowItemFrame){
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onItemFrameInteract(PlayerInteractEntityEvent event){
+        if (!isPlayerInGame(event.getPlayer())){
+            return;
+        }
+        if (event.getRightClicked() instanceof ItemFrame || event.getRightClicked() instanceof GlowItemFrame){
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
         if (!isPlayerInGame(event.getPlayer())){
             return;
+        }
+        if (event.getItem()!=null){
+            if (event.getItem().getType().equals(Material.ITEM_FRAME) || event.getItem().getType().equals(Material.GLOW_ITEM_FRAME)){
+                event.setCancelled(true);
+                return;
+            }
         }
         if (!(arenaPlayers.get(event.getPlayer()).getGame() instanceof Dungeon)){
             return;

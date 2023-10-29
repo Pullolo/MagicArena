@@ -37,6 +37,14 @@ public class GameDamageHandler implements Listener {
         if (event.isCancelled()){
             return;
         }
+        if (event instanceof EntityDamageByEntityEvent){
+            if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player && isPlayerInGame((Player) ((EntityDamageByEntityEvent) event).getDamager())){
+                if (event.getEntity() instanceof ItemFrame || event.getEntity() instanceof GlowItemFrame){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
         if (event.getDamage()<0.1){
             return;
         }

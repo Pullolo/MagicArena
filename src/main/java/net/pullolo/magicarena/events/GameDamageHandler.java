@@ -81,6 +81,9 @@ public class GameDamageHandler implements Listener {
             if (!(damager instanceof Player)){
                 if (!arenaEntities.containsKey(damager)){
                     if (damager instanceof EvokerFangs){
+                        if (!arenaEntities.containsKey(((EvokerFangs) damager).getOwner())){
+                            return;
+                        }
                         arenaPlayers.get(damaged).damage(((EvokerFangs) damager).getOwner(), damaged, calculateDamage(event.getDamage(), ((EvokerFangs) damager).getOwner(), damaged), true);
                     }
                     return;
@@ -261,9 +264,6 @@ public class GameDamageHandler implements Listener {
 
     private double calculateDamage(double eventDamage, Entity damager, Entity damaged){
         if (!(damager instanceof Player)){
-            if (!arenaEntities.containsKey(damaged)){
-                return 0;
-            }
             double entityDamage = arenaEntities.get(damager).getDamage();
             return entityDamage;
         }

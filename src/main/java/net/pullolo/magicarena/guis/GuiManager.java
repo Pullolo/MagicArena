@@ -297,7 +297,7 @@ public class GuiManager {
                 "  lxwsd  ",
                 "         "
         };
-        InventoryGui gui = new InventoryGui(this.plugin, player, "Select Game Mode", guiSetup);
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Your profile", guiSetup);
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1)); // fill the empty slots with this
         gui.addElement(new DynamicGuiElement('h', (viewer)->{
             return new StaticGuiElement('h', getPlayerSkull(player),

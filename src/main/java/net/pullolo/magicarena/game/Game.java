@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
@@ -27,6 +28,8 @@ import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static org.bukkit.Bukkit.getServer;
 
 public abstract class Game {
+
+    public static final HashMap<World, Game> games = new HashMap<>();
 
     private ArrayList<Player> allPlayers;
     private final ArrayList<Entity> allEntities = new ArrayList<>();
@@ -47,6 +50,7 @@ public abstract class Game {
         }
         WorldManager.copyWorld(new File(getServer().getWorldContainer().getAbsolutePath().replace(".", "") + arenaName), "temp_" + newArenaName);
         WorldManager.saveWorld(Bukkit.getWorld("temp_" + newArenaName), false, false, false); //this results in saved name being temp_ the temp param cant be true
+        games.put(Bukkit.getWorld("temp_" + newArenaName), this);
         return Bukkit.getWorld("temp_" + newArenaName);
     }
     public void startNecessaryClocks(boolean test, World arena){
@@ -252,6 +256,7 @@ public abstract class Game {
                 WorldManager.removeWorld(world);
             }
         }.runTaskLater(MagicArena.plugin, 100);
+        games.remove(world);
     }
 
     public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won){
@@ -286,6 +291,7 @@ public abstract class Game {
                 WorldManager.removeWorld(world);
             }
         }.runTaskLater(MagicArena.plugin, 300);
+        games.remove(world);
     }
 
     public void forceEndGame(){
@@ -309,6 +315,7 @@ public abstract class Game {
             }
         }
         if (world!=null){
+            games.remove(world);
             WorldManager.removeWorld(world);
         }
     }

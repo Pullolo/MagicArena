@@ -260,8 +260,6 @@ public class GameDamageHandler implements Listener {
         }
     }
 
-
-
     private double calculateDamage(double eventDamage, Entity damager, Entity damaged){
         if (!(damager instanceof Player)){
             double entityDamage = arenaEntities.get(damager).getDamage();

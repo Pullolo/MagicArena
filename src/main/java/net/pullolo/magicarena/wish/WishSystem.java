@@ -123,6 +123,8 @@ public class WishSystem {
                 finalItem = new Item(getRandomRareArmorPiece(itemClass), stars, q).getItem();
             } else if (wishRarity.equals(WishRarity.EPIC)){
                 finalItem = new Item(getRandomEpicArmorPiece(itemClass), stars, q).getItem();
+            } else if (wishRarity.equals(WishRarity.LEGENDARY)){
+                finalItem = new Item(getRandomLegendaryArmorPiece(itemClass), stars, q).getItem();
             } else {
                 finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
                 ItemMeta im = finalItem.getItemMeta();

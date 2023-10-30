@@ -34,6 +34,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.data.PlayerData.setPlayerDataFromDb;
+import static net.pullolo.magicarena.game.Game.games;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -67,13 +68,7 @@ public class GameEventsHandler implements Listener {
             }
             arenaEntities.get(e).setLoaded(true);
         }
-        Game g = null;
-        for (Player p : Bukkit.getOnlinePlayers()){
-            if (p.getWorld().equals(event.getWorld()) && isPlayerInGame(p)){
-                g = arenaPlayers.get(p).getGame();
-                break;
-            }
-        }
+        Game g = games.get(event.getWorld());
         if (!(g instanceof Dungeon)){
             return;
         }

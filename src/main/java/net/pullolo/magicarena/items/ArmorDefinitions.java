@@ -35,6 +35,11 @@ public class ArmorDefinitions {
     public static Item angelChestplate;
     public static Item angelLeggings;
     public static Item angelBoots;
+    //legendary
+    public static Item superiorHelmet;
+    public static Item superiorChestplate;
+    public static Item superiorLeggings;
+    public static Item superiorBoots;
 
     public static final ArrayList<String> armorItemIds = new ArrayList<>();
     public static final HashMap<String, ArrayList<Item>> armorItems = new HashMap<>();
@@ -47,6 +52,105 @@ public class ArmorDefinitions {
         createHardenedDiamondArmor();
 
         createAngelArmor();
+
+        createSuperiorArmor();
+    }
+
+    private  static void createSuperiorArmor(){
+        ArrayList<Item> pieces = new ArrayList<>();
+        String name1 = "&6Superior Dragon Helmet";
+        List<String> lore1 = new ArrayList<>();
+
+        lore1.add("&7Health: &4+390");
+        lore1.add("&7Defence: &a+335");
+        lore1.add("&7Resistance: &3+330");
+        lore1.add("&7Damage: &c+60");
+        lore1.add("&7Critical Damage: &c+50");
+        lore1.add("&7Critical Chance: &c+20");
+        lore1.add("§7Intelligence: §b+200");
+        lore1.add("&7Mana Regen: &b+2");
+        lore1.add("&7Speed: &f+20");
+        lore1.add("");
+        lore1.add("&6Full Set Bonus: Superior Blood");
+        lore1.add("&7Most of your stats are increased by &a%5&7.");
+        lore1.add("");
+        lore1.add("&6&lLEGENDARY HELMET");
+        lore1.add("&8item_id:superior_helmet");
+        ItemStack item1 = createSkullItem(name1, lore1, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzU1OGVmYmU2Njk3NjA5OWNmZDYyNzYwZDllMDUxNzBkMmJiOGY1MWU2ODgyOWFiOGEwNTFjNDhjYmM0MTVjYiJ9fX0=");
+        superiorHelmet = new Item(item1);
+        armorItemIds.add(superiorHelmet.getItemId());
+        pieces.add(superiorHelmet);
+
+        String name2 = "&6Superior Dragon Chestplate";
+        List<String> lore2 = new ArrayList<>();
+
+        lore2.add("&7Health: &4+490");
+        lore2.add("&7Defence: &a+435");
+        lore2.add("&7Resistance: &3+330");
+        lore2.add("&7Damage: &c+100");
+        lore2.add("&7Critical Damage: &c+50");
+        lore2.add("&7Critical Chance: &c+5");
+        lore2.add("§7Intelligence: §b+200");
+        lore2.add("&7Mana Regen: &b+2");
+        lore2.add("&7Speed: &f+20");
+        lore2.add("");
+        lore2.add("&6Full Set Bonus: Superior Blood");
+        lore2.add("&7Most of your stats are increased by &a%5&7.");
+        lore2.add("");
+        lore2.add("&6&lLEGENDARY CHESTPLATE");
+        lore2.add("&8item_id:superior_chestplate");
+        ItemStack item2 = createColoredItem(Material.LEATHER_CHESTPLATE, Color.YELLOW, name2, lore2);
+        superiorChestplate = new Item(item2);
+        armorItemIds.add(superiorChestplate.getItemId());
+        pieces.add(superiorChestplate);
+
+        String name3 = "&6Superior Dragon Leggings";
+        List<String> lore3 = new ArrayList<>();
+
+        lore3.add("&7Health: &4+420");
+        lore3.add("&7Defence: &a+335");
+        lore3.add("&7Resistance: &3+330");
+        lore3.add("&7Damage: &c+90");
+        lore3.add("&7Critical Damage: &c+50");
+        lore3.add("&7Critical Chance: &c+5");
+        lore3.add("§7Intelligence: §b+200");
+        lore3.add("&7Mana Regen: &b+2");
+        lore3.add("&7Speed: &f+20");
+        lore3.add("");
+        lore3.add("&6Full Set Bonus: Superior Blood");
+        lore3.add("&7Most of your stats are increased by &a%5&7.");
+        lore3.add("");
+        lore3.add("&6&lLEGENDARY LEGGINGS");
+        lore3.add("&8item_id:superior_leggings");
+        ItemStack item3 = createColoredItem(Material.LEATHER_LEGGINGS, Color.YELLOW, name3, lore3);
+        superiorLeggings = new Item(item3);
+        armorItemIds.add(superiorLeggings.getItemId());
+        pieces.add(superiorLeggings);
+
+        String name4 = "&6Superior Dragon Boots";
+        List<String> lore4 = new ArrayList<>();
+
+        lore4.add("&7Health: &4+390");
+        lore4.add("&7Defence: &a+335");
+        lore4.add("&7Resistance: &3+330");
+        lore4.add("&7Damage: &c+50");
+        lore4.add("&7Critical Damage: &c+50");
+        lore4.add("&7Critical Chance: &c+5");
+        lore4.add("§7Intelligence: §b+200");
+        lore4.add("&7Mana Regen: &b+2");
+        lore4.add("&7Speed: &f+20");
+        lore4.add("");
+        lore4.add("&6Full Set Bonus: Superior Blood");
+        lore4.add("&7Most of your stats are increased by &a%5&7.");
+        lore4.add("");
+        lore4.add("&6&lLEGENDARY BOOTS");
+        lore4.add("&8item_id:superior_boots");
+        ItemStack item4 = createColoredItem(Material.LEATHER_BOOTS, Color.ORANGE, name4, lore4);
+        superiorBoots = new Item(item4);
+        armorItemIds.add(superiorBoots.getItemId());
+        pieces.add(superiorBoots);
+
+        armorItems.put("superior_armor", pieces);
     }
 
     private  static void createAngelArmor(){
@@ -55,7 +159,7 @@ public class ArmorDefinitions {
         List<String> lore1 = new ArrayList<>();
 
         lore1.add("&7Health: &4+190");
-        lore1.add("&7Defense: &a+135");
+        lore1.add("&7Defence: &a+135");
         lore1.add("&7Resistance: &3+130");
         lore1.add("&7Critical Damage: &c+20");
         lore1.add("&7Critical Chance: &c+5");
@@ -75,7 +179,7 @@ public class ArmorDefinitions {
         List<String> lore2 = new ArrayList<>();
 
         lore2.add("&7Health: &4+230");
-        lore2.add("&7Defense: &a+150");
+        lore2.add("&7Defence: &a+150");
         lore2.add("&7Resistance: &3+180");
         lore2.add("&7Critical Damage: &c+20");
         lore2.add("&7Critical Chance: &c+5");
@@ -386,6 +490,21 @@ public class ArmorDefinitions {
         switch (r){
             case 1:
                 return armorItems.get("angel_armor").get(piece);
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
+    public static Item getRandomLegendaryArmorPiece(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        int piece = new Random().nextInt(4); //0-4 range
+        switch (r){
+            case 1:
+                return armorItems.get("superior_armor").get(piece);
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

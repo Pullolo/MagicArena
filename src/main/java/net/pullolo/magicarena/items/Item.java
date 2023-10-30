@@ -296,7 +296,7 @@ public class Item {
             bonusValue+=2;  //amount per star todo balance
         }
 
-        if (this.defence == 1){
+        if (this.defence <= 1){
             ItemMeta meta = item.getItemMeta();
             List<String> newLore = new ArrayList<>();
             List<String> lore = meta.getLore();

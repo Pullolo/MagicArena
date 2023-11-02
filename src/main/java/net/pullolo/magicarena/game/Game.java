@@ -22,6 +22,7 @@ import java.util.HashMap;
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
+import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -476,6 +477,16 @@ public abstract class Game {
                 }
             }
         }
+        if (doesHaveFullSetBonus(p, "superior_armor")){
+            bonusDefence +=20;
+            bonusDamage +=20;
+            bonusAbilityDamage+=20;
+            bonusCritDamage+=20;
+            bonusMagicDefence+=20;
+            bonusIntelligence+=20;
+            bonusHealth+=20;
+            bonusSpeed+=20;
+        }
 
         if (arenaPlayers.get(p).getBonusDefence().containsKey(key)){
             arenaPlayers.get(p).getBonusDefence().replace(key, bonusDefence);
@@ -712,5 +723,41 @@ public abstract class Game {
 
     public void setStarted(boolean started) {
         this.started = started;
+    }
+
+    private boolean doesHaveFullSetBonus(Player p, String armorSet){
+        ItemStack helmetItem = p.getInventory().getHelmet();
+        ItemStack chestplateItem = p.getInventory().getChestplate();
+        ItemStack leggingsItem = p.getInventory().getLeggings();
+        ItemStack bootsItem = p.getInventory().getBoots();
+
+        if (helmetItem==null || helmetItem.getItemMeta()==null){
+            return false;
+        }
+        if (chestplateItem==null || chestplateItem.getItemMeta()==null){
+            return false;
+        }
+        if (leggingsItem==null || leggingsItem.getItemMeta()==null){
+            return false;
+        }
+        if (bootsItem==null || bootsItem.getItemMeta()==null){
+            return false;
+        }
+
+        Item helmet = new Item(helmetItem);
+        Item chestplate = new Item(chestplateItem);
+        Item leggings = new Item(leggingsItem);
+        Item boots = new Item(bootsItem);
+
+        for (Item i : armorItems.get(armorSet)){
+            if (i.getItemId().equalsIgnoreCase(helmet.getItemId())
+                    || i.getItemId().equalsIgnoreCase(chestplate.getItemId())
+                    || i.getItemId().equalsIgnoreCase(leggings.getItemId())
+                    || i.getItemId().equalsIgnoreCase(boots.getItemId())){
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 }

@@ -72,7 +72,7 @@ public class ArmorDefinitions {
         lore1.add("&7Speed: &f+20");
         lore1.add("");
         lore1.add("&6Full Set Bonus: Superior Blood");
-        lore1.add("&7Most of your stats are increased by &a%5&7.");
+        lore1.add("&7Most of your stats are increased by &a20&7.");
         lore1.add("");
         lore1.add("&6&lLEGENDARY HELMET");
         lore1.add("&8item_id:superior_helmet");
@@ -95,7 +95,7 @@ public class ArmorDefinitions {
         lore2.add("&7Speed: &f+20");
         lore2.add("");
         lore2.add("&6Full Set Bonus: Superior Blood");
-        lore2.add("&7Most of your stats are increased by &a%5&7.");
+        lore2.add("&7Most of your stats are increased by &a20&7.");
         lore2.add("");
         lore2.add("&6&lLEGENDARY CHESTPLATE");
         lore2.add("&8item_id:superior_chestplate");
@@ -118,7 +118,7 @@ public class ArmorDefinitions {
         lore3.add("&7Speed: &f+20");
         lore3.add("");
         lore3.add("&6Full Set Bonus: Superior Blood");
-        lore3.add("&7Most of your stats are increased by &a%5&7.");
+        lore3.add("&7Most of your stats are increased by &a20&7.");
         lore3.add("");
         lore3.add("&6&lLEGENDARY LEGGINGS");
         lore3.add("&8item_id:superior_leggings");
@@ -141,7 +141,7 @@ public class ArmorDefinitions {
         lore4.add("&7Speed: &f+20");
         lore4.add("");
         lore4.add("&6Full Set Bonus: Superior Blood");
-        lore4.add("&7Most of your stats are increased by &a%5&7.");
+        lore4.add("&7Most of your stats are increased by &a20&7.");
         lore4.add("");
         lore4.add("&6&lLEGENDARY BOOTS");
         lore4.add("&8item_id:superior_boots");

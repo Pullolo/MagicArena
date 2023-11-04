@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.items.Item;
+import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
@@ -18,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
@@ -75,7 +77,21 @@ public abstract class Game {
                                 arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getMaxHealth()/20);
                                 p.getWorld().spawnParticle(Particle.TOTEM, p.getLocation().add(0, 1, 0), 100, 0.1, 0, 0.1, 1);
                                 p.getWorld().playSound(p.getLocation(), Sound.ITEM_TOTEM_USE, 1, 1);
-                            } else playerDied(p);
+                            } else {
+                                if (doesHaveFullSetBonus(p, "shadowweave_shroud") && !CooldownApi.isOnCooldown("SSA", p)){
+                                    CooldownApi.addCooldown("SSA", p, 120);
+                                    Player saver;
+                                    do {
+                                        saver=allPlayers.get(new Random().nextInt(allPlayers.size()));
+                                    } while (saver.equals(p) && allPlayers.size()>1);
+                                    p.teleport(saver);
+                                    arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getMaxHealth()/20);
+                                    p.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, p.getLocation().add(0, 1, 0), 100, 0.1, 0.1, 0.1, 0.1);
+                                    p.getWorld().playSound(p.getLocation(), Sound.ITEM_TOTEM_USE, 1, 1);
+                                } else {
+                                    playerDied(p);
+                                }
+                            }
                         } else {
                             arenaPlayers.get(p).updateStats();
                             try{

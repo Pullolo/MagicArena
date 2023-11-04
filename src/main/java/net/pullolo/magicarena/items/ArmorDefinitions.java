@@ -6,8 +6,12 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +44,11 @@ public class ArmorDefinitions {
     public static Item superiorChestplate;
     public static Item superiorLeggings;
     public static Item superiorBoots;
+    //mythic
+    public static Item shadowweaveShroudHelmet;
+    public static Item shadowweaveShroudChestplate;
+    public static Item shadowweaveShroudLeggings;
+    public static Item shadowweaveShroudBoots;
 
     public static final ArrayList<String> armorItemIds = new ArrayList<>();
     public static final HashMap<String, ArrayList<Item>> armorItems = new HashMap<>();
@@ -54,6 +63,111 @@ public class ArmorDefinitions {
         createAngelArmor();
 
         createSuperiorArmor();
+
+        createShadowweaveShroud();
+    }
+
+    private static void createShadowweaveShroud(){
+        ArrayList<Item> pieces = new ArrayList<>();
+        String name1 = "&dShadowweave Shroud Helmet";
+        List<String> lore1 = new ArrayList<>();
+
+        lore1.add("&7Defence: &a+235");
+        lore1.add("&7Resistance: &3+230");
+        lore1.add("&7Damage: &c+160");
+        lore1.add("&7Critical Damage: &c+150");
+        lore1.add("&7Critical Chance: &c+20");
+        lore1.add("§7Intelligence: §b+200");
+        lore1.add("&7Mana Regen: &b+2");
+        lore1.add("&7Speed: &f+5");
+        lore1.add("");
+        lore1.add("&6Full Set Bonus: Teared Into The Void");
+        lore1.add("&7If you die u are teleported to your ally.");
+        lore1.add("&8Cooldown: &a120s");
+        lore1.add("");
+        lore1.add("&d&lMYTHIC HELMET");
+        lore1.add("&8item_id:shadowweave_shroud_helmet");
+        ItemStack item1 = createTrimItem(Material.NETHERITE_HELMET, TrimPattern.WARD, TrimMaterial.AMETHYST, name1, lore1);
+        shadowweaveShroudHelmet = new Item(item1);
+        armorItemIds.add(shadowweaveShroudHelmet.getItemId());
+        pieces.add(shadowweaveShroudHelmet);
+
+        String name2 = "&dShadowweave Shroud Chestplate";
+        List<String> lore2 = new ArrayList<>();
+
+        lore2.add("&7Health: &4+100");
+        lore2.add("&7Defence: &a+235");
+        lore2.add("&7Resistance: &3+230");
+        lore2.add("&7Damage: &c+350");
+        lore2.add("&7Critical Damage: &c+200");
+        lore2.add("&7Critical Chance: &c+20");
+        lore2.add("§7Intelligence: §b+200");
+        lore2.add("&7Mana Regen: &b+2");
+        lore2.add("&7Speed: &f+5");
+        lore2.add("");
+        lore2.add("&6Full Set Bonus: Teared Into The Void");
+        lore2.add("&7If you die u are teleported to your ally.");
+        lore2.add("&8Cooldown: &a120s");
+        lore2.add("");
+        lore2.add("&d&lMYTHIC CHESTPLATE");
+        lore2.add("&8item_id:shadowweave_shroud_chestplate");
+        ItemStack item2 = createTrimItem(Material.NETHERITE_CHESTPLATE, TrimPattern.TIDE, TrimMaterial.AMETHYST, name2, lore2);
+        shadowweaveShroudChestplate = new Item(item2);
+        armorItemIds.add(shadowweaveShroudChestplate.getItemId());
+        pieces.add(shadowweaveShroudChestplate);
+
+        String name3 = "&dShadowweave Shroud Leggings";
+        List<String> lore3 = new ArrayList<>();
+
+        lore3.add("&7Defence: &a+235");
+        lore3.add("&7Resistance: &3+230");
+        lore3.add("&7Damage: &c+190");
+        lore3.add("&7Critical Damage: &c+150");
+        lore3.add("&7Critical Chance: &c+20");
+        lore3.add("§7Intelligence: §b+200");
+        lore3.add("&7Mana Regen: &b+2");
+        lore3.add("&7Speed: &f+5");
+        lore3.add("");
+        lore3.add("&6Full Set Bonus: Teared Into The Void");
+        lore3.add("&7If you die u are teleported to your ally.");
+        lore3.add("&8Cooldown: &a120s");
+        lore3.add("");
+        lore3.add("&d&lMYTHIC LEGGINGS");
+        lore3.add("&8item_id:shadowweave_shroud_leggings");
+        ItemStack item3 = createTrimItem(Material.NETHERITE_LEGGINGS, TrimPattern.SILENCE, TrimMaterial.AMETHYST, name3, lore3);
+        shadowweaveShroudLeggings = new Item(item3);
+        armorItemIds.add(shadowweaveShroudLeggings.getItemId());
+        pieces.add(shadowweaveShroudLeggings);
+
+        String name4 = "&dShadowweave Shroud Boots";
+        List<String> lore4 = new ArrayList<>();
+
+        lore4.add("&7Defence: &a+235");
+        lore4.add("&7Resistance: &3+230");
+        lore4.add("&7Damage: &c+150");
+        lore4.add("&7Critical Damage: &c+150");
+        lore4.add("&7Critical Chance: &c+20");
+        lore4.add("§7Intelligence: §b+200");
+        lore4.add("&7Mana Regen: &b+2");
+        lore4.add("&7Speed: &f+5");
+        lore4.add("");
+        lore4.add("&6Full Set Bonus: Teared Into The Void");
+        lore4.add("&7If you die u are teleported to your ally.");
+        lore4.add("&8Cooldown: &a120s");
+        lore4.add("");
+        lore4.add("&6Piece Bonus: Shadow Step &eSHIFT");
+        lore4.add("&7Teleport a short distance ahead of you.");
+        lore4.add("&8Mana Cost: &350");
+        lore4.add("&8Cooldown: &a1s");
+        lore4.add("");
+        lore4.add("&d&lMYTHIC BOOTS");
+        lore4.add("&8item_id:shadowweave_shroud_boots");
+        ItemStack item4 = createTrimItem(Material.NETHERITE_BOOTS, TrimPattern.COAST, TrimMaterial.AMETHYST, name4, lore4);
+        shadowweaveShroudBoots = new Item(item4);
+        armorItemIds.add(shadowweaveShroudBoots.getItemId());
+        pieces.add(shadowweaveShroudBoots);
+
+        armorItems.put("shadowweave_shroud", pieces);
     }
 
     private  static void createSuperiorArmor(){
@@ -514,6 +628,21 @@ public class ArmorDefinitions {
         }
     }
 
+    public static Item getRandomMythicArmorPiece(ItemClass itemClass){
+        int r = new Random().nextInt(1)+1; //1-1 range
+        int piece = new Random().nextInt(4); //0-4 range
+        switch (r){
+            case 1:
+                return armorItems.get("shadowweave_shroud").get(piece);
+            default:
+                ItemStack nullItem = new ItemStack(Material.BARRIER);
+                ItemMeta im = nullItem.getItemMeta();
+                im.setDisplayName("NULL");
+                nullItem.setItemMeta(im);
+                return new Item(nullItem);
+        }
+    }
+
     private static ItemStack createItem(Material material, String displayName, List<String> lore){
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
@@ -562,5 +691,22 @@ public class ArmorDefinitions {
 
         return item;
     }
+    private static ItemStack createTrimItem(Material material, TrimPattern trimPattern, TrimMaterial trimMaterial, String displayName, List<String> lore){
+        ItemStack item = new ItemStack(material, 1);
+        ArmorMeta meta = (ArmorMeta) item.getItemMeta();
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+        meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        meta.setTrim(new ArmorTrim(trimMaterial, trimPattern));
+        List<String> newLore = new ArrayList<>();
+        for (String s : lore){
+            newLore.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+        meta.setLore(newLore);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
 }
 

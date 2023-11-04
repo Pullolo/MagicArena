@@ -102,7 +102,6 @@ public class WishSystem {
         //todo add a proper wishing system (getItem(itemClass, rarity))
 
         if (wishType == WishType.WEAPON_WISH){
-            finalItem=null;
             if (wishRarity.equals(WishRarity.UNCOMMON)){
                 finalItem = new Item(getRandomUncommonWeapon(itemClass), stars, q).getItem();
             } else if (wishRarity.equals(WishRarity.RARE)) {
@@ -113,10 +112,9 @@ public class WishSystem {
                 finalItem = new Item(getRandomLegendaryWeapon(itemClass), stars, q).getItem();
             } else if (wishRarity.equals(WishRarity.MYTHIC)){
                 finalItem = new Item(getRandomMythicWeapon(itemClass), stars, q).getItem();
-            }
+            } else finalItem=null;
 
         } else {
-            finalItem=null;
             if (wishRarity.equals(WishRarity.UNCOMMON)){
                 finalItem = new Item(getRandomUncommonArmorPiece(itemClass), stars, q).getItem();
             } else if (wishRarity.equals(WishRarity.RARE)){
@@ -125,28 +123,9 @@ public class WishSystem {
                 finalItem = new Item(getRandomEpicArmorPiece(itemClass), stars, q).getItem();
             } else if (wishRarity.equals(WishRarity.LEGENDARY)){
                 finalItem = new Item(getRandomLegendaryArmorPiece(itemClass), stars, q).getItem();
-            } else {
-                finalItem = new ItemStack(Material.NETHERITE_CHESTPLATE);
-                ItemMeta im = finalItem.getItemMeta();
-
-                //todo temp
-                if (finalItem.getItemMeta().getDisplayName().equalsIgnoreCase("")){
-                    im.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&r&" + getRarityColorChar(wishRarity) + finalItem.getType().toString().replace('_', ' ').toLowerCase()));
-                }
-
-                im.setDisplayName(im.getDisplayName() + starsStr);
-
-                List<String> lore;
-                if (finalItem.getItemMeta().getLore()==null){
-                    lore = new ArrayList<>();
-                } else {
-                    //todo possibly move it 2nd to last
-                    lore = finalItem.getItemMeta().getLore();
-                }
-                lore.add(ChatColor.translateAlternateColorCodes('&', quality));
-                im.setLore(lore);
-                finalItem.setItemMeta(im);
-            }
+            } else if (wishRarity.equals(WishRarity.MYTHIC)){
+                finalItem = new Item(getRandomMythicArmorPiece(itemClass), stars, q).getItem();
+            } else finalItem=null;
 
             //add a 50% chance for the next armor piece to be the same set
             if (lastArmorSet.containsKey(player)){

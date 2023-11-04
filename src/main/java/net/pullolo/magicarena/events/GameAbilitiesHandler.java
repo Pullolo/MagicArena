@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
@@ -23,6 +24,7 @@ import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
+import static net.pullolo.magicarena.items.ArmorDefinitions.shadowweaveShroudBoots;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -66,6 +68,47 @@ public class GameAbilitiesHandler implements Listener {
                 }
             }
             return;
+        }
+    }
+
+    @EventHandler
+    public void onPlayerSneak(PlayerToggleSneakEvent event){
+        if (!event.isSneaking()){
+            return;
+        }
+        Player p = event.getPlayer();
+        if (!isPlayerInGame(p)){
+            return;
+        }
+        if (!arenaPlayers.get(event.getPlayer()).getGame().hasStarted()){
+            return;
+        }
+        if (p.getInventory().getBoots()!=null && p.getInventory().getBoots().getItemMeta()!=null){
+            Item boots = new Item(p.getInventory().getBoots());
+            if (boots.getItemId().equals(shadowweaveShroudBoots.getItemId())){
+                if (!CooldownApi.isOnCooldown("SSTE", p)){
+                    if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(50, p)) {
+                        CooldownApi.addCooldown("SSTE", p, 1);
+                        arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses(50, p));
+
+                        Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ(), p.getLocation().getYaw(), p.getLocation().getPitch());
+                        if (p.getWorld().getBlockAt(loc.add(loc.getDirection().multiply(1))).isPassable()) {
+                            p.teleport(loc);
+                            for (int i = 0; i < 4; i++) {
+                                if (p.getWorld().getBlockAt(loc.add(loc.getDirection().multiply(1))).isPassable()) {
+                                    p.teleport(p.getLocation().add(p.getLocation().getDirection().multiply(1)));
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+                        else p.sendMessage(ChatColor.RED + "There are blocks in the way!");
+                        p.playSound(p, Sound.ENTITY_WITHER_SHOOT, 0.5f, 1.1f+(((float) new Random().nextInt(6))/10));
+                        p.getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 10, 0, 0, 0, 0.1);
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -261,8 +304,7 @@ public class GameAbilitiesHandler implements Listener {
                     }
                 }.runTaskTimer(plugin, 0, 1);
                 event.setCancelled(true);
-
-                event.setCancelled(true);
+                return;
             } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("SR", p)/100)/10 + "s.");
         }
         if (item.getItemId().equalsIgnoreCase("healing_staff")){

@@ -72,6 +72,7 @@ public class ArmorDefinitions {
         String name1 = "&dShadowweave Shroud Helmet";
         List<String> lore1 = new ArrayList<>();
 
+        lore1.add("&7Health: &4+100");
         lore1.add("&7Defence: &a+235");
         lore1.add("&7Resistance: &3+230");
         lore1.add("&7Damage: &c+160");
@@ -119,6 +120,7 @@ public class ArmorDefinitions {
         String name3 = "&dShadowweave Shroud Leggings";
         List<String> lore3 = new ArrayList<>();
 
+        lore3.add("&7Health: &4+100");
         lore3.add("&7Defence: &a+235");
         lore3.add("&7Resistance: &3+230");
         lore3.add("&7Damage: &c+190");
@@ -142,6 +144,7 @@ public class ArmorDefinitions {
         String name4 = "&dShadowweave Shroud Boots";
         List<String> lore4 = new ArrayList<>();
 
+        lore4.add("&7Health: &4+100");
         lore4.add("&7Defence: &a+235");
         lore4.add("&7Resistance: &3+230");
         lore4.add("&7Damage: &c+150");

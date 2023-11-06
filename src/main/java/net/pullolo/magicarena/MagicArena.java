@@ -13,6 +13,7 @@ import net.pullolo.magicarena.items.ArmorDefinitions;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
 import net.pullolo.magicarena.misc.CooldownApi;
+import net.pullolo.magicarena.misc.ParticleApi;
 import net.pullolo.magicarena.players.PartyManager;
 import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
@@ -50,12 +51,14 @@ public final class MagicArena extends JavaPlugin {
     public static GuiManager guiManager;
     public static DungeonChestSystem dungeonChestSystem;
     public static DbManager dbManager = new DbManager();
+    public static ParticleApi particleApi;
     public static JavaPlugin plugin;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
+        particleApi = new ParticleApi(this);
         config = getConfig();
         dbManager.init();
         ItemsDefinitions.init();

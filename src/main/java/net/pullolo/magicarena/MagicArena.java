@@ -21,7 +21,6 @@ import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;

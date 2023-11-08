@@ -1,5 +1,6 @@
 package net.pullolo.magicarena.events;
 
+import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.misc.CooldownApi;
@@ -38,7 +39,7 @@ public class GameDamageHandler implements Listener {
             return;
         }
         if (event instanceof EntityDamageByEntityEvent){
-            if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player && isPlayerInGame((Player) ((EntityDamageByEntityEvent) event).getDamager())){
+            if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player && isPlayerInGame((Player) ((EntityDamageByEntityEvent) event).getDamager()) && !(arenaPlayers.get((Player) ((EntityDamageByEntityEvent) event).getDamager()).getGame() instanceof GameWorld)){
                 if (event.getEntity() instanceof Hanging){
                     event.setCancelled(true);
                     return;

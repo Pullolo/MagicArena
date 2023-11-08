@@ -7,6 +7,7 @@ import net.pullolo.magicarena.events.GameDamageHandler;
 import net.pullolo.magicarena.data.DbManager;
 import net.pullolo.magicarena.events.GameEventsHandler;
 import net.pullolo.magicarena.game.GameManager;
+import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.ArmorDefinitions;
@@ -14,6 +15,7 @@ import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
 import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.misc.ParticleApi;
+import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.PartyManager;
 import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
@@ -30,10 +32,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
+import static net.pullolo.magicarena.game.GameWorld.gameWorlds;
+import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
 import static net.pullolo.magicarena.worlds.WorldManager.*;
 
@@ -101,6 +106,7 @@ public final class MagicArena extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);
         getServer().getPluginManager().registerEvents(new GameAbilitiesHandler(), this);
 
+        loadDefaultWorlds();
         loadSavedWorlds();
     }
 
@@ -110,6 +116,7 @@ public final class MagicArena extends JavaPlugin {
         savePlayers();
         dbManager.disconnect();
         deleteActiveTempWorlds();
+        unloadDefaultWorlds();
     }
 
     private void loadSavedWorlds(){
@@ -123,6 +130,26 @@ public final class MagicArena extends JavaPlugin {
                 new WorldCreator(s).createWorld();
                 log.info(prefix + "Loaded world " + s);
             }
+        }
+    }
+
+    private void loadDefaultWorlds(){
+        getLog().warning(arenaPlayers.values().toString());
+        for (int i = 0; i < 3; i++){
+            new GameWorld(Bukkit.getWorlds().get(i));
+        }
+        for (Player p : Bukkit.getOnlinePlayers()){
+            if (gameWorlds.containsKey(p.getWorld())){
+                GameWorld g = gameWorlds.get(p.getWorld());
+                new ArenaPlayer(p, getPlayerData(p).getLevel(), g);
+            }
+        }
+    }
+
+    private void unloadDefaultWorlds(){
+        Collection<GameWorld> worlds = gameWorlds.values();
+        for (GameWorld g : worlds){
+            g.forceEndGame();
         }
     }
 

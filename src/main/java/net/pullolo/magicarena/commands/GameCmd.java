@@ -1,8 +1,6 @@
 package net.pullolo.magicarena.commands;
 
-import net.pullolo.magicarena.game.ArenaGame;
-import net.pullolo.magicarena.game.Dungeon;
-import net.pullolo.magicarena.game.QueueManager;
+import net.pullolo.magicarena.game.*;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -71,7 +69,10 @@ public class GameCmd implements CommandExecutor, TabCompleter {
                     sender.sendMessage( ChatColor.RED + "You are currently not in game!");
                     return true;
                 }
-                arenaPlayers.get(sender).getGame().forceEndGame();
+                Game game = arenaPlayers.get(sender).getGame();
+                if (!(game instanceof GameWorld)){
+                    game.forceEndGame();
+                } else sender.sendMessage(ChatColor.RED + "You can not stop a world game!");
             } else return false;
         }
 

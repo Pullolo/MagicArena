@@ -147,6 +147,8 @@ public abstract class Game {
         gameClock1t.runTaskTimer(MagicArena.plugin, 0, 1);
         this.gameC = gameClock1t;
 
+        Game g = this;
+
         BukkitRunnable gameClock1s = new BukkitRunnable() {
             @Override
             public void run() {
@@ -166,6 +168,8 @@ public abstract class Game {
                 }
 
                 update1s();
+
+                if (g instanceof GameWorld) return;
 
                 if (!test){
                     if (!isTeamAlive(team1) && isTeamAlive(team2)){
@@ -314,6 +318,10 @@ public abstract class Game {
     }
 
     public void forceEndGame(){
+        if (this instanceof GameWorld) {
+            saveGameWorld();
+            return;
+        }
         if (startC!=null) startC.cancel();
         gameC.cancel();
         gameCS.cancel();
@@ -351,9 +359,31 @@ public abstract class Game {
     }
 
     public abstract String pickRandomArena();
+    public void saveGameWorld(){};
 
     public void playerDied(Player p){
         p.sendMessage(ChatColor.RED + "[Arena] You died!");
+        if (this instanceof GameWorld){
+            for (Player player : allPlayers){
+                if (player!=null && !player.equals(p)){
+                    player.sendMessage(ChatColor.RED + "Player " + p.getDisplayName() + " has died!");
+                }
+            }
+            try {
+                p.teleport(p.getBedSpawnLocation());
+            } catch (Exception e){
+                try {
+                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                } catch (Exception er){
+                    getLog().warning("Player " + p.getName() + " couldn't respawn properly!");
+                }
+            }
+            ArenaPlayer ap = arenaPlayers.get(p);
+            ap.respawn();
+            ap.updateStats();
+            p.setInvulnerable(false);
+            return;
+        }
         arenaPlayers.remove(p);
         p.setGameMode(GameMode.SPECTATOR);
         p.teleport(new Location(p.getWorld(), 0, 65, 0));

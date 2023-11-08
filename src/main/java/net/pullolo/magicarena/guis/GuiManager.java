@@ -243,7 +243,7 @@ public class GuiManager {
     public InventoryGui createMainMenuGui(Player player){
         String[] guiSetup = {
                 "         ",
-                "r g p w i",
+                "r g p w q",
                 "         "
         };
         InventoryGui gui = new InventoryGui(this.plugin, player, "Profile", guiSetup);
@@ -274,11 +274,11 @@ public class GuiManager {
                     click.getGui().close();
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&6⚡ Ranks")));
-        gui.addElement(new StaticGuiElement('i', new ItemStack (Material.CRAFTING_TABLE),
+        gui.addElement(new StaticGuiElement('q', new ItemStack (Material.BIRCH_HANGING_SIGN),
                 click -> {
                     click.getGui().close();
                     return true;
-                }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Your Items")));
+                }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Quests")));
 
         return gui;
     }

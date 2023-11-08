@@ -7,15 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import net.pullolo.magicarena.items.ItemClass;
 import org.bukkit.inventory.meta.PotionMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-
-import static net.pullolo.magicarena.MagicArena.getLog;
 
 public class ItemsDefinitions {
 

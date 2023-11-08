@@ -28,7 +28,7 @@ public class GameWorld extends Game{
         gameWorlds.put(w, this);
         createEntities(w);
         setAllPlayers((ArrayList<Player>) w.getPlayers());
-        setTeam1(null);
+        setTeam1(new ArrayList<>());
         setTeam2(null);
         for (Player p : getAllPlayers()){
             p.sendMessage(ChatColor.GREEN + "You are now being processed by " + w.getName() + ".");

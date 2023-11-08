@@ -88,7 +88,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event){
-        if (!(event.getEntity().getWorld().getName().contains("temp_"))){
+        if (!(event.getEntity().getWorld().getName().contains("temp_")) && !gameWorlds.containsKey(event.getEntity().getWorld())){
             return;
         }
         if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPELL)){
@@ -156,14 +156,13 @@ public class GameEventsHandler implements Listener {
         PlayerData.removePlayerData(event.getPlayer());
         partyManager.leaveParty(event.getPlayer());
         if (arenaPlayers.containsKey(event.getPlayer())){
-            arenaPlayers.get(event.getPlayer()).getGame().broadcast("[Arena] Player " + event.getPlayer().getDisplayName() + " has left the game!");
+            arenaPlayers.get(event.getPlayer()).getGame().broadcast("Player " + event.getPlayer().getDisplayName() + " has left the game!");
             if (!(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
                 arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());
                 event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
-            } else {
-                arenaPlayers.get(event.getPlayer()).getGame().getAllPlayers().remove(event.getPlayer());
-                arenaPlayers.remove(event.getPlayer());
             }
+            arenaPlayers.get(event.getPlayer()).getGame().getAllPlayers().remove(event.getPlayer());
+            arenaPlayers.remove(event.getPlayer());
         }
 
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
@@ -172,6 +171,9 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerSwapWorld(PlayerChangedWorldEvent event){
+        if (getPlayerData(event.getPlayer())==null){
+            return;
+        }
         if (arenaPlayers.containsKey(event.getPlayer()) && (arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
             arenaPlayers.remove(event.getPlayer());
             if (gameWorlds.containsKey(event.getFrom())){
@@ -209,14 +211,14 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerBuild(BlockPlaceEvent event){
-        if (isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_") && !(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+        if ((isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")) && !(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerBreak(BlockBreakEvent event){
-        if (isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_") && !(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+        if ((isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")) && !(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
             event.setCancelled(true);
         }
     }

@@ -362,7 +362,8 @@ public abstract class Game {
     public void saveGameWorld(){};
 
     public void playerDied(Player p){
-        p.sendMessage(ChatColor.RED + "[Arena] You died!");
+        if (this instanceof GameWorld) p.sendMessage(ChatColor.RED + "You died!");
+        else p.sendMessage(ChatColor.RED + "[Arena] You died!");
         if (this instanceof GameWorld){
             for (Player player : allPlayers){
                 if (player!=null && !player.equals(p)){

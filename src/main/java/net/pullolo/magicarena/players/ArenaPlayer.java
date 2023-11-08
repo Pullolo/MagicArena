@@ -8,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
+
 public class ArenaPlayer extends ArenaEntityBlueprint {
 
     private final Game game;
@@ -15,12 +17,14 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
     private boolean inGame = true;
 
     public static HashMap<Player, ArenaPlayer> arenaPlayers = new HashMap<>();
+    private final Player player;
 
     public ArenaPlayer(Player player, int level, Game game){
         if (arenaPlayers.containsKey(player)){
             throw new RuntimeException("Cannot convert player that is already converted!");
         } else arenaPlayers.put(player, this);
         this.game = game;
+        this.player = player;
         setLevel(level);
         updateStats();
         respawn();
@@ -102,5 +106,10 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
 
     public void setLastHeldItemStack(ItemStack lastHeldItemStack) {
         this.lastHeldItemStack = lastHeldItemStack;
+    }
+
+    public void preRemove(Player p) {
+        getPlayerData(p).setHp((int) getHealth());
+        getPlayerData(p).setMana((int) getMana());
     }
 }

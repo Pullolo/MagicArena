@@ -32,6 +32,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
@@ -152,21 +153,23 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
-        PlayerData.savePlayerDataToDb(event.getPlayer(), dbManager);
-        PlayerData.removePlayerData(event.getPlayer());
         partyManager.leaveParty(event.getPlayer());
         if (arenaPlayers.containsKey(event.getPlayer())){
             arenaPlayers.get(event.getPlayer()).getGame().broadcast("Player " + event.getPlayer().getDisplayName() + " has left the game!");
             if (!(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
                 arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());
                 event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
+            } else{
+                arenaPlayers.get(event.getPlayer()).getGame().getAllPlayers().remove(event.getPlayer());
             }
-            arenaPlayers.get(event.getPlayer()).getGame().getAllPlayers().remove(event.getPlayer());
+            arenaPlayers.get(event.getPlayer()).preRemove(event.getPlayer());
             arenaPlayers.remove(event.getPlayer());
         }
 
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
         lastArmorSet.remove(event.getPlayer());
+        PlayerData.savePlayerDataToDb(event.getPlayer(), dbManager);
+        PlayerData.removePlayerData(event.getPlayer());
     }
 
     @EventHandler
@@ -175,6 +178,7 @@ public class GameEventsHandler implements Listener {
             return;
         }
         if (arenaPlayers.containsKey(event.getPlayer()) && (arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+            arenaPlayers.get(event.getPlayer()).preRemove(event.getPlayer());
             arenaPlayers.remove(event.getPlayer());
             if (gameWorlds.containsKey(event.getFrom())){
                 gameWorlds.get(event.getFrom()).getAllPlayers().remove(event.getPlayer());
@@ -204,7 +208,17 @@ public class GameEventsHandler implements Listener {
             event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
         }
         if (gameWorlds.containsKey(event.getPlayer().getWorld())){
-            new ArenaPlayer(event.getPlayer(), getPlayerData(event.getPlayer()).getLevel(), gameWorlds.get(event.getPlayer().getWorld()));
+            ArenaPlayer ap = new ArenaPlayer(event.getPlayer(), getPlayerData(event.getPlayer()).getLevel(), gameWorlds.get(event.getPlayer().getWorld()));
+            Player p = event.getPlayer();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (arenaPlayers.get(p)==null) return;
+                    arenaPlayers.get(p).updateStats();
+                    arenaPlayers.get(p).setHealth(getPlayerData(p).getHp());
+                    arenaPlayers.get(p).setMana(getPlayerData(p).getMana());
+                }
+            }.runTaskLater(plugin, 1);
             gameWorlds.get(event.getPlayer().getWorld()).getAllPlayers().add(event.getPlayer());
         }
     }

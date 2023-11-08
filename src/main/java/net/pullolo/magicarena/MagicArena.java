@@ -29,6 +29,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 import java.io.File;
@@ -114,10 +115,10 @@ public final class MagicArena extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        savePlayers();
-        dbManager.disconnect();
         deleteActiveTempWorlds();
         unloadDefaultWorlds();
+        savePlayers();
+        dbManager.disconnect();
     }
 
     private void loadSavedWorlds(){
@@ -142,6 +143,15 @@ public final class MagicArena extends JavaPlugin {
             if (gameWorlds.containsKey(p.getWorld())){
                 GameWorld g = gameWorlds.get(p.getWorld());
                 new ArenaPlayer(p, getPlayerData(p).getLevel(), g);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (arenaPlayers.get(p)==null) return;
+                        arenaPlayers.get(p).updateStats();
+                        arenaPlayers.get(p).setHealth(getPlayerData(p).getHp());
+                        arenaPlayers.get(p).setMana(getPlayerData(p).getMana());
+                    }
+                }.runTaskLater(plugin, 1);
             }
         }
     }

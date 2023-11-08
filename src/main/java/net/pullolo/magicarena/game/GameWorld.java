@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -39,7 +40,7 @@ public class GameWorld extends Game{
 
     private void createEntities(World w) {
         for (Entity e : w.getEntities()){
-            if ((e instanceof LivingEntity) && !(e instanceof Player)){
+            if ((e instanceof LivingEntity) && !(e instanceof Player) && !(e instanceof ArmorStand)){
                 if (!arenaEntities.containsKey(e)){
                     arenaEntities.put(e, new DungeonEntity(e, (int) worldLevel, this, false));
                 }
@@ -71,6 +72,9 @@ public class GameWorld extends Game{
             arenaEntities.get(e).save();
         }
         arenaEntities.clear();
+        for (Player p : getAllPlayers()){
+            arenaPlayers.get(p).preRemove(p);
+        }
         arenaPlayers.clear();
         setAllPlayers(new ArrayList<>());
         gameWorlds.remove(getWorld());

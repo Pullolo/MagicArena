@@ -187,6 +187,16 @@ public class GameEventsHandler implements Listener {
         if (gameWorlds.containsKey(event.getPlayer().getWorld())){
             new ArenaPlayer(event.getPlayer(), getPlayerData(event.getPlayer()).getLevel(), gameWorlds.get(event.getPlayer().getWorld()));
             gameWorlds.get(event.getPlayer().getWorld()).getAllPlayers().add(event.getPlayer());
+            Player p = event.getPlayer();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (arenaPlayers.get(p)==null) return;
+                    arenaPlayers.get(p).updateStats();
+                    arenaPlayers.get(p).setHealth(getPlayerData(p).getHp());
+                    arenaPlayers.get(p).setMana(getPlayerData(p).getMana());
+                }
+            }.runTaskLater(plugin, 1);
         }
     }
 

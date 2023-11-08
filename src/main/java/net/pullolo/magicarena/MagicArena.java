@@ -26,6 +26,7 @@ import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -134,7 +135,6 @@ public final class MagicArena extends JavaPlugin {
     }
 
     private void loadDefaultWorlds(){
-        getLog().warning(arenaPlayers.values().toString());
         for (int i = 0; i < 3; i++){
             new GameWorld(Bukkit.getWorlds().get(i));
         }
@@ -147,9 +147,8 @@ public final class MagicArena extends JavaPlugin {
     }
 
     private void unloadDefaultWorlds(){
-        Collection<GameWorld> worlds = gameWorlds.values();
-        for (GameWorld g : worlds){
-            g.forceEndGame();
+        for (int i = 0; i < gameWorlds.size(); i++){
+            ((GameWorld) gameWorlds.values().toArray()[i]).forceEndGame();
         }
     }
 

@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
-import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
-import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.ArenaPlayer.*;
 
 public class GameCmd implements CommandExecutor, TabCompleter {
     @Override
@@ -30,7 +29,7 @@ public class GameCmd implements CommandExecutor, TabCompleter {
         }
         if (args.length==2){
             if (args[0].equalsIgnoreCase("start")){
-                if (isPlayerInGame((Player) sender)){
+                if (isPlayerInMatch((Player) sender)){
                     sender.sendMessage( ChatColor.RED + "You are currently in game!");
                     return true;
                 }
@@ -51,7 +50,7 @@ public class GameCmd implements CommandExecutor, TabCompleter {
         }
         if (args.length==1){
             if (args[0].equalsIgnoreCase("dungeon")){
-                if (isPlayerInGame((Player) sender)){
+                if (isPlayerInMatch((Player) sender)){
                     sender.sendMessage( ChatColor.RED + "You are currently in game!");
                     return true;
                 }
@@ -65,7 +64,7 @@ public class GameCmd implements CommandExecutor, TabCompleter {
                     sender.sendMessage(ChatColor.RED + "An error occurred while creating a game!");
                 }
             } else if (args[0].equalsIgnoreCase("end")){
-                if (!isPlayerInGame((Player) sender)){
+                if (!isPlayerInMatch((Player) sender)){
                     sender.sendMessage( ChatColor.RED + "You are currently not in game!");
                     return true;
                 }

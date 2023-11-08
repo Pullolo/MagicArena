@@ -272,6 +272,7 @@ public class GameDamageHandler implements Listener {
         }
         Item playersItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
         Double itemDamage = playersItem.getDamage();
+        if (itemDamage==0) return (5*(1+playerDamage/100))+eventDamage*5;
         if (playersItem.getItemId().equalsIgnoreCase("leeching_staff")){
             arenaPlayers.get(damager).setHealth(arenaPlayers.get(damager).getHealth()+2);
             damager.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, damager.getLocation().add(0, 1, 0), 20, 0.2, 0.6, 0.2, 1);
@@ -309,6 +310,7 @@ public class GameDamageHandler implements Listener {
         double playerDamage = arenaPlayers.get(damager).getDamage();
         Item playerItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
         Double itemDamage = playerItem.getDamage();
+        if (itemDamage==0) return (5*(1+playerDamage/100))+5*5;
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null || armorItemIds.contains(getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getItemId())){
             return 5*(1+playerDamage/100);
         }

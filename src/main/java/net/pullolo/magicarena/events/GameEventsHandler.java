@@ -26,10 +26,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -73,9 +70,9 @@ public class GameEventsHandler implements Listener {
         }
         for (Entity e : event.getChunk().getEntities()){
             if (!arenaEntities.containsKey(e)) {
-                if (gameWorlds.containsKey(e.getWorld()) && e instanceof LivingEntity){
+                if (gameWorlds.containsKey(e.getWorld()) && e instanceof LivingEntity && !(e instanceof Player)){
                     GameWorld g = gameWorlds.get(e.getWorld());
-                    int level = 1;
+                    int level = g.getWorldLevel();
                     arenaEntities.put(e, new ArenaEntity(e, level, g, false));
                 }
                 continue;
@@ -91,7 +88,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event){
-        if (!(event.getEntity().getWorld().getName().contains("temp_") || gameWorlds.containsKey(event.getEntity().getWorld()))){
+        if (!(event.getEntity().getWorld().getName().contains("temp_"))){
             return;
         }
         if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPELL)){
@@ -110,17 +107,19 @@ public class GameEventsHandler implements Listener {
                 int level = 1;
                 if (g instanceof Dungeon){
                     level = ((Dungeon) g).getLevel();
+                } else if (g instanceof GameWorld){
+                    level = ((GameWorld) g).getWorldLevel();
                 }
                 arenaEntities.put(event.getEntity(), new DungeonEntity(event.getEntity(), level, g, false));
             }
             return;
         }
-        if (gameWorlds.containsKey(event.getEntity().getWorld())){
+        if (gameWorlds.containsKey(event.getEntity().getWorld()) && !event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)){
             if (event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand || event.getEntity() instanceof EnderDragonPart){
                 return;
             }
             GameWorld g = gameWorlds.get(event.getEntity().getWorld());
-            int level = 1;
+            int level = g.getWorldLevel();
             arenaEntities.put(event.getEntity(), new ArenaEntity(event.getEntity(), level, g, false));
             return;
         }
@@ -169,6 +168,20 @@ public class GameEventsHandler implements Listener {
 
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
         lastArmorSet.remove(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerSwapWorld(PlayerChangedWorldEvent event){
+        if (arenaPlayers.containsKey(event.getPlayer()) && (arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+            arenaPlayers.remove(event.getPlayer());
+            if (gameWorlds.containsKey(event.getFrom())){
+                gameWorlds.get(event.getFrom()).getAllPlayers().remove(event.getPlayer());
+            }
+        }
+        if (gameWorlds.containsKey(event.getPlayer().getWorld())){
+            new ArenaPlayer(event.getPlayer(), getPlayerData(event.getPlayer()).getLevel(), gameWorlds.get(event.getPlayer().getWorld()));
+            gameWorlds.get(event.getPlayer().getWorld()).getAllPlayers().add(event.getPlayer());
+        }
     }
 
     @EventHandler

@@ -2,6 +2,7 @@ package net.pullolo.magicarena.players;
 
 import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
+import net.pullolo.magicarena.game.GameWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -84,6 +85,13 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
     public static boolean isPlayerInGame(Player p){
         if (arenaPlayers.containsKey(p)){
             return arenaPlayers.get(p).isInGame();
+        }
+        return false;
+    }
+
+    public static boolean isPlayerInMatch(Player p){
+        if (arenaPlayers.containsKey(p)){
+            return arenaPlayers.get(p).isInGame() && !(arenaPlayers.get(p).getGame() instanceof GameWorld);
         }
         return false;
     }

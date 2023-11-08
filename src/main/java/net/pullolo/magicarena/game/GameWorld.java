@@ -1,9 +1,12 @@
 package net.pullolo.magicarena.game;
 
+import net.pullolo.magicarena.players.DungeonEntity;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.world.ChunkLoadEvent;
 
@@ -11,16 +14,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 
 public class GameWorld extends Game{
 
     public static final HashMap<World, GameWorld> gameWorlds = new HashMap<>();
+    private long worldLevel = 1;
 
     public GameWorld(World w) {
         setWorld(w);
         gameWorlds.put(w, this);
+        createEntities(w);
         setAllPlayers((ArrayList<Player>) w.getPlayers());
         setTeam1(null);
         setTeam2(null);
@@ -31,9 +37,25 @@ public class GameWorld extends Game{
         setStarted(true);
     }
 
+    private void createEntities(World w) {
+        for (Entity e : w.getEntities()){
+            if ((e instanceof LivingEntity) && !(e instanceof Player)){
+                if (!arenaEntities.containsKey(e)){
+                    arenaEntities.put(e, new DungeonEntity(e, (int) worldLevel, this, false));
+                }
+            }
+        }
+    }
+
     @Override
     public void update1s(){
-
+        int i = 0;
+        long lvl = 0;
+        for (Player p : getAllPlayers()){
+            i++;
+            lvl += getPlayerData(p).getLevel();
+        }
+        if (i!=0) worldLevel = Math.round((double) lvl/i);
     }
 
     @Override
@@ -66,5 +88,9 @@ public class GameWorld extends Game{
     @Override
     public String pickRandomArena() {
         return null;
+    }
+
+    public int getWorldLevel() {
+        return (int) worldLevel;
     }
 }

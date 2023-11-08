@@ -4,7 +4,6 @@ import de.themoep.inventorygui.DynamicGuiElement;
 import de.themoep.inventorygui.InventoryGui;
 import de.themoep.inventorygui.StaticGuiElement;
 import dev.dbassett.skullcreator.SkullCreator;
-import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.data.XpManager;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
@@ -34,7 +33,7 @@ import java.util.Locale;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
-import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInMatch;
 import static net.pullolo.magicarena.wish.WishSystem.getRarityColorChar;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
 
@@ -754,7 +753,7 @@ public class GuiManager {
         //todo temp
         if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p) && !gameManager.getQueueManager().isPlayerInQueue(p)){
             for (Player member : partyManager.getPlayersParty(p)){
-                if (isPlayerInGame(member)){
+                if (isPlayerInMatch(member)){
                     p.sendMessage(ChatColor.RED + "No players can be in game!");
                 }
             }

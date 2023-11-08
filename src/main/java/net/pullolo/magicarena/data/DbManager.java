@@ -46,7 +46,7 @@ public class DbManager {
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
-            PreparedStatement stmt = conn.prepareStatement("select * from plugin_data where name=\"?\";");
+            PreparedStatement stmt = conn.prepareStatement("select * from plugin_data where name=?;");
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.isClosed()){
@@ -69,7 +69,7 @@ public class DbManager {
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
             String insert = "insert into plugin_data (name, level, xp, star_essence, wishes, dungeon_essence, updated) values" +
-                    " (\"?\", " + level + ", \"" + xp +"\", " + star_essence + ", " + wishes + ", " + dungeon_essence + ", " + updated + ");";
+                    " (?, " + level + ", \"" + xp +"\", " + star_essence + ", " + wishes + ", " + dungeon_essence + ", " + updated + ");";
 
             PreparedStatement stmt = conn.prepareStatement(insert);
             stmt.setString(1, name);
@@ -90,7 +90,7 @@ public class DbManager {
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
-            PreparedStatement stmt = conn.prepareStatement("select * from plugin_data where name=\"?\";");
+            PreparedStatement stmt = conn.prepareStatement("select * from plugin_data where name=?;");
             stmt.setString(1, playerName);
 
             ResultSet rs = stmt.executeQuery();
@@ -110,7 +110,7 @@ public class DbManager {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
 
 
-            String update = "update plugin_data set level=" + level + ", xp=\"" + xp + "\", star_essence=" + star_essence + ", wishes=" + wishes + ", dungeon_essence=" + dungeon_essence + ", updated=" + updated + " where name=\"?\";";
+            String update = "update plugin_data set level=" + level + ", xp=\"" + xp + "\", star_essence=" + star_essence + ", wishes=" + wishes + ", dungeon_essence=" + dungeon_essence + ", updated=" + updated + " where name=?;";
             PreparedStatement stmt = conn.prepareStatement(update);
             stmt.setString(1, name);
             stmt.execute();

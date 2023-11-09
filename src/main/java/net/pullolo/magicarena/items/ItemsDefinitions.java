@@ -34,11 +34,18 @@ public class ItemsDefinitions {
     //epic
     public static Item leapingSword;
     public static Item rodOfChaos; //dungeonItem
+
     //legendary
     public static Item auroraStaff;
     public static Item priscillasDagger;
     //mythic
     public static Item kusumibaru;
+    public static Item hyperion; //dps
+    public static Item atomSplitKatana; //dps
+    public static Item kunai; //dps
+    public static Item bactaNade; //healer
+    public static Item quenAxe; //tank
+    public static Item terminator; //archer
     public static Item scorpionChainDart;
 
     public static Item bladeOfTheUniverse;
@@ -69,9 +76,139 @@ public class ItemsDefinitions {
         createPriscillasDagger();
 
         createKusumibaru();
+        createAtomSplitKatana();
+        createHyperion();
+        createKunai();
+        createQuenAxe();
+        createTerminator();
+        createBactaNade();
         createScorpionChainDart();
 
         createBladeOfTheUniverse();
+    }
+    private static void createBactaNade(){
+        String name = "&dBactaNade";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+1");
+        lore.add("");
+        lore.add("&6Item Ability: Healing Grenade &eRIGHT CLICK");
+        lore.add("&7The grenade will heal players in 4 block radius");
+        lore.add("&7for &540% &7player's health.");
+        lore.add("&8Cooldown: &a30s");
+        lore.add("");
+        lore.add("&d&lMYTHIC HEAL GRENADE");
+        lore.add("&8item_id:bacta_nade");
+        ItemStack item = createItem(Material.SNOWBALL, name, lore);
+        bactaNade = new Item(item);
+        itemIds.add(bactaNade.getItemId());
+        items.put(bactaNade.getItemId(), bactaNade);
+    }
+
+    private static void createTerminator(){
+        String name = "&dTerminator";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+695");
+        lore.add("&7Critical Chance: &c-60");
+        lore.add("&7Critical Damage: &c+2200");
+        lore.add("");
+        lore.add("&6Shortbow: Instantly shoots!");
+        lore.add("&7Shoot &b3 &7arrows at once.");
+        lore.add("");
+        lore.add("&d&lMYTHIC SHORTBOW");
+        lore.add("&8item_id:terminator");
+        ItemStack item = createItem(Material.BOW, name, lore);
+        terminator = new Item(item);
+        itemIds.add(terminator.getItemId());
+        items.put(terminator.getItemId(), terminator);
+    }
+    private static void createQuenAxe(){
+        String name = "&dQuen Axe";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+315");
+        lore.add("&7Intelligence: &b+100");
+        lore.add("&7Critical Chance: &c+5");
+        lore.add("&7Critical Damage: &c+90");
+        lore.add("");
+        lore.add("&6Item Ability: Quen Shield &eRIGHT CLICK");
+        lore.add("&7You get a shield which negates the first hit");
+        lore.add("&7and explodes on impact damaging nearby enemies for");
+        lore.add("&3200% &7base damage as magic damage.");
+        lore.add("&8Mana Cost: &3100");
+        lore.add("&8Cooldown: &a30s");
+        lore.add("");
+        lore.add("&d&lMYTHIC AXE");
+        lore.add("&8item_id:quen_axe");
+        ItemStack item = createItem(Material.GOLDEN_AXE, name, lore);
+        quenAxe = new Item(item);
+        itemIds.add(quenAxe.getItemId());
+        items.put(quenAxe.getItemId(), quenAxe);
+    }
+
+    private static void createKunai(){
+        String name = "&dKunai";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+700");
+        lore.add("&7Ability Damage: &3+2390");
+        lore.add("&7Critical Chance: &c+70");
+        lore.add("&7Critical Damage: &c+550");
+        lore.add("");
+        lore.add("&6Item Ability: Throw kunai &eRIGHT CLICK");
+        lore.add("&7You throw a kunai where your character is looking.");
+        lore.add("&8Cooldown: &a1.5s");
+        lore.add("");
+        lore.add("&d&lMYTHIC DAGGER");
+        lore.add("&8item_id:kunai");
+        ItemStack item = createItem(Material.IRON_SWORD, name, lore);
+        kunai = new Item(item);
+        itemIds.add(kunai.getItemId());
+        items.put(kunai.getItemId(), kunai);
+    }
+
+    private static void createHyperion(){
+        String name = "&dHyperion";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+395");
+        lore.add("&7Intelligence: &b+500");
+        lore.add("&7Ability Damage: &3+2390");
+        lore.add("&7Critical Chance: &c+50");
+        lore.add("&7Critical Damage: &c+300");
+        lore.add("");
+        lore.add("&6Item Ability: Wither Impact &eRIGHT CLICK");
+        lore.add("&7Teleport &a10 blocks &7forward and ");
+        lore.add("&7deal &3(base/10)*(100% + 200%)&7 your ability");
+        lore.add("&7damage and intelligence to nearby enemies.");
+        lore.add("&8Mana Cost: &3300");
+        lore.add("");
+        lore.add("&d&lMYTHIC SWORD");
+        lore.add("&8item_id:hyperion");
+        ItemStack item = createItem(Material.IRON_SWORD, name, lore);
+        hyperion = new Item(item);
+        itemIds.add(hyperion.getItemId());
+        items.put(hyperion.getItemId(), hyperion);
+    }
+
+    private static void createAtomSplitKatana(){
+        String name = "&dAtom Split Katana";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+900");
+        lore.add("&7Critical Chance: &c+100");
+        lore.add("&7Critical Damage: &c+950");
+        lore.add("");
+        lore.add("&6Item Ability: Atom Split &eRIGHT CLICK");
+        lore.add("&7You have a 50% chance to double strike the target.");
+        lore.add("");
+        lore.add("&d&lMYTHIC KATANA");
+        lore.add("&8item_id:atom_split_katana");
+        ItemStack item = createItem(Material.DIAMOND_SWORD, name, lore);
+        atomSplitKatana = new Item(item);
+        itemIds.add(atomSplitKatana.getItemId());
+        items.put(atomSplitKatana.getItemId(), atomSplitKatana);
     }
 
     private static void createScorpionChainDart(){

@@ -89,3 +89,7 @@ commands:
     usage: /<command> <all/single player>
     permission: ma.update
     description: After changing items this should be used to update them
+  heal:
+    usage: /<command>
+    permission: ma.heal
+    description: Heals you

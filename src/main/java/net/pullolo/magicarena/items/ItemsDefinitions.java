@@ -40,6 +40,12 @@ public class ItemsDefinitions {
     public static Item priscillasDagger;
     //mythic
     public static Item kusumibaru;
+    public static Item hyperion; //dps
+    public static Item atomSplitKatana; //dps
+    public static Item kunai; //dps
+    public static Item bactaNade; //healer
+    public static Item quenAxe; //tank
+    public static Item terminator; //archer
     public static Item scorpionChainDart;
 
     public static Item bladeOfTheUniverse;

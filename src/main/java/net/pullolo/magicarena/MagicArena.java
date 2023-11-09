@@ -138,6 +138,7 @@ public final class MagicArena extends JavaPlugin {
         CooldownApi.createCooldown("ARM", 20);
         CooldownApi.createCooldown("SSA", 120);
         CooldownApi.createCooldown("SSTE", 1);
+        CooldownApi.createCooldown("BNADE", 30);
     }
 
     private void registerCommand(CommandExecutor cmd, String cmdName){

@@ -7,20 +7,19 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
@@ -32,6 +31,31 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 import static org.bukkit.Bukkit.getServer;
 
 public class GameAbilitiesHandler implements Listener {
+
+    private final ArrayList<Player> shotCustomProjectile = new ArrayList<>();
+
+    @EventHandler
+    public void onProjectile(ProjectileLaunchEvent event){
+        if (!(event.getEntity().getShooter() instanceof Player)){
+            return;
+        }
+        Player p = (Player) event.getEntity().getShooter();
+        Projectile projectile = event.getEntity();
+        Item item = new Item(p.getInventory().getItemInMainHand());
+        if (projectile instanceof Snowball && !shotCustomProjectile.contains(p)){
+            if (item.getItemId().equalsIgnoreCase("bacta_nade")){
+                debugLog("eo", true);
+                event.setCancelled(true);
+                if (!CooldownApi.isOnCooldown("BNADE", p)){
+                    CooldownApi.addCooldown("BNADE", p, 30);
+                    shotCustomProjectile.add(p);
+                    p.launchProjectile(Snowball.class).setMetadata("projectile_explode_heal", new FixedMetadataValue(plugin, p));
+                    shotCustomProjectile.remove(p);
+                } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("BNADE", p)/100)/10 + "s.");
+                return;
+            }
+        }
+    }
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event){

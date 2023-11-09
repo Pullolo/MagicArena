@@ -37,7 +37,8 @@ public class ItemsDefinitions {
 
     //legendary
     public static Item auroraStaff;
-    public static Item priscillasDagger;
+    public static Item consideredJudgment; //dps
+    public static Item priscillasDagger; //dungeonItem
     //mythic
     public static Item kusumibaru;
     public static Item hyperion; //dps
@@ -74,18 +75,44 @@ public class ItemsDefinitions {
 
         createAuroraStaff();
         createPriscillasDagger();
+        createConsideredJudgment(); //todo ability
 
         createKusumibaru();
-        createAtomSplitKatana();
-        createHyperion();
-        createKunai();
-        createQuenAxe();
-        createTerminator();
-        createBactaNade();
+        createAtomSplitKatana(); //todo ability
+        createHyperion(); //todo ability
+        createKunai(); //todo ability
+        createQuenAxe(); //todo ability
+        createTerminator(); //todo ability
+        createBactaNade(); //todo ability
         createScorpionChainDart();
 
         createBladeOfTheUniverse();
     }
+
+    private static void createConsideredJudgment(){
+        String name = "&6Considered Judgment";
+        List<String> lore = new ArrayList<>();
+
+        lore.add("&7Damage: &c+524");
+        lore.add("&7Critical Chance: &c+22.1"); //nie zmieniac tego dzienks, ma byc 22,1
+        lore.add("&7Critical Damage: &c+268");
+        lore.add("");
+        lore.add("&6Item Ability: Final Oath &eRIGHT CLICK");
+        lore.add("&7After using an ability, you gain &c18% &7strength");
+        lore.add("&7bonus that lasts for 15 seconds.");
+        lore.add("&8Cooldown: &a20s");
+        lore.add("");
+        lore.add("&6Item Ability: Many Oaths of Dawn and Dusk");
+        lore.add("&7Increases player's strength by &c20%");
+        lore.add("");
+        lore.add("&6&lLEGENDARY AXE");
+        lore.add("&8item_id:considered_judgment");
+        ItemStack item = createItem(Material.GOLDEN_AXE, name, lore);
+        consideredJudgment = new Item(item);
+        itemIds.add(consideredJudgment.getItemId());
+        items.put(consideredJudgment.getItemId(), consideredJudgment);
+    }
+
     private static void createBactaNade(){
         String name = "&dBactaNade";
         List<String> lore = new ArrayList<>();
@@ -93,8 +120,8 @@ public class ItemsDefinitions {
         lore.add("&7Damage: &c+1");
         lore.add("");
         lore.add("&6Item Ability: Healing Grenade &eRIGHT CLICK");
-        lore.add("&7The grenade will heal players in 4 block radius");
-        lore.add("&7for &540% &7player's health.");
+        lore.add("&7The grenade will heal players in &a4 &7block radius");
+        lore.add("&7for &440% &7player's health.");
         lore.add("&8Cooldown: &a30s");
         lore.add("");
         lore.add("&d&lMYTHIC HEAL GRENADE");
@@ -152,7 +179,6 @@ public class ItemsDefinitions {
         List<String> lore = new ArrayList<>();
 
         lore.add("&7Damage: &c+700");
-        lore.add("&7Ability Damage: &3+2390");
         lore.add("&7Critical Chance: &c+70");
         lore.add("&7Critical Damage: &c+550");
         lore.add("");
@@ -201,7 +227,7 @@ public class ItemsDefinitions {
         lore.add("&7Critical Damage: &c+950");
         lore.add("");
         lore.add("&6Item Ability: Atom Split &eRIGHT CLICK");
-        lore.add("&7You have a 50% chance to double strike the target.");
+        lore.add("&7You have a &a50% &7chance to double strike the target.");
         lore.add("");
         lore.add("&d&lMYTHIC KATANA");
         lore.add("&8item_id:atom_split_katana");

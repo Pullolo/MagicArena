@@ -577,8 +577,8 @@ public abstract class Game {
 
         double prevBonusHp, prevBonusMana, newBonusHp = 0, newBonusMana = 0, healthPerc, manaPerc;
         String key = "itemHeld";
+        String cjKey = "cj-bonus";
 
-        //to add player mana and hp when swapping weapons
         manaPerc = player.getMana()/player.getMaxMana();
         if (player.getBonusMaxMana().containsKey(key)) {
             prevBonusMana = player.getBonusMaxMana().get(key);
@@ -589,6 +589,19 @@ public abstract class Game {
         } else prevBonusHp = 0;
 
         if (heldItem.getItemMeta() != null && itemIds.contains(new Item(heldItem).getItemId())){
+            //item calcs
+
+            if (new Item(heldItem).getItemId().equalsIgnoreCase("considered_judgment")){ //bron navii
+                if (player.getBonusDamage().containsKey(cjKey)){
+                    player.getBonusDamage().remove(cjKey);
+                    double val = player.getDamage()*1.2;
+                    player.getBonusDamage().put(cjKey, val);
+                } else {
+                    double val = player.getDamage()*1.2;
+                    player.getBonusDamage().put(cjKey, val);
+                }
+            } else player.getBonusDamage().remove(cjKey);
+            //rest of the calcs
             if (player.getBonusDefence().containsKey(key)){
                 player.getBonusDefence().replace(key, new Item(heldItem).getDefence());
             }else {
@@ -642,6 +655,8 @@ public abstract class Game {
                 player.getBonusHpRegen().put(key, new Item(heldItem).getHealthRegen());
             }
         } else {
+            player.getBonusDamage().remove(cjKey);
+            //rest
             if (player.getBonusDefence().containsKey(key)){
                 player.getBonusDefence().replace(key, 0.0);
             }else {

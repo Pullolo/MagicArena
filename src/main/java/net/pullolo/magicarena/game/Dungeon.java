@@ -65,9 +65,10 @@ public class Dungeon extends Game{
                 arenaPlayers.remove(p);
             }
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
-            updatePlayerItemStats(p);
+            updatePlayerItemStats(p, false);
             ap.updateStats();
             ap.respawn();
+            updatePlayerItemStats(p, true);
             p.setGameMode(GameMode.SURVIVAL);
             p.teleport(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).setDirection(new Location(dungeon, spawnX, config.getDouble("arenas-spawn-y"), spawnZ).getDirection().multiply(-1)));
             if (test){
@@ -398,9 +399,10 @@ public class Dungeon extends Game{
             i++;
             score-=100;
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
-            updatePlayerItemStats(p);
+            updatePlayerItemStats(p, false);
             ap.updateStats();
             ap.respawn();
+            updatePlayerItemStats(p, true);
             p.setGameMode(GameMode.SURVIVAL);
             p.setInvulnerable(false);
             p.teleport(loc);

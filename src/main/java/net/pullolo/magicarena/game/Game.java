@@ -65,7 +65,7 @@ public abstract class Game {
 
                 for (Player p : new ArrayList<>(allPlayers)){
                     if (p!=null && arenaPlayers.containsKey(p)){
-                        updatePlayerItemStats(p);
+                        updatePlayerItemStats(p, false);
                         float speed = (float) (arenaPlayers.get(p).getSpeed()/500);
                         p.setWalkSpeed(speed);
                         if (arenaPlayers.get(p).getHealth()<=0 || (p.getWorld().getEnvironment().equals(World.Environment.NORMAL) && p.getLocation().getY() < -96) || (!p.getWorld().getEnvironment().equals(World.Environment.NORMAL) && p.getLocation().getY() < -64)){
@@ -446,8 +446,8 @@ public abstract class Game {
         return new ArrayList<>();
     }
 
-    public void updatePlayerItemStats(Player p){
-        updatePlayerStatsItemHeld(p);
+    public void updatePlayerItemStats(Player p, boolean forceUpdate){
+        updatePlayerStatsItemHeld(p, forceUpdate);
         updatePlayerStatsArmorWorn(p);
     }
 
@@ -604,12 +604,12 @@ public abstract class Game {
         }
     }
 
-    private void updatePlayerStatsItemHeld(Player p){
+    private void updatePlayerStatsItemHeld(Player p, boolean force){
         ArenaPlayer player = arenaPlayers.get(p);
         ItemStack heldItem = p.getInventory().getItemInMainHand();
         ItemStack lastHeldItemStack = player.getLastHeldItemStack();
 
-        if (lastHeldItemStack!=null){
+        if (lastHeldItemStack!=null && !force){
             if (lastHeldItemStack.equals(heldItem)){
                 return;
             }
@@ -634,10 +634,10 @@ public abstract class Game {
             if (new Item(heldItem).getItemId().equalsIgnoreCase("considered_judgment")){ //bron navii
                 if (player.getBonusDamage().containsKey(cjKey)){
                     player.getBonusDamage().remove(cjKey);
-                    double val = player.getDamage()*1.2;
+                    double val = player.getDamage()*0.2;
                     player.getBonusDamage().put(cjKey, val);
                 } else {
-                    double val = player.getDamage()*1.2;
+                    double val = player.getDamage()*0.2;
                     player.getBonusDamage().put(cjKey, val);
                 }
             } else player.getBonusDamage().remove(cjKey);

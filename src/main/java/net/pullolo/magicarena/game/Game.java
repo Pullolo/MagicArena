@@ -9,6 +9,7 @@ import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -132,6 +133,10 @@ public abstract class Game {
                 }
                 for (Entity en : toDel){
                     allEntities.remove(en);
+                    int timeToDie = 20;
+                    if (en instanceof EnderDragon){
+                        timeToDie = 260;
+                    }
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -139,7 +144,7 @@ public abstract class Game {
                                 en.remove();
                             }
                         }
-                    }.runTaskLater(plugin, 20);
+                    }.runTaskLater(plugin, timeToDie);
                 }
                 update1t();
             }

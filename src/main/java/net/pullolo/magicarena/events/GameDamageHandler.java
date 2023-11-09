@@ -2,10 +2,7 @@ package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.items.Item;
-import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.misc.CooldownApi;
-import net.pullolo.magicarena.players.ArenaPlayer;
-import net.pullolo.magicarena.players.DungeonEntity;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
@@ -15,15 +12,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-import static net.pullolo.magicarena.MagicArena.debugLog;
-import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
@@ -34,7 +28,7 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 public class GameDamageHandler implements Listener {
 
     @EventHandler
-    public void onPlayerDamaged(EntityDamageEvent event){
+    public void onDamage(EntityDamageEvent event){
         if (event.isCancelled()){
             return;
         }
@@ -181,6 +175,9 @@ public class GameDamageHandler implements Listener {
         Entity damaged = event.getHitEntity();
         Entity damager = (Entity) event.getEntity().getShooter();
 
+        if (damaged instanceof EnderDragonPart){
+            damaged = ((EnderDragonPart) damaged).getParent();
+        }
         if (!(arenaEntities.containsKey(damaged))){
             return;
         }
@@ -219,6 +216,9 @@ public class GameDamageHandler implements Listener {
     }
 
     public void onEntityDamage(Entity damaged, EntityDamageEvent.DamageCause damageCause, double damage){
+        if (damaged instanceof EnderDragonPart){
+            damaged = ((EnderDragonPart) damaged).getParent();
+        }
         if (!arenaEntities.containsKey(damaged)){
             return;
         }
@@ -231,6 +231,9 @@ public class GameDamageHandler implements Listener {
 
     public void onEntityDamagedByEntity(EntityDamageByEntityEvent event){
         Entity damaged = event.getEntity();
+        if (damaged instanceof EnderDragonPart){
+            damaged = ((EnderDragonPart) damaged).getParent();
+        }
         if (!arenaEntities.containsKey(damaged)){
             return;
         }

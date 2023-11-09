@@ -46,9 +46,10 @@ public class ArenaGame extends Game {
         }
         for (Player p : allPlayers){
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
-            updatePlayerItemStats(p);
+            updatePlayerItemStats(p, false);
             ap.updateStats();
             ap.respawn();
+            updatePlayerItemStats(p, true);
             p.setGameMode(GameMode.SURVIVAL);
             if (test){
                 p.sendMessage(ChatColor.YELLOW + "[Warning] Experimental=True");

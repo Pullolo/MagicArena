@@ -41,8 +41,7 @@ import static net.pullolo.magicarena.game.Game.games;
 import static net.pullolo.magicarena.game.GameWorld.gameWorlds;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
-import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
-import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.ArenaPlayer.*;
 import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
 import static net.pullolo.magicarena.wish.WishSystem.lastArmorSet;
 
@@ -235,14 +234,14 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerBuild(BlockPlaceEvent event){
-        if ((isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")) && !(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+        if ((isPlayerInMatch(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_"))){
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerBreak(BlockBreakEvent event){
-        if ((isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")) && !(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+        if ((isPlayerInMatch(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_"))){
             event.setCancelled(true);
         }
     }

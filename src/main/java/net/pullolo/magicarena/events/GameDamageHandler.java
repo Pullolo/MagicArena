@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Random;
 
+import static net.pullolo.magicarena.MagicArena.debugLog;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
@@ -61,7 +62,9 @@ public class GameDamageHandler implements Listener {
         if (((Player) event.getEntity()).isBlocking()){
             return;
         }
-
+        if (arenaPlayers.get(damaged).isDead()){
+            return;
+        }
 
         if (event instanceof EntityDamageByEntityEvent){
             if (event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)){
@@ -179,6 +182,15 @@ public class GameDamageHandler implements Listener {
             damaged = ((EnderDragonPart) damaged).getParent();
         }
         if (!(arenaEntities.containsKey(damaged))){
+            return;
+        }
+
+        if (damaged instanceof Shulker){
+            if (((Shulker) damaged).getPeek()<=0){
+                return;
+            }
+        }
+        if (damaged instanceof Enderman){
             return;
         }
 

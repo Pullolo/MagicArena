@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,12 +62,13 @@ public abstract class Game {
         BukkitRunnable gameClock1t = new BukkitRunnable() {
             @Override
             public void run() {
-                for (Player p : allPlayers){
+
+                for (Player p : new ArrayList<>(allPlayers)){
                     if (p!=null && arenaPlayers.containsKey(p)){
                         updatePlayerItemStats(p);
                         float speed = (float) (arenaPlayers.get(p).getSpeed()/500);
                         p.setWalkSpeed(speed);
-                        if (arenaPlayers.get(p).getHealth()<=0 || p.getLocation().getY() < -96){
+                        if (arenaPlayers.get(p).getHealth()<=0 || (p.getWorld().getEnvironment().equals(World.Environment.NORMAL) && p.getLocation().getY() < -96) || (!p.getWorld().getEnvironment().equals(World.Environment.NORMAL) && p.getLocation().getY() < -64)){
                             //totem check
                             if (p.getInventory().getItemInMainHand().getItemMeta()!=null && p.getInventory().getItemInMainHand().getType().equals(Material.TOTEM_OF_UNDYING) && arenaPlayers.get(p).getHealth()<=0){
                                 p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
@@ -367,6 +369,7 @@ public abstract class Game {
     public void saveGameWorld(){};
 
     public void playerDied(Player p){
+        arenaPlayers.get(p).setDead(true);
         if (this instanceof GameWorld) p.sendMessage(ChatColor.RED + "You died!");
         else p.sendMessage(ChatColor.RED + "[Arena] You died!");
         if (this instanceof GameWorld){
@@ -375,6 +378,9 @@ public abstract class Game {
                     player.sendMessage(ChatColor.RED + "Player " + p.getDisplayName() + " has died!");
                 }
             }
+            arenaPlayers.get(p).respawn();
+            arenaPlayers.get(p).updateStats();
+            p.setInvulnerable(false);
             try {
                 p.teleport(p.getBedSpawnLocation());
             } catch (Exception e){
@@ -384,10 +390,8 @@ public abstract class Game {
                     getLog().warning("Player " + p.getName() + " couldn't respawn properly!");
                 }
             }
-            ArenaPlayer ap = arenaPlayers.get(p);
-            ap.respawn();
-            ap.updateStats();
-            p.setInvulnerable(false);
+            p.setFallDistance(0);
+            arenaPlayers.get(p).setDead(false);
             return;
         }
         arenaPlayers.remove(p);

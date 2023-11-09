@@ -3,11 +3,13 @@ package net.pullolo.magicarena.players;
 import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
 import net.pullolo.magicarena.game.GameWorld;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 
+import static net.pullolo.magicarena.MagicArena.debugLog;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 
 public class ArenaPlayer extends ArenaEntityBlueprint {
@@ -15,16 +17,15 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
     private final Game game;
     private ItemStack lastHeldItemStack;
     private boolean inGame = true;
+    private boolean dead = false;
 
     public static HashMap<Player, ArenaPlayer> arenaPlayers = new HashMap<>();
-    private final Player player;
 
     public ArenaPlayer(Player player, int level, Game game){
         if (arenaPlayers.containsKey(player)){
             throw new RuntimeException("Cannot convert player that is already converted!");
         } else arenaPlayers.put(player, this);
         this.game = game;
-        this.player = player;
         setLevel(level);
         updateStats();
         respawn();
@@ -111,5 +112,13 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
     public void preRemove(Player p) {
         getPlayerData(p).setHp((int) getHealth());
         getPlayerData(p).setMana((int) getMana());
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 }

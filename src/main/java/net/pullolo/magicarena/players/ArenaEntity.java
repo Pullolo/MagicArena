@@ -5,11 +5,10 @@ import net.pullolo.magicarena.game.Game;
 import net.pullolo.magicarena.game.GameWorld;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attributable;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH;
@@ -41,7 +40,17 @@ public class ArenaEntity extends ArenaEntityBlueprint{
             originalMobMaxHealth = 20;
         }
         game.addEntity(entity);
-        setLevel(level);
+        int levelOffset = 0;
+        //handle vanilla mobs levels
+        if (entity instanceof Boss || entity instanceof Warden){
+            levelOffset+=50+level*10;
+            level=0;
+        } else {
+            if (game instanceof GameWorld){
+                levelOffset+=new Random().nextInt(5);
+            }
+        }
+        setLevel(level+levelOffset);
         updateStats();
         respawn();
     }

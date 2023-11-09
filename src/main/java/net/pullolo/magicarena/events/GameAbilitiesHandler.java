@@ -44,7 +44,6 @@ public class GameAbilitiesHandler implements Listener {
         Item item = new Item(p.getInventory().getItemInMainHand());
         if (projectile instanceof Snowball && !shotCustomProjectile.contains(p)){
             if (item.getItemId().equalsIgnoreCase("bacta_nade")){
-                debugLog("eo", true);
                 event.setCancelled(true);
                 if (!CooldownApi.isOnCooldown("BNADE", p)){
                     CooldownApi.addCooldown("BNADE", p, 30);

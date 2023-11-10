@@ -218,7 +218,7 @@ public class WishSystem {
     }
 
     public static Item getRandomEpicWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(1)+1; //1-2 range
+        int r = new Random().nextInt(1)+1; //1-1 range
         switch (r){
             case 1:
                 return leapingSword;
@@ -232,10 +232,15 @@ public class WishSystem {
     }
 
     public static Item getRandomLegendaryWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(1)+1; //1-2 range
+        int r = new Random().nextInt(2)+1; //1-1 range
         switch (r){
             case 1:
                 return auroraStaff;
+            case 2:
+                switch (itemClass){
+                    case DPS:
+                        return consideredJudgment;
+                }
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
@@ -246,10 +251,29 @@ public class WishSystem {
     }
 
     public static Item getRandomMythicWeapon(ItemClass itemClass){
-        int r = new Random().nextInt(1)+1; //1-2 range
+        Random random = new Random();
+        int r = random.nextInt(2)+1; //1-2 range
         switch (r){
             case 1:
                 return kusumibaru;
+            case 2:
+                switch (itemClass){
+                    case HEALER:
+                        return bactaNade;
+                    case TANK:
+                        return quenAxe;
+                    case ARCHER:
+                        return terminator;
+                    case DPS:
+                        switch (random.nextInt(3)+1){
+                            case 1:
+                                return atomSplitKatana;
+                            case 2:
+                                return kunai;
+                            case 3:
+                                return hyperion;
+                        }
+                }
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

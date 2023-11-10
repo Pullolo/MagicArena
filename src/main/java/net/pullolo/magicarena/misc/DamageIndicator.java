@@ -13,11 +13,10 @@ import static org.bukkit.Bukkit.getServer;
 
 public class DamageIndicator {
     public DamageIndicator(Entity e, double amou, boolean isCrit){
-        Random rand = new Random();
         long amount = Math.round(amou);
         Location loc = e.getLocation();
-        loc.add(e.getLocation().clone().getDirection().multiply(1).add(e.getLocation().clone().getDirection().multiply(rand.nextFloat()*0.1)));
-        loc.add(0, 1+rand.nextFloat()*0.1, 0);
+        loc.add(e.getLocation().getDirection().multiply(1));
+        loc.add(0, 1, 0);
 
         ArmorStand armorStand = loc.getWorld().spawn(loc, ArmorStand.class, en -> {
             en.setVisible(false);
@@ -27,7 +26,7 @@ public class DamageIndicator {
         armorStand.setGravity(false);
 
         if (isCrit){
-
+            Random rand = new Random();
             ChatColor[] colors = new ChatColor[4];
             colors[0] = ChatColor.WHITE;
             colors[1] = ChatColor.YELLOW;

@@ -3,11 +3,9 @@ package net.pullolo.magicarena.misc;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ParticleApi {
@@ -33,27 +31,19 @@ public class ParticleApi {
             rotateVector(v1, (double) 360/(360*precision));
         }
     }
-    public ArrayList<Entity> drawColoredLine(Location l1, Location l2, double precision, Color color, float size, double lineOffset){
-        ArrayList<Entity> lineThrough = new ArrayList<>();
+    public void drawColoredLine(Location l1, Location l2, double precision, Color color, float size, double lineOffset){
         Location startPos = l1.clone();
         Location loc = l1.clone();
         double step = precision/0.1;
         Vector dir = l2.toVector().subtract(l1.toVector()).normalize().multiply((double) 1/step);
         loc.add(dir.clone().normalize().multiply(lineOffset));
         for (int i = 0; i<startPos.distance(l2)*step; i++){
-            for (Entity e : loc.getWorld().getNearbyEntities(loc, 1, 1, 1)){
-                if (!lineThrough.contains(e)){
-                    lineThrough.add(e);
-                }
-            }
             loc.add(dir);
             spawnColoredParticles(loc, color, size, 1, 0, 0, 0);
         }
-        return lineThrough;
     }
 
-    public ArrayList<Entity> drawMultiParticleLine(Location l1, Location l2, double precision, HashMap<Particle, Double> proportions, double lineOffset){
-        ArrayList<Entity> lineThrough = new ArrayList<>();
+    public void drawMultiParticleLine(Location l1, Location l2, double precision, HashMap<Particle, Double> proportions, double lineOffset){
         Location startPos = l1.clone();
         Location loc = l1.clone();
         double step = precision/0.1;
@@ -62,16 +52,10 @@ public class ParticleApi {
         loc.add(dir.clone().normalize().multiply(lineOffset));
         for (Particle p : proportions.keySet()){
             for (int i = 0; i<fullDist*proportions.get(p); i++){
-                for (Entity e : loc.getWorld().getNearbyEntities(loc, 1, 1, 1)){
-                    if (!lineThrough.contains(e)){
-                        lineThrough.add(e);
-                    }
-                }
                 spawnParticles(loc, p, 1, 0, 0, 0, 0.01);
                 loc.add(dir);
             }
         }
-        return lineThrough;
     }
 
     public void spawnParticles(Location loc, Particle particle, int amount, double offsetX, double offsetY, double offsetZ, double speed){

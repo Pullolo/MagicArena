@@ -45,6 +45,10 @@ public class ArenaGame extends Game {
             p.teleport(new Location(arena, config.getDouble("arenas-spawn-x"), config.getDouble("arenas-spawn-y"), -config.getDouble("arenas-spawn-z")));
         }
         for (Player p : allPlayers){
+            if (arenaPlayers.containsKey(p)){
+                arenaPlayers.get(p).getGame().getAllPlayers().remove(p);
+                arenaPlayers.remove(p);
+            }
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
             updatePlayerItemStats(p, false);
             ap.updateStats();

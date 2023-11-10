@@ -2,11 +2,16 @@ package net.pullolo.magicarena.players;
 
 import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
+import net.pullolo.magicarena.game.GameWorld;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.attribute.Attributable;
+import org.bukkit.entity.*;
 
 import java.util.HashMap;
+import java.util.Random;
+
+import static net.pullolo.magicarena.MagicArena.getLog;
+import static org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH;
 
 public class ArenaEntity extends ArenaEntityBlueprint{
 
@@ -15,10 +20,12 @@ public class ArenaEntity extends ArenaEntityBlueprint{
     private final boolean isTester;
     private boolean loaded = true;
 
+    private double originalMobMaxHealth;
+
     public static HashMap<Entity, ArenaEntity> arenaEntities = new HashMap<>();
 
     public ArenaEntity(Entity entity, int level, Game game, boolean isTester){
-        if (entity instanceof LivingEntity){
+        if (entity instanceof LivingEntity && !(game instanceof GameWorld)){
             ((LivingEntity) entity).setRemoveWhenFarAway(false);
         }
         if (arenaEntities.containsKey(entity)){
@@ -27,8 +34,23 @@ public class ArenaEntity extends ArenaEntityBlueprint{
         this.game = game;
         this.entity = entity;
         this.isTester = isTester;
+        try {
+            originalMobMaxHealth = ((Attributable) entity).getAttribute(GENERIC_MAX_HEALTH).getDefaultValue();
+        } catch (Exception e){
+            originalMobMaxHealth = 20;
+        }
         game.addEntity(entity);
-        setLevel(level);
+        int levelOffset = 0;
+        //handle vanilla mobs levels
+        if (entity instanceof Boss || entity instanceof Warden){
+            levelOffset+=50+level*10;
+            level=0;
+        } else {
+            if (game instanceof GameWorld){
+                levelOffset+=new Random().nextInt(5);
+            }
+        }
+        setLevel(level+levelOffset);
         updateStats();
         respawn();
     }
@@ -80,6 +102,14 @@ public class ArenaEntity extends ArenaEntityBlueprint{
         fixedUpdateStats();
         performChecksAndCalc();
         updateName();
+    }
+
+    public void save(){
+        try {
+            ((Attributable) entity).getAttribute(GENERIC_MAX_HEALTH).setBaseValue(originalMobMaxHealth);
+        } catch (Exception e){
+            getLog().warning("Couldn't restore health to " + entity.getType() + "!");
+        }
     }
 
     public void updateName(){

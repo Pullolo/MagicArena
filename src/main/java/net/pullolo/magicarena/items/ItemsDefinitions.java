@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemsDefinitions {
-
     //uncommon
     public static Item testItem;
     public static Item basicSword;

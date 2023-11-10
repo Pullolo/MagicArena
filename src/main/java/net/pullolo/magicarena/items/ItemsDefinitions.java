@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemsDefinitions {
-
     //uncommon
     public static Item testItem;
     public static Item basicSword;
@@ -75,10 +74,10 @@ public class ItemsDefinitions {
 
         createAuroraStaff();
         createPriscillasDagger();
-        createConsideredJudgment(); //todo ability
+        createConsideredJudgment();
 
         createKusumibaru();
-        createAtomSplitKatana(); //todo ability
+        createAtomSplitKatana();
         createHyperion(); //todo ability
         createKunai(); //todo ability
         createQuenAxe(); //todo ability
@@ -99,7 +98,7 @@ public class ItemsDefinitions {
         lore.add("");
         lore.add("&6Item Ability: Final Oath &eRIGHT CLICK");
         lore.add("&7After using an ability, you gain &c18% &7strength");
-        lore.add("&7bonus that lasts for 15 seconds.");
+        lore.add("&7bonus that lasts for &a10 &7seconds.");
         lore.add("&8Cooldown: &a20s");
         lore.add("");
         lore.add("&6Item Ability: Many Oaths of Dawn and Dusk");
@@ -178,17 +177,18 @@ public class ItemsDefinitions {
         String name = "&dKunai";
         List<String> lore = new ArrayList<>();
 
-        lore.add("&7Damage: &c+700");
+        lore.add("&7Damage: &c+200");
         lore.add("&7Critical Chance: &c+70");
         lore.add("&7Critical Damage: &c+550");
         lore.add("");
         lore.add("&6Item Ability: Throw kunai &eRIGHT CLICK");
-        lore.add("&7You throw a kunai where your character is looking.");
+        lore.add("&7You throw a kunai dealing &c400% &7of this item");
+        lore.add("&7base damage, where your character is looking.");
         lore.add("&8Cooldown: &a1.5s");
         lore.add("");
         lore.add("&d&lMYTHIC DAGGER");
         lore.add("&8item_id:kunai");
-        ItemStack item = createItem(Material.IRON_SWORD, name, lore);
+        ItemStack item = createItem(Material.GHAST_TEAR, name, lore);
         kunai = new Item(item);
         itemIds.add(kunai.getItemId());
         items.put(kunai.getItemId(), kunai);
@@ -227,6 +227,11 @@ public class ItemsDefinitions {
         lore.add("&7Critical Damage: &c+950");
         lore.add("");
         lore.add("&6Item Ability: Atom Split &eRIGHT CLICK");
+        lore.add("&7Blink forward slicing everything you blink through");
+        lore.add("&7Dealing &c12x &7this weapons damage.");
+        lore.add("&8Mana Cost: &350%");
+        lore.add("");
+        lore.add("&6Item Ability: Double Strike");
         lore.add("&7You have a &a50% &7chance to double strike the target.");
         lore.add("");
         lore.add("&d&lMYTHIC KATANA");

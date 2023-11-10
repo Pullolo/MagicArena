@@ -581,6 +581,7 @@ public class ArmorDefinitions {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -596,6 +597,7 @@ public class ArmorDefinitions {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -611,6 +613,7 @@ public class ArmorDefinitions {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -626,6 +629,7 @@ public class ArmorDefinitions {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -641,6 +645,7 @@ public class ArmorDefinitions {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }

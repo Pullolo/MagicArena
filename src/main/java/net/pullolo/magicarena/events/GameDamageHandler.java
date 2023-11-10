@@ -3,10 +3,10 @@ package net.pullolo.magicarena.events;
 import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.misc.CooldownApi;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import net.pullolo.magicarena.misc.ParticleApi;
+import net.pullolo.magicarena.players.ArenaPlayer;
+import net.pullolo.magicarena.players.DungeonEntity;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,11 +14,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Random;
 
-import static net.pullolo.magicarena.MagicArena.debugLog;
+import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
@@ -312,6 +313,38 @@ public class GameDamageHandler implements Listener {
         if (playersItem.getItemId().equalsIgnoreCase("priscillas_dagger")){
             if (isBehind(damager, damaged)){
                 return (5+itemDamage)*(1+playerDamage/100)*2;
+            }
+        }
+        if (playersItem.getItemId().equalsIgnoreCase("atom_split_katana")){
+            Random r = new Random();
+            if (r.nextBoolean()){
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        Color[] colors = new Color[3];
+                        colors[0] = Color.fromRGB(0, 145, 255);
+                        colors[1] = Color.fromRGB(230, 0, 255);
+                        colors[2] = Color.fromRGB(255, 0, 0);
+                        if (damaged==null) return;
+                        if (damaged.isDead()) return;
+                        if (!arenaEntities.containsKey(damaged)) return;
+                        if (arenaEntities.get(damaged).getHealth() <= 0) return;
+                        ((Damageable) damaged).damage(0.01);
+                        arenaEntities.get(damaged).damage(damager, damaged, (5+itemDamage)*(1+playerDamage/100)*(r.nextFloat()+1), false);
+                        double rx = 0.2+r.nextFloat()*0.3;
+                        double rz = 0.2+r.nextFloat()*0.3;
+                        Location l1;
+                        Location l2;
+                        if (r.nextBoolean()){
+                            l1 = damaged.getLocation().clone().add(rx, 2, rz);
+                            l2 = damaged.getLocation().clone().add(-rx, 0, -rz);
+                        } else {
+                            l1 = damaged.getLocation().clone().add(-rx, 2, -rz);
+                            l2 = damaged.getLocation().clone().add(rx, 0, rz);
+                        }
+                        particleApi.drawColoredLine(l1, l2, 1, colors[r.nextInt(colors.length)], 1, 0);
+                    }
+                }.runTaskLater(plugin, 1);
             }
         }
         return (5+itemDamage)*(1+playerDamage/100);

@@ -45,12 +45,12 @@ public class GameAbilitiesHandler implements Listener {
         if (projectile instanceof Snowball && !shotCustomProjectile.contains(p)){
             if (item.getItemId().equalsIgnoreCase("bacta_nade")){
                 event.setCancelled(true);
-                if (!CooldownApi.isOnCooldown("BNADE", p)){
+                if (isPlayerInGame(p) && !CooldownApi.isOnCooldown("BNADE", p)){
                     CooldownApi.addCooldown("BNADE", p, 30);
                     shotCustomProjectile.add(p);
                     p.launchProjectile(Snowball.class).setMetadata("projectile_explode_heal", new FixedMetadataValue(plugin, p));
                     shotCustomProjectile.remove(p);
-                } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("BNADE", p)/100)/10 + "s.");
+                } else if (CooldownApi.isOnCooldown("BNADE", p)) p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("BNADE", p)/100)/10 + "s.");
                 return;
             }
         }
@@ -677,6 +677,67 @@ public class GameAbilitiesHandler implements Listener {
                     return;
                 } else p.sendMessage(ChatColor.RED + "You dont have enough Mana!");
             } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("ROC", p)/100)/10 + "s.");
+        }
+        if (item.getItemId().equalsIgnoreCase("atom_split_katana")){
+            if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses((int) (arenaPlayers.get(p).getMaxMana()/2), p)){
+                arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses((int) (arenaPlayers.get(p).getMaxMana()/2), p));
+
+                double itemDamage = item.getDamage();
+                double playerDamage = arenaPlayers.get(p).getDamage();
+
+                Location l1 = p.getLocation().clone();
+                Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ(), p.getLocation().getYaw(), p.getLocation().getPitch());
+                if (p.getWorld().getBlockAt(loc.add(loc.getDirection().multiply(1))).isPassable()) {
+                    p.teleport(loc);
+                    for (int i = 0; i < 7; i++) {
+                        if (p.getWorld().getBlockAt(loc.add(loc.getDirection().multiply(1))).isPassable()) {
+                            p.teleport(p.getLocation().add(p.getLocation().getDirection().multiply(1)));
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 2f);
+                p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.2f);
+                Location l2 = p.getLocation().clone();
+                Color[] colors = new Color[3];
+                colors[0] = Color.fromRGB(0, 145, 255);
+                colors[1] = Color.fromRGB(230, 0, 255);
+                colors[2] = Color.fromRGB(255, 0, 0);
+                areaDamage(p, particleApi.drawColoredLine(l1, l2, 1, colors[new Random().nextInt(colors.length)], 1, 0),
+                        (5+itemDamage)*(1+playerDamage/100)*12, false);
+
+                event.setCancelled(true);
+
+                return;
+            } else p.sendMessage(ChatColor.RED + "You dont have enough Mana!");
+        }
+        if (item.getItemId().equalsIgnoreCase("considered_judgment")){
+            if (!CooldownApi.isOnCooldown("CJ", p)){
+                CooldownApi.addCooldown("CJ", p, 20);
+
+                if (arenaPlayers.get(p).getBonusDamage().containsKey("CJ-active")){
+                    arenaPlayers.get(p).getBonusDamage().remove("CJ-active");
+                    arenaPlayers.get(p).updateStats();
+                    arenaPlayers.get(p).getBonusDamage().put("CJ-active", arenaPlayers.get(p).getDamage()*0.18);
+                } else {
+                    arenaPlayers.get(p).getBonusDamage().put("CJ-active", arenaPlayers.get(p).getDamage()*0.18);
+                }
+                p.playSound(p, Sound.ENTITY_ZOMBIE_VILLAGER_CURE, 0.6f, 2f);
+                BukkitRunnable removeBonusDamage = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (arenaPlayers.containsKey(p)){
+                            arenaPlayers.get(p).getBonusDamage().remove("CJ-active");
+                            p.playSound(p, Sound.ENTITY_ZOMBIE_INFECT, 1f, 1f);
+                        }
+                    }
+                };
+                removeBonusDamage.runTaskLater(plugin, 200);
+
+                event.setCancelled(true);
+                return;
+            } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("CJ", p)/100)/10 + "s.");
         }
     }
 

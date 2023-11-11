@@ -2,6 +2,7 @@ package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.players.DungeonEntity;
+import net.pullolo.magicarena.quests.QuestManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,7 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 public class OnArenaEntityKilled {
 
     public OnArenaEntityKilled(Player killer, Entity e){
+        QuestManager.onMobKill(killer);
         if (arenaEntities.get(e) instanceof DungeonEntity){
             Dungeon d = (Dungeon) arenaEntities.get(e).getGame();
             if (((DungeonEntity) arenaEntities.get(e)).hasWitherKey()){
@@ -40,6 +42,7 @@ public class OnArenaEntityKilled {
             if (((DungeonEntity) arenaEntities.get(e)).hasBossKey()){
                 d.findBossKey(p);
             }
+            QuestManager.onMobKill(p);
             return;
         }
     }

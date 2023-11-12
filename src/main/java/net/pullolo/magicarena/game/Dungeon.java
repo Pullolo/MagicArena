@@ -7,6 +7,7 @@ import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.DungeonEntity;
+import net.pullolo.magicarena.quests.QuestManager;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -243,6 +244,7 @@ public class Dungeon extends Game{
     }
 
     public void findSecret(BlockState b, Player p){
+        QuestManager.onCollectSecrets(p);
         foundSecrets.add(b);
         broadcast(ChatColor.DARK_RED + "Player " + ChatColor.RED + p.getDisplayName() + ChatColor.DARK_RED + " has found a Secret!" + ChatColor.GOLD + " +100 Score");
         score+=100;
@@ -256,6 +258,9 @@ public class Dungeon extends Game{
     public void finishDungeon(ArrayList<Player> allPlayers, World world, boolean won) {
         if (won){
             broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.GREEN + "You have Won!" + ChatColor.GOLD + " " + score + " Score");
+            for (Player p : allPlayers){
+                QuestManager.onFinishDungeons(p);
+            }
         } else{
             broadcast(ChatColor.DARK_RED + "[Dungeon] " + ChatColor.RED + "You have Lost!" + ChatColor.GOLD + " " + score + " Score");
         }

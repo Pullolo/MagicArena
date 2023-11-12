@@ -10,6 +10,7 @@ import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.QueueManager;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemClass;
+import net.pullolo.magicarena.quests.QuestManager;
 import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
 import org.bukkit.ChatColor;
@@ -243,7 +244,7 @@ public class GuiManager {
     public InventoryGui createMainMenuGui(Player player){
         String[] guiSetup = {
                 "         ",
-                "r g p w i",
+                "r g p w q",
                 "         "
         };
         InventoryGui gui = new InventoryGui(this.plugin, player, "Profile", guiSetup);
@@ -274,12 +275,42 @@ public class GuiManager {
                     click.getGui().close();
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&6⚡ Ranks")));
-        gui.addElement(new StaticGuiElement('i', new ItemStack (Material.CRAFTING_TABLE),
+        gui.addElement(new StaticGuiElement('q', new ItemStack (Material.BIRCH_HANGING_SIGN),
                 click -> {
                     click.getGui().close();
+                    createQuestsMenu((Player) click.getWhoClicked()).show(click.getWhoClicked());
                     return true;
-                }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Your Items")));
+                }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Quests")));
 
+        return gui;
+    }
+    public InventoryGui createQuestsMenu(Player player){
+        String[] guiSetup = {
+                "    h    ",
+                " 1 2 3 4 ",
+                "         "
+        };
+        int slots = 4;
+        for (int i = 4; i>QuestManager.getPlayerQuests(player).size(); i--){
+            guiSetup[1]=guiSetup[1].replaceAll(String.valueOf(i), " ");
+            slots--;
+        }
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Profile", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
+        gui.addElement(new DynamicGuiElement('h', (viewer)->{
+            return new StaticGuiElement('h', getPlayerSkull(player),
+                    ChatColor.translateAlternateColorCodes('&', "&r&7✎ Quests for &a" + getPlayerData(player).getName()));
+        }));
+        for (int i = 0; i<slots; i++){
+            final int a = i;
+            gui.addElement(new DynamicGuiElement((char)((a+1)+'0'), (viewer)->{
+                return new StaticGuiElement((char)((a+1)+'0'), QuestManager.getQuestItemstack(QuestManager.getPlayerQuests(player).get(a).getQuestType()),
+                        click -> {
+                            return true;
+                        },
+                        ChatColor.translateAlternateColorCodes('&', "&r&7" + QuestManager.getPlayerQuests(player).get(a).getStyledString()));
+            }));
+        }
         return gui;
     }
     public InventoryGui createProfileMenu(Player player){

@@ -397,6 +397,7 @@ public class Dungeon extends Game{
                 arenaPlayers.get(p).respawn();
                 continue;
             }
+            QuestManager.onPlayerRevive(reviver);
             i++;
             score-=100;
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);

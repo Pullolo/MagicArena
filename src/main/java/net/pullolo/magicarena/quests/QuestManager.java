@@ -79,6 +79,22 @@ public class QuestManager {
         }
     }
 
+    public static void onWish(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.WISH)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
+    public static void onPlayerRevive(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.REVIVE_PLAYERS)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
     public static Quest getNewRandomQuest(Player p){
         Random r = new Random();
         QuestType qt = QuestType.values()[r.nextInt(QuestType.values().length)];
@@ -91,6 +107,10 @@ public class QuestManager {
                 return new Quest(p, qt, 2+r.nextInt(3), 0);
             case OPEN_WITHER_DOORS:
                 return new Quest(p, qt, 8+r.nextInt(8), 0);
+            case WISH:
+                return new Quest(p, qt, 8+r.nextInt(5), 0);
+            case REVIVE_PLAYERS:
+                return new Quest(p, qt, 1+r.nextInt(2), 0);
             default:
                 return null;
         }
@@ -112,6 +132,10 @@ public class QuestManager {
                 return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjM3YjZmNTAxNTRkMTkyZDhjM2E3MmQxM2ZhNDRjOTUzYjQxMTM4NThjOWQyZWRmMjE4ZjUxNzk5OGQ3MzM2YyJ9fX0=");
             case OPEN_WITHER_DOORS:
                 return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTY3YjQ3ZmJkMzdjNmQ5ZDhkMjJkOTczZTcyOTBlODA4NTJlOTI2NmEwNzZmYjdhYjIxNWFmZTkxYjgxZWQ2YyJ9fX0=");
+            case WISH:
+                return new ItemStack(Material.NETHER_STAR);
+            case REVIVE_PLAYERS:
+                return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGI2OTc1YWY3MDcyNGQ2YTQ0ZmQ1OTQ2ZTYwYjI3MTc3MzdkZmRiNTQ1YjRkYWIxODkzMzUxYTljOWRkMTgzYyJ9fX0=");
             default:
                 return new ItemStack(Material.BARRIER);
         }

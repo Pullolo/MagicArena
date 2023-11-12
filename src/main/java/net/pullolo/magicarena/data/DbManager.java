@@ -1,9 +1,13 @@
 package net.pullolo.magicarena.data;
 
+import net.pullolo.magicarena.quests.Quest;
+import net.pullolo.magicarena.quests.QuestType;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 
 import static net.pullolo.magicarena.MagicArena.getLog;
 import static net.pullolo.magicarena.MagicArena.plugin;
@@ -31,6 +35,8 @@ public class DbManager {
             Statement stmt = conn.createStatement();
             String sql = "create table if not exists plugin_data (name TEXT PRIMARY KEY NOT NULL, level INT NOT NULL, hp INT NOT NULL, mana INT NOT NULL, xp TEXT NOT NULL," +
                     " star_essence INT NOT NULL, wishes INT NOT NULL, dungeon_essence INT NOT NULL, updated BOOLEAN NOT NULL);";
+            stmt.execute(sql);
+            sql = "create table if not exists plugin_quests (name TEXT NOT NULL, goal INT NOT NULL, progress INT NOT NULL, type TEXT NOT NULL);";
             stmt.execute(sql);
             stmt.close();
             conn.close();
@@ -143,6 +149,62 @@ public class DbManager {
             conn.close();
             conn=null;
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Quest> getQuests(Player p){
+        ArrayList<Quest> quests = new ArrayList<>();
+        try{
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
+            PreparedStatement stmt = conn.prepareStatement("select * from plugin_quests where name=?;");
+            stmt.setString(1, p.getName());
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                quests.add(new Quest(p, QuestType.valueOf(rs.getString("type")), rs.getInt("goal"), rs.getInt("progress")));
+            }
+            stmt.close();
+            conn.close();
+            removeQueriedQuests(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return quests;
+    }
+
+    private void removeQueriedQuests(Player p){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
+            String del = "delete from plugin_quests where name=?";
+            PreparedStatement stmt = conn.prepareStatement(del);
+            stmt.setString(1, p.getName());
+            stmt.execute();
+
+            stmt.close();
+            conn.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void saveQuest(Quest quest) {
+        try{
+            Class.forName("org.sqlite.JDBC");
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
+            String insert = "insert into plugin_quests (name, goal, progress, type) values" +
+                    " (?, " + quest.getGoal() + ", " + quest.getProgress() + ", ?);";
+
+            PreparedStatement stmt = conn.prepareStatement(insert);
+            stmt.setString(1, quest.getPlayer().getName());
+            stmt.setString(2, quest.getQuestType().toString());
+            stmt.execute();
+
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

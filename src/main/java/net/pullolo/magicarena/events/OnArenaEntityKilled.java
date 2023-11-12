@@ -2,6 +2,7 @@ package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.players.DungeonEntity;
+import net.pullolo.magicarena.quests.QuestManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 public class OnArenaEntityKilled {
 
     public OnArenaEntityKilled(Player killer, Entity e){
+        QuestManager.onMobKill(killer);
         getPlayerData(killer).setXp(getPlayerData(killer).getXp()+(double) arenaEntities.get(e).getLevel()/2);
         if (arenaEntities.get(e) instanceof DungeonEntity && arenaEntities.get(e).getGame() instanceof Dungeon){
             Dungeon d = (Dungeon) arenaEntities.get(e).getGame();
@@ -43,6 +45,7 @@ public class OnArenaEntityKilled {
             if (((DungeonEntity) arenaEntities.get(e)).hasBossKey()){
                 d.findBossKey(p);
             }
+            QuestManager.onMobKill(p);
             return;
         }
     }

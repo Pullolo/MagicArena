@@ -10,6 +10,7 @@ import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.players.ArenaEntity;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.DungeonEntity;
+import net.pullolo.magicarena.quests.QuestManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -43,6 +44,7 @@ import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.*;
 import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
+import static net.pullolo.magicarena.quests.QuestManager.*;
 import static net.pullolo.magicarena.wish.WishSystem.lastArmorSet;
 
 public class GameEventsHandler implements Listener {
@@ -167,6 +169,7 @@ public class GameEventsHandler implements Listener {
 
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
         lastArmorSet.remove(event.getPlayer());
+        savePlayerQuestsOnLeave(event.getPlayer());
         PlayerData.savePlayerDataToDb(event.getPlayer(), dbManager);
         PlayerData.removePlayerData(event.getPlayer());
     }
@@ -206,6 +209,7 @@ public class GameEventsHandler implements Listener {
         }
         event.getPlayer().setInvulnerable(false);
         setPlayerDataFromDb(event.getPlayer(), dbManager);
+        getPlayerQuestsOnJoin(event.getPlayer());
         if (!getPlayerData(event.getPlayer()).isUpdated()){
             updatePlayer(event.getPlayer());
         }

@@ -17,6 +17,7 @@ import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.misc.ParticleApi;
 import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.PartyManager;
+import net.pullolo.magicarena.quests.QuestManager;
 import net.pullolo.magicarena.wish.DungeonChestSystem;
 import net.pullolo.magicarena.wish.WishSystem;
 import net.pullolo.magicarena.worlds.WorldManager;
@@ -104,6 +105,7 @@ public final class MagicArena extends JavaPlugin {
         registerCommand(new Open(), "open");
         registerCommand(new UpdateGame(), "updategame");
         registerCommand(new Heal(), "heal");
+        registerCommand(new Quests(), "quests");
         getServer().getPluginManager().registerEvents(new MainMenuItemManager(this, guiManager), this);
         getServer().getPluginManager().registerEvents(new GameEventsHandler(), this);
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);
@@ -241,6 +243,7 @@ public final class MagicArena extends JavaPlugin {
     private void setPlayerData() {
         for (Player p : getServer().getOnlinePlayers()){
             PlayerData.setPlayerDataFromDb(p, dbManager);
+            QuestManager.getPlayerQuestsOnJoin(p);
             if (!getPlayerData(p).isUpdated()){
                 updatePlayer(p);
             }
@@ -249,6 +252,7 @@ public final class MagicArena extends JavaPlugin {
 
     private void savePlayers(){
         for (Player p : getServer().getOnlinePlayers()){
+            QuestManager.savePlayerQuestsOnLeave(p);
             PlayerData.savePlayerDataToDb(p, dbManager);
             PlayerData.removePlayerData(p);
         }

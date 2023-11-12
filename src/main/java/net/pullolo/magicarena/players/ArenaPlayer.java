@@ -2,16 +2,22 @@ package net.pullolo.magicarena.players;
 
 import net.pullolo.magicarena.game.ArenaGame;
 import net.pullolo.magicarena.game.Game;
+import net.pullolo.magicarena.game.GameWorld;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+
+import static net.pullolo.magicarena.MagicArena.debugLog;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 
 public class ArenaPlayer extends ArenaEntityBlueprint {
 
     private final Game game;
     private ItemStack lastHeldItemStack;
     private boolean inGame = true;
+    private boolean dead = false;
 
     public static HashMap<Player, ArenaPlayer> arenaPlayers = new HashMap<>();
 
@@ -88,11 +94,31 @@ public class ArenaPlayer extends ArenaEntityBlueprint {
         return false;
     }
 
+    public static boolean isPlayerInMatch(Player p){
+        if (arenaPlayers.containsKey(p)){
+            return arenaPlayers.get(p).isInGame() && !(arenaPlayers.get(p).getGame() instanceof GameWorld);
+        }
+        return false;
+    }
+
     public ItemStack getLastHeldItemStack() {
         return lastHeldItemStack;
     }
 
     public void setLastHeldItemStack(ItemStack lastHeldItemStack) {
         this.lastHeldItemStack = lastHeldItemStack;
+    }
+
+    public void preRemove(Player p) {
+        getPlayerData(p).setHp((int) getHealth());
+        getPlayerData(p).setMana((int) getMana());
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 }

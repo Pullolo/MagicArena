@@ -295,7 +295,7 @@ public class GuiManager {
             guiSetup[1]=guiSetup[1].replaceAll(String.valueOf(i), " ");
             slots--;
         }
-        InventoryGui gui = new InventoryGui(this.plugin, player, "Profile", guiSetup);
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Quests", guiSetup);
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         gui.addElement(new DynamicGuiElement('h', (viewer)->{
             return new StaticGuiElement('h', getPlayerSkull(player),

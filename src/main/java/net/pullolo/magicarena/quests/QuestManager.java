@@ -37,6 +37,7 @@ public class QuestManager {
 
     public static void finishQuest(Player p, Quest q){
         getPlayerQuests(p).remove(q);
+        addPlayerQuest(p, getNewRandomQuest(p));
     }
 
     public static void addPlayerQuest(Player p, Quest quest){

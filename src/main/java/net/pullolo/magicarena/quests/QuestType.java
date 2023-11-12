@@ -3,5 +3,6 @@ package net.pullolo.magicarena.quests;
 public enum QuestType {
     KILL_MOBS,
     COLLECT_SECRETS,
-    FINISH_DUNGEONS
+    FINISH_DUNGEONS,
+    OPEN_WITHER_DOORS
 }

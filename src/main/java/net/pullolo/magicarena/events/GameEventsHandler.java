@@ -233,6 +233,7 @@ public class GameEventsHandler implements Listener {
             }
         } else if (event.getClickedBlock().getType().equals(Material.COAL_BLOCK)) {
             if (d.getWitherKeys()>0){
+                QuestManager.onOpenWitherDoors(event.getPlayer());
                 d.openWitherDoor(event.getClickedBlock().getLocation());
             }
         }

@@ -78,6 +78,10 @@ public class Quest {
                 this.rewardXp=400*goal;
                 this.rewardStarEssence =40*goal;
                 return;
+            case OPEN_WITHER_DOORS:
+                this.rewardXp=100*goal;
+                this.rewardStarEssence=40*goal;
+                return;
             default:
                 this.rewardXp = 0;
                 this.rewardStarEssence = 0;
@@ -101,6 +105,9 @@ public class Quest {
             case FINISH_DUNGEONS:
                 return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+
                         " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&4" + getProgress() + "&7/&4" + getGoal() + " &7finished.";
+            case OPEN_WITHER_DOORS:
+                return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+ questType.toString().split("_")[2].toLowerCase()+
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&4" + getProgress() + "&7/&4" + getGoal() + " &7opened.";
             default:
                 return toString();
         }

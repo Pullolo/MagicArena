@@ -142,6 +142,10 @@ public class Quest {
     }
 
     public String getStyledType() {
-        return uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " " + questType.toString().split("_")[1].toLowerCase();
+        String s = uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase());
+        for (int i = 1; i<questType.toString().split("_").length; i++){
+            s+= " " + questType.toString().split("_")[i].toLowerCase();
+        }
+        return s;
     }
 }

@@ -2,11 +2,14 @@ package net.pullolo.magicarena.events;
 
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.misc.CooldownApi;
+import net.pullolo.magicarena.misc.ParticleApi;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -33,6 +36,42 @@ import static org.bukkit.Bukkit.getServer;
 public class GameAbilitiesHandler implements Listener {
 
     private final ArrayList<Player> shotCustomProjectile = new ArrayList<>();
+
+    @EventHandler
+    public void onProjectileLand(ProjectileHitEvent event){
+        Projectile projectile = event.getEntity();
+        if (projectile.hasMetadata("projectile_explode_heal")){
+            projectile.getWorld().playSound(projectile.getLocation(), Sound.ENTITY_SPLASH_POTION_BREAK, 1f, 1.2f);
+            particleApi.spawnParticles(projectile.getLocation(), Particle.HEART, 50, 2, 0, 2, 2);
+            particleApi.spawnParticles(projectile.getLocation(), Particle.VILLAGER_HAPPY, 50, 2, 0.5, 2, 2);
+            particleApi.spawnColoredParticles(projectile.getLocation(), Color.RED, 1, 50, 2, 0, 2);
+            for (Entity e : projectile.getNearbyEntities(2, 2, 2)){
+                if (!(e instanceof Player)){
+                    continue;
+                }
+                Player p = (Player) e;
+                if (!arenaPlayers.containsKey(p)){
+                    continue;
+                }
+                arenaPlayers.get(p).setHealth(arenaPlayers.get(p).getHealth()+arenaPlayers.get(p).getMaxHealth()*0.4);
+                p.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, p.getLocation().add(0, 1, 0), 20, 0.2, 0.6, 0.2, 1);
+                p.playSound(p, Sound.ENTITY_PLAYER_LEVELUP, 1, (1 + ((float) new Random().nextInt(2))/10));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBow(EntityShootBowEvent event){
+        if (!(event.getEntity() instanceof Player)){
+            return;
+        }
+        if (event.getBow()==null) return;
+        if (event.getBow().getItemMeta()==null) return;
+        Item item = new Item(event.getBow());
+        if (item.getItemId().equalsIgnoreCase("terminator")){
+            event.setCancelled(true);
+        }
+    }
 
     @EventHandler
     public void onProjectile(ProjectileLaunchEvent event){
@@ -143,9 +182,6 @@ public class GameAbilitiesHandler implements Listener {
         if (!arenaPlayers.get(event.getPlayer()).getGame().hasStarted()){
             return;
         }
-        if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))){
-            return;
-        }
         if (event.getItem()==null || event.getItem().getItemMeta()==null){
             return;
         }
@@ -155,6 +191,37 @@ public class GameAbilitiesHandler implements Listener {
             return;
         }
 
+        if (event.getAction().equals(Action.LEFT_CLICK_AIR) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)){
+            if (item.getItemId().equalsIgnoreCase("terminator")){
+                if (!CooldownApi.isOnCooldown("SHORTBOW", p)){
+                    CooldownApi.addCooldown("SHORTBOW", p, 0.2);
+                    double force = 2;
+                    if (p.getInventory().contains(Material.ARROW, 3) || p.getGameMode().equals(GameMode.CREATIVE)){
+                        if (!p.getGameMode().equals(GameMode.CREATIVE)){
+                            p.getInventory().removeItem(new ItemStack(Material.ARROW, 3));
+                        }
+                        Arrow a1 = p.launchProjectile(Arrow.class, rotateVector(p.getLocation().getDirection().multiply(force), 0.2));
+                        Arrow a2 = p.launchProjectile(Arrow.class, rotateVector(p.getLocation().getDirection().multiply(force), -0.2));
+                        Arrow a3 = p.launchProjectile(Arrow.class, rotateVector(p.getLocation().getDirection().multiply(force), 0));
+                        a1.setMetadata(item.getItemId(), new FixedMetadataValue(plugin, p));
+                        a1.setBounce(false);
+                        a2.setMetadata(item.getItemId(), new FixedMetadataValue(plugin, p));
+                        a3.setMetadata(item.getItemId(), new FixedMetadataValue(plugin, p));
+                        event.setCancelled(true);
+                    }
+                }
+            }
+            return;
+        }
+
+        if (!(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.RIGHT_CLICK_AIR))){
+            return;
+        }
+
+        if (item.getItemId().equalsIgnoreCase("terminator")){
+            event.setCancelled(true);
+            return;
+        }
         if (item.getItemId().equalsIgnoreCase("unstable_tome")){
             if (!CooldownApi.isOnCooldown("UT", p)){
                 if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(10, p)){
@@ -738,6 +805,35 @@ public class GameAbilitiesHandler implements Listener {
                 event.setCancelled(true);
                 return;
             } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("CJ", p)/100)/10 + "s.");
+        }
+        if (item.getItemId().equalsIgnoreCase("hyperion")){
+            if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(300, p)){
+                arenaPlayers.get(p).setMana(arenaPlayers.get(p).getMana()-calcBaseManaWithBonuses(300, p));
+
+                double itemDamage = item.getDamage();
+                double playerDamage = arenaPlayers.get(p).getDamage();
+                double playerAp = arenaPlayers.get(p).getMagicDamage();
+                double playerIntelligence = arenaPlayers.get(p).getMaxMana();
+
+                Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() + 1, p.getLocation().getZ(), p.getLocation().getYaw(), p.getLocation().getPitch());
+                if (p.getWorld().getBlockAt(loc.add(loc.getDirection().multiply(1))).isPassable()) {
+                    p.teleport(loc);
+                    for (int i = 0; i < 10; i++) {
+                        if (p.getWorld().getBlockAt(loc.add(loc.getDirection().multiply(1))).isPassable()) {
+                            p.teleport(p.getLocation().add(p.getLocation().getDirection().multiply(1)));
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                else p.sendMessage(ChatColor.RED + "There are blocks in the way!");
+                p.playSound(p.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1f, 1f);
+                p.playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 1f, 1f);
+                p.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, (p.getLocation().add(p.getLocation().getDirection().multiply(-3))), 10, 2, 0.1, 2, 0.3);
+                p.getWorld().spawnParticle(Particle.FLAME, (p.getLocation().add(p.getLocation().getDirection().multiply(-3))), 10, 0.6, 0.6, 0.6, 0.2);
+                areaDamage(p, p.getNearbyEntities(6, 5, 6),
+                        ((5+itemDamage)*(1+playerDamage/100)*0.02)*(playerAp+playerIntelligence*0.2), true);
+            }
         }
     }
 

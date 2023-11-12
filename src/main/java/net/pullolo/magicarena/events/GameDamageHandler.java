@@ -129,6 +129,7 @@ public class GameDamageHandler implements Listener {
         }
         if (!(event.getHitEntity() instanceof Player)){
             onEntityProjectileDamage(event);
+            tryRemoveProjectile(event.getEntity());
             return;
         }
         Player damaged = (Player) event.getHitEntity();
@@ -143,6 +144,7 @@ public class GameDamageHandler implements Listener {
                 }
             }
             onProjectileDamagePlayer(event);
+            tryRemoveProjectile(event.getEntity());
             return;
         }
         Player damager = (Player) event.getEntity().getShooter();
@@ -170,6 +172,13 @@ public class GameDamageHandler implements Listener {
         }
 
         arenaPlayers.get(damaged).damage(damager, damaged, calculateProjectileDamage(damager, damaged), false);
+        tryRemoveProjectile(event.getEntity());
+    }
+
+    private void tryRemoveProjectile(Projectile projectile) {
+        if (projectile instanceof Arrow && projectile.hasMetadata("terminator")){
+            projectile.remove();
+        }
     }
 
     public void onEntityProjectileDamage(ProjectileHitEvent event){
@@ -347,6 +356,7 @@ public class GameDamageHandler implements Listener {
                 }.runTaskLater(plugin, 1);
             }
         }
+        if (playersItem.getItemId().equalsIgnoreCase("terminator")) return (5+1)*(1+playerDamage/100); //prevent term from dealing melee damage
         return (5+itemDamage)*(1+playerDamage/100);
     }
 

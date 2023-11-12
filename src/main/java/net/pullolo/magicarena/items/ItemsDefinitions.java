@@ -78,11 +78,11 @@ public class ItemsDefinitions {
 
         createKusumibaru();
         createAtomSplitKatana();
-        createHyperion(); //todo ability
+        createHyperion();
         createKunai(); //todo ability
         createQuenAxe(); //todo ability
-        createTerminator(); //todo ability
-        createBactaNade(); //todo ability
+        createTerminator();
+        createBactaNade();
         createScorpionChainDart();
 
         createBladeOfTheUniverse();
@@ -200,13 +200,13 @@ public class ItemsDefinitions {
 
         lore.add("&7Damage: &c+395");
         lore.add("&7Intelligence: &b+500");
-        lore.add("&7Ability Damage: &3+2390");
+        lore.add("&7Ability Damage: &3+680");
         lore.add("&7Critical Chance: &c+50");
         lore.add("&7Critical Damage: &c+300");
         lore.add("");
         lore.add("&6Item Ability: Wither Impact &eRIGHT CLICK");
-        lore.add("&7Teleport &a10 blocks &7forward and ");
-        lore.add("&7deal &3(base/10)*(100% + 200%)&7 your ability");
+        lore.add("&7Teleport &a10 blocks &7forward and deal");
+        lore.add("&32% &7base damage times &3(100% + 20%)&7 your ability");
         lore.add("&7damage and intelligence to nearby enemies.");
         lore.add("&8Mana Cost: &3300");
         lore.add("");

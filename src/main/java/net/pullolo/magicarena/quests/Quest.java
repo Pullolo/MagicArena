@@ -1,10 +1,12 @@
 package net.pullolo.magicarena.quests;
 
+import net.pullolo.magicarena.data.XpManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import static net.pullolo.magicarena.MagicArena.dbManager;
+import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 
 public class Quest {
     private final QuestType questType;
@@ -42,6 +44,8 @@ public class Quest {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 2);
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&4Magic&6Arena&7] Quest completed! &a+" + getRewardXp() + " ❊"));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&4Magic&6Arena&7] Added star essence - &a" + getRewardStarEssence() + " ✷"));
+        XpManager.addXp(player, getRewardXp());
+        getPlayerData(player).setStarEssence(getPlayerData(player).getStarEssence()+getRewardStarEssence());
     }
 
     public QuestType getQuestType() {
@@ -65,6 +69,14 @@ public class Quest {
             case KILL_MOBS:
                 this.rewardXp=10*goal;
                 this.rewardStarEssence = (int) (goal*1.2);
+                return;
+            case COLLECT_SECRETS:
+                this.rewardXp=100*goal;
+                this.rewardStarEssence =10*goal;
+                return;
+            case FINISH_DUNGEONS:
+                this.rewardXp=400*goal;
+                this.rewardStarEssence =40*goal;
                 return;
             default:
                 this.rewardXp = 0;
@@ -106,5 +118,9 @@ public class Quest {
 
     public int getRewardStarEssence() {
         return rewardStarEssence;
+    }
+
+    public String getStyledType() {
+        return uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " " + questType.toString().split("_")[1].toLowerCase();
     }
 }

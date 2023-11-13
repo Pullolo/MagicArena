@@ -3,8 +3,7 @@ package net.pullolo.magicarena.events;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.players.DungeonEntity;
 import net.pullolo.magicarena.quests.QuestManager;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -18,6 +17,9 @@ public class OnArenaEntityKilled {
 
     public OnArenaEntityKilled(Player killer, Entity e){
         QuestManager.onMobKill(killer);
+        if (e instanceof Spider) QuestManager.onSpiderKill(killer);
+        if (e instanceof Witch) QuestManager.onWitchKill(killer);
+        if (e instanceof Evoker) QuestManager.onEvokerKilled(killer);
         if (arenaEntities.get(e) instanceof DungeonEntity){
             Dungeon d = (Dungeon) arenaEntities.get(e).getGame();
             if (((DungeonEntity) arenaEntities.get(e)).hasWitherKey()){

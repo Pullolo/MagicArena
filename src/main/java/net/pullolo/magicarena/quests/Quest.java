@@ -68,7 +68,7 @@ public class Quest {
         switch (questType){
             case KILL_MOBS:
                 this.rewardXp=10*goal;
-                this.rewardStarEssence = (int) (goal*1.2);
+                this.rewardStarEssence = (int) (goal*1.4);
                 return;
             case COLLECT_SECRETS:
                 this.rewardXp=100*goal;
@@ -89,6 +89,26 @@ public class Quest {
             case REVIVE_PLAYERS:
                 this.rewardXp=600*goal;
                 this.rewardStarEssence=110*goal;
+                return;
+            case USE_TELEPORT_ABILITY:
+                this.rewardXp=90*goal;
+                this.rewardStarEssence= (int) 6.2*goal;
+                return;
+            case WIN_SOLO_DUELS:
+                this.rewardXp=1000*goal;
+                this.rewardStarEssence=90*goal;
+                return;
+            case KILL_SPIDERS:
+                this.rewardXp=20*goal;
+                this.rewardStarEssence = (int) (goal*5.4);
+                return;
+            case KILL_WITCHES:
+                this.rewardXp=100*goal;
+                this.rewardStarEssence = goal*10;
+                return;
+            case KILL_EVOKERS:
+                this.rewardXp=200*goal;
+                this.rewardStarEssence = goal*65;
                 return;
             default:
                 this.rewardXp = 0;
@@ -118,10 +138,25 @@ public class Quest {
                         " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&4" + getProgress() + "&7/&4" + getGoal() + " &7opened.";
             case WISH:
                 return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &ftimes" +
-                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&4" + getProgress() + "&7/&4" + getGoal() + " &7wished.";
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&3" + getProgress() + "&7/&3" + getGoal() + " &7wished.";
             case REVIVE_PLAYERS:
                 return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+
-                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&4" + getProgress() + "&7/&4" + getGoal() + " &7revived.";
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&d" + getProgress() + "&7/&d" + getGoal() + " &7revived.";
+            case USE_TELEPORT_ABILITY:
+                return "&f" + getStyledType() + " &a" + goal + " &ftimes" +
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&3" + getProgress() + "&7/&3" + getGoal() + " &7times.";
+            case WIN_SOLO_DUELS:
+                return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+ " " + questType.toString().split("_")[2].toLowerCase()+
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&a" + getProgress() + "&7/&a" + getGoal() + " &7won.";
+            case KILL_EVOKERS:
+                return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&c" + getProgress() + "&7/&c" + getGoal() + " &7evokers killed.";
+            case KILL_SPIDERS:
+                return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&c" + getProgress() + "&7/&c" + getGoal() + " &7spiders killed.";
+            case KILL_WITCHES:
+                return "&f" + uppercaseFirstLetter(questType.toString().split("_")[0].toLowerCase()) + " &a" + goal + " &f" + questType.toString().split("_")[1].toLowerCase()+
+                        " - &a" + Math.round(getPercentageProgress()*1000)/10 + "% &fdone.\n&r&c" + getProgress() + "&7/&c" + getGoal() + " &7witches killed.";
             default:
                 return toString();
         }

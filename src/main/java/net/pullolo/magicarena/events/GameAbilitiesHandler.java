@@ -3,6 +3,7 @@ package net.pullolo.magicarena.events;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.misc.ParticleApi;
+import net.pullolo.magicarena.quests.QuestManager;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -165,6 +166,7 @@ public class GameAbilitiesHandler implements Listener {
                             }
                         }
                         else p.sendMessage(ChatColor.RED + "There are blocks in the way!");
+                        QuestManager.onTeleportAbility(p);
                         p.playSound(p, Sound.ENTITY_WITHER_SHOOT, 0.5f, 1.1f+(((float) new Random().nextInt(6))/10));
                         p.getWorld().spawnParticle(Particle.SMOKE_LARGE, p.getLocation(), 10, 0, 0, 0, 0.1);
                         return;
@@ -479,6 +481,7 @@ public class GameAbilitiesHandler implements Listener {
                     }
                 }
                 else p.sendMessage(ChatColor.RED + "There are blocks in the way!");
+                QuestManager.onTeleportAbility(p);
                 p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f);
 
                 event.setCancelled(true);
@@ -764,6 +767,7 @@ public class GameAbilitiesHandler implements Listener {
                         }
                     }
                 }
+                QuestManager.onTeleportAbility(p);
                 p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 1f, 2f);
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1f, 1.2f);
                 Location l2 = p.getLocation().clone();
@@ -827,6 +831,7 @@ public class GameAbilitiesHandler implements Listener {
                     }
                 }
                 else p.sendMessage(ChatColor.RED + "There are blocks in the way!");
+                QuestManager.onTeleportAbility(p);
                 p.playSound(p.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1f, 1f);
                 p.playSound(p.getLocation(), Sound.ENTITY_WITHER_AMBIENT, 1f, 1f);
                 p.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, (p.getLocation().add(p.getLocation().getDirection().multiply(-3))), 10, 2, 0.1, 2, 0.3);

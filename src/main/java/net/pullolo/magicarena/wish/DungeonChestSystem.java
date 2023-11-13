@@ -43,7 +43,7 @@ public class DungeonChestSystem {
                 if (level>=100){
                     wepVal=100;
                 } else if (level >= 50) {
-                    wepVal=12;
+                    wepVal=24;
                 } else wepVal=2;
                 mul+=1;
                 break;
@@ -52,7 +52,7 @@ public class DungeonChestSystem {
                     wepVal=100;
                     skipUncommons=true;
                 } else if (level >= 50) {
-                    wepVal=50;
+                    wepVal=90;
                 } else wepVal=12;
                 mul+=3;
                 add=(int) Math.floor((double) score/300);
@@ -65,7 +65,7 @@ public class DungeonChestSystem {
             int rarityChance = rand.nextInt(100)+1;
             WishSystem.WishRarity wishRarity;
             if (rarityChance<=80 && skipUncommons){
-                if (rand.nextInt(10)==0){
+                if (rand.nextInt(4)==0){
                     rarityChance = 80 + rand.nextInt(20)+1;
                 } else rarityChance=81;
             }
@@ -129,6 +129,7 @@ public class DungeonChestSystem {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -143,6 +144,7 @@ public class DungeonChestSystem {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -157,6 +159,7 @@ public class DungeonChestSystem {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -171,6 +174,7 @@ public class DungeonChestSystem {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }
@@ -185,6 +189,7 @@ public class DungeonChestSystem {
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();
                 im.setDisplayName("NULL");
+                im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
                 return new Item(nullItem);
         }

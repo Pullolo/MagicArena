@@ -21,6 +21,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -839,6 +840,94 @@ public class GameAbilitiesHandler implements Listener {
                 areaDamage(p, p.getNearbyEntities(6, 5, 6),
                         ((5+itemDamage)*(1+playerDamage/100)*0.02)*(playerAp+playerIntelligence*0.2), true);
             }
+        }
+        if (item.getItemId().equalsIgnoreCase("kunai")){
+            if (!CooldownApi.isOnCooldown("KUNAI", p)){
+                CooldownApi.addCooldown("KUNAI", p, 1.5);
+
+                double itemDamage = item.getDamage();
+                double playerDamage = arenaPlayers.get(p).getDamage();
+
+                ArmorStand as = p.getWorld().spawn(p.getLocation().add(0, 1.5, 0), ArmorStand.class, en -> {
+                    en.setVisible(false);
+                    en.setGravity(false);
+                    en.setSmall(true);
+                    en.setMarker(true);
+                    en.setSmall(true);
+                    en.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
+                    en.setRightArmPose(new EulerAngle(352,0,0));
+                });
+
+                Location dest = p.getLocation().add(p.getLocation().getDirection().multiply(10));
+                Vector v = dest.subtract(p.getLocation()).toVector().normalize();
+                HashMap<Particle, Double> particlesOpt = new HashMap<>();
+                particlesOpt.put(Particle.CRIT, 1.0);
+
+                int distance = 40;
+                int s = 1;
+                new BukkitRunnable() {
+                    Location l1 = as.getLocation().clone();
+                    int i = 0;
+                    @Override
+                    public void run() {
+                        if (p == null){
+                            as.remove();
+                            cancel();
+                        }
+
+                        as.teleport(as.getLocation().add(v.clone().multiply(s)));
+                        for (Entity entity : as.getLocation().getChunk().getEntities()){
+                            if (!as.isDead()){
+                                if (entity.equals(as)){
+                                    continue;
+                                }
+                                if (as.getLocation().distanceSquared(entity.getLocation()) <= 3.5){
+                                    if (!entity.equals(p)){
+                                        if (entity instanceof Damageable){
+                                            if (entity instanceof Player && !arenaPlayers.get(p).getGame().getAllPlayersInPlayersTeam(p).contains(entity)){
+                                                if (isKillable(p ,(Player) entity)){
+                                                    arenaPlayers.get(entity).damage(p, entity, (5+itemDamage)*(1+playerDamage/100)*4, false);
+                                                    ((Damageable) entity).damage(0.01, p);
+                                                }
+                                            } else {
+                                                if (arenaEntities.containsKey(entity)){
+                                                    arenaEntities.get(entity).damage(p, entity, (5+itemDamage)*(1+playerDamage/100)*4, false);
+                                                    ((Damageable) entity).damage(0.01, p);
+                                                    if (arenaEntities.get(entity).getHealth()<=0){
+                                                        new OnArenaEntityKilled(p, entity);
+                                                    }
+                                                }
+                                            }
+                                            as.remove();
+                                            cancel();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Location l2 = as.getLocation().clone();
+                        particleApi.drawMultiParticleLine(l1, l2, 0.2, particlesOpt, 0);
+
+                        l1 = l2.clone();
+
+                        if (!as.getLocation().add(0, 1, 0).getBlock().isPassable()){
+                            if (!as.isDead()){
+                                as.remove();
+                                cancel();
+                            }
+                        }
+
+                        if (i > distance){
+                            if (!as.isDead()){
+                                as.remove();
+                                cancel();
+                            }
+                        }
+                        i++;
+                    }
+                }.runTaskTimer(plugin, 0, 1);
+            } else p.sendMessage(ChatColor.RED + "This item is on Cooldown for " + (float) ((int) CooldownApi.getCooldownForPlayerLong("KUNAI", p)/100)/10 + "s.");
         }
     }
 

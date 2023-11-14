@@ -2,6 +2,8 @@ package net.pullolo.magicarena.items;
 
 import net.pullolo.magicarena.guis.GuiManager;
 import org.bukkit.*;
+import org.bukkit.entity.GlowItemFrame;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -43,7 +45,7 @@ public class MainMenuItemManager implements Listener {
 
     @EventHandler
     public void onPlayerSwitchWorlds(PlayerChangedWorldEvent event){
-        if (config.getList("main-menu-item-disabled-worlds").contains(event.getPlayer().getWorld().getName()) || event.getPlayer().getWorld().getName().contains("temp")){
+        if (config.getList("main-menu-item-disabled-worlds").contains(event.getPlayer().getWorld().getName())){
             if (event.getPlayer().getInventory().contains(getMainMenuItem())) {
                 event.getPlayer().getInventory().remove(getMainMenuItem());
             }
@@ -61,8 +63,20 @@ public class MainMenuItemManager implements Listener {
     public void onPlayerClick(PlayerInteractEvent event){
         if ((event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
         && event.getItem()!=null && event.getItem().equals(getMainMenuItem())){
-            guiManager.createMainMenuGui(event.getPlayer()).show(event.getPlayer());
+            if (event.getPlayer().getWorld().getName().contains("temp")) guiManager.createMainMenuGuiInGame(event.getPlayer()).show(event.getPlayer());
+            else guiManager.createMainMenuGui(event.getPlayer()).show(event.getPlayer());
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event){
+        ItemStack item = event.getPlayer().getInventory().getItem(event.getHand());
+        if (item!=null && item.equals(getMainMenuItem())){
+            if (event.getRightClicked() instanceof ItemFrame || event.getRightClicked() instanceof GlowItemFrame){
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 

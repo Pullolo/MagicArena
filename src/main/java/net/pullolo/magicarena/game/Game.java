@@ -6,6 +6,7 @@ import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.players.ArenaPlayer;
+import net.pullolo.magicarena.quests.QuestManager;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
@@ -257,6 +258,7 @@ public abstract class Game {
         for (Player p : winners){
             if (p!=null){
                 p.sendMessage(ChatColor.GREEN + "[Arena] You have won this game!");
+                if (winners.size()==1) QuestManager.onSoloDuelWon(p);
             }
         }
         for (Player p : losers){

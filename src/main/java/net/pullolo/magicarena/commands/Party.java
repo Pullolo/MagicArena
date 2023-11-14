@@ -24,6 +24,10 @@ public class Party implements CommandExecutor, TabCompleter {
             return true;
         }
         Player p = (Player) sender;
+        if (p.getWorld().getName().contains("temp_")){
+            p.sendMessage(ChatColor.RED+"You can't use this here!");
+            return true;
+        }
         if (args.length<1){
             if (partyManager.isPlayerInParty(p)){
                 sender.sendMessage(ChatColor.GRAY + "-----------------------------------------");

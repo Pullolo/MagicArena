@@ -71,6 +71,67 @@ public class QuestManager {
         }
     }
 
+    public static void onOpenWitherDoors(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.OPEN_WITHER_DOORS)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
+    public static void onWish(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.WISH)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
+    public static void onPlayerRevive(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.REVIVE_PLAYERS)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
+    public static void onTeleportAbility(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.USE_TELEPORT_ABILITY)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
+    public static void onSoloDuelWon(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.WIN_SOLO_DUELS)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+    public static void onWitchKill(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.KILL_WITCHES)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+    public static void onSpiderKill(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.KILL_SPIDERS)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+    public static void onEvokerKilled(Player p){
+        for (Quest q : new ArrayList<>(getPlayerQuests(p))){
+            if (q.getQuestType().equals(QuestType.KILL_EVOKERS)){
+                q.increaseProgress(1);
+            }
+        }
+    }
+
     public static Quest getNewRandomQuest(Player p){
         Random r = new Random();
         QuestType qt = QuestType.values()[r.nextInt(QuestType.values().length)];
@@ -81,6 +142,22 @@ public class QuestManager {
                 return new Quest(p, qt, 10+r.nextInt(21), 0);
             case FINISH_DUNGEONS:
                 return new Quest(p, qt, 2+r.nextInt(3), 0);
+            case OPEN_WITHER_DOORS:
+                return new Quest(p, qt, 8+r.nextInt(8), 0);
+            case WISH:
+                return new Quest(p, qt, 8+r.nextInt(5), 0);
+            case REVIVE_PLAYERS:
+                return new Quest(p, qt, 1+r.nextInt(2), 0);
+            case USE_TELEPORT_ABILITY:
+                return new Quest(p, qt, 7+r.nextInt(6), 0);
+            case WIN_SOLO_DUELS:
+                return new Quest(p, qt, 1+r.nextInt(3), 0);
+            case KILL_WITCHES:
+                return new Quest(p, qt, 10+r.nextInt(11), 0);
+            case KILL_SPIDERS:
+                return new Quest(p, qt, 30+r.nextInt(11), 0);
+            case KILL_EVOKERS:
+                return new Quest(p, qt, 6+r.nextInt(7), 0);
             default:
                 return null;
         }
@@ -100,6 +177,22 @@ public class QuestManager {
                 return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmIwNTVjODEwYmRkZmQxNjI2NGVjOGQ0MzljNDMyODNlMzViY2E3MWE1MDk4M2UxNWUzNjRjZDhhYjdjNjY4ZiJ9fX0=");
             case FINISH_DUNGEONS:
                 return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjM3YjZmNTAxNTRkMTkyZDhjM2E3MmQxM2ZhNDRjOTUzYjQxMTM4NThjOWQyZWRmMjE4ZjUxNzk5OGQ3MzM2YyJ9fX0=");
+            case OPEN_WITHER_DOORS:
+                return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTY3YjQ3ZmJkMzdjNmQ5ZDhkMjJkOTczZTcyOTBlODA4NTJlOTI2NmEwNzZmYjdhYjIxNWFmZTkxYjgxZWQ2YyJ9fX0=");
+            case WISH:
+                return new ItemStack(Material.NETHER_STAR);
+            case REVIVE_PLAYERS:
+                return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGI2OTc1YWY3MDcyNGQ2YTQ0ZmQ1OTQ2ZTYwYjI3MTc3MzdkZmRiNTQ1YjRkYWIxODkzMzUxYTljOWRkMTgzYyJ9fX0=");
+            case USE_TELEPORT_ABILITY:
+                return new ItemStack(Material.ECHO_SHARD);
+            case WIN_SOLO_DUELS:
+                return new ItemStack(Material.DIAMOND_SWORD);
+            case KILL_SPIDERS:
+                return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzVlMjQ4ZGEyZTEwOGYwOTgxM2E2Yjg0OGEwZmNlZjExMTMwMDk3ODE4MGVkYTQxZDNkMWE3YThlNGRiYTNjMyJ9fX0=");
+            case KILL_WITCHES:
+                return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjBlMTNkMTg0NzRmYzk0ZWQ1NWFlYjcwNjk1NjZlNDY4N2Q3NzNkYWMxNmY0YzNmODcyMmZjOTViZjlmMmRmYSJ9fX0=");
+            case KILL_EVOKERS:
+                return SkullCreator.itemFromBase64("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjMwY2U3NzVlZGI2NWRiOGMyNzQxYmRmYWU4NGYzYzBkMDI4NWFiYTkzYWZhZGM3NDkwMGQ1NWRmZDk1MDRhNSJ9fX0=");
             default:
                 return new ItemStack(Material.BARRIER);
         }

@@ -4,6 +4,7 @@ import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.Item;
 import net.pullolo.magicarena.items.ItemClass;
+import net.pullolo.magicarena.quests.QuestManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,6 +51,7 @@ public class WishSystem {
             return false;
         } else getPlayerData(player).setWishes(getPlayerData(player).getWishes()-1);
 
+        QuestManager.onWish(player);
         ItemStack finalItem;
         Random r = new Random();
         String starsStr = ChatColor.translateAlternateColorCodes('&', " &f✪");
@@ -240,10 +242,11 @@ public class WishSystem {
             case 1:
                 return auroraStaff;
             case 2:
-                switch (itemClass){
-                    case DPS:
-                        return consideredJudgment;
-                }
+                return consideredJudgment;
+//                switch (itemClass){
+//                    case DPS:
+//                        return consideredJudgment;
+//                }
             default:
                 ItemStack nullItem = new ItemStack(Material.BARRIER);
                 ItemMeta im = nullItem.getItemMeta();

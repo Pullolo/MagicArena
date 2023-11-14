@@ -247,7 +247,7 @@ public class GuiManager {
                 "r g p w q",
                 "         "
         };
-        InventoryGui gui = new InventoryGui(this.plugin, player, "Profile", guiSetup);
+        InventoryGui gui = new InventoryGui(this.plugin, player, "Main menu", guiSetup);
         gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         gui.addElement(new StaticGuiElement('g', new ItemStack (Material.COMPASS),
                 click -> {
@@ -261,6 +261,37 @@ public class GuiManager {
                     createWishGui((Player) click.getWhoClicked()).show(click.getWhoClicked());
                     return true;
                 }, ChatColor.translateAlternateColorCodes('&', "&r&3✧ Wish")));
+        gui.addElement(new DynamicGuiElement('p', (viewer)->{
+            return new StaticGuiElement('p', getPlayerSkull(player),
+                    click -> {
+                        click.getGui().close();
+                        createProfileMenu((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                        return true;
+                    },
+                    ChatColor.translateAlternateColorCodes('&', "&r&7✉ Your Profile"));
+        }));
+        gui.addElement(new StaticGuiElement('r', new ItemStack (Material.BEACON),
+                click -> {
+                    click.getGui().close();
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&6⚡ Ranks")));
+        gui.addElement(new StaticGuiElement('q', new ItemStack (Material.BIRCH_HANGING_SIGN),
+                click -> {
+                    click.getGui().close();
+                    createQuestsMenu((Player) click.getWhoClicked()).show(click.getWhoClicked());
+                    return true;
+                }, ChatColor.translateAlternateColorCodes('&', "&r&7✎ Quests")));
+
+        return gui;
+    }
+    public InventoryGui createMainMenuGuiInGame(Player player){
+        String[] guiSetup = {
+                "         ",
+                "  r p q  ",
+                "         "
+        };
+        InventoryGui gui = new InventoryGui(this.plugin, player, "In game menu", guiSetup);
+        gui.setFiller(new ItemStack(Material.GRAY_STAINED_GLASS_PANE, 1));
         gui.addElement(new DynamicGuiElement('p', (viewer)->{
             return new StaticGuiElement('p', getPlayerSkull(player),
                     click -> {

@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
-import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
-import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.ArenaPlayer.*;
 
 public class Spawn implements CommandExecutor, TabCompleter {
     @Override

@@ -14,6 +14,7 @@ import java.util.List;
 import static net.pullolo.magicarena.MagicArena.gameManager;
 import static net.pullolo.magicarena.MagicArena.partyManager;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInMatch;
 
 public class DungeonCmd implements CommandExecutor, TabCompleter {
     @Override
@@ -41,7 +42,7 @@ public class DungeonCmd implements CommandExecutor, TabCompleter {
         }
         if (partyManager.isPlayerInParty(p) && partyManager.isPartyOwner(p) && !gameManager.getQueueManager().isPlayerInQueue(p)){
             for (Player member : partyManager.getPlayersParty(p)){
-                if (isPlayerInGame(member)){
+                if (isPlayerInMatch(member)){
                     sender.sendMessage(ChatColor.RED + "No players can be in game!");
                     return true;
                 }

@@ -1,7 +1,7 @@
 package net.pullolo.magicarena.events;
 
+import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.items.Item;
-import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.misc.ParticleApi;
 import net.pullolo.magicarena.players.ArenaPlayer;
@@ -12,7 +12,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FireworkExplodeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -31,12 +30,12 @@ import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 public class GameDamageHandler implements Listener {
 
     @EventHandler
-    public void onPlayerDamaged(EntityDamageEvent event){
+    public void onDamage(EntityDamageEvent event){
         if (event.isCancelled()){
             return;
         }
         if (event instanceof EntityDamageByEntityEvent){
-            if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player && isPlayerInGame((Player) ((EntityDamageByEntityEvent) event).getDamager())){
+            if (((EntityDamageByEntityEvent) event).getDamager() instanceof Player && isPlayerInGame((Player) ((EntityDamageByEntityEvent) event).getDamager()) && !(arenaPlayers.get((Player) ((EntityDamageByEntityEvent) event).getDamager()).getGame() instanceof GameWorld)){
                 if (event.getEntity() instanceof Hanging){
                     event.setCancelled(true);
                     return;
@@ -64,7 +63,9 @@ public class GameDamageHandler implements Listener {
         if (((Player) event.getEntity()).isBlocking()){
             return;
         }
-
+        if (arenaPlayers.get(damaged).isDead()){
+            return;
+        }
 
         if (event instanceof EntityDamageByEntityEvent){
             if (event.getCause().equals(EntityDamageEvent.DamageCause.PROJECTILE)){
@@ -187,7 +188,19 @@ public class GameDamageHandler implements Listener {
         Entity damaged = event.getHitEntity();
         Entity damager = (Entity) event.getEntity().getShooter();
 
+        if (damaged instanceof EnderDragonPart){
+            damaged = ((EnderDragonPart) damaged).getParent();
+        }
         if (!(arenaEntities.containsKey(damaged))){
+            return;
+        }
+
+        if (damaged instanceof Shulker){
+            if (((Shulker) damaged).getPeek()<=0){
+                return;
+            }
+        }
+        if (damaged instanceof Enderman){
             return;
         }
 
@@ -225,6 +238,9 @@ public class GameDamageHandler implements Listener {
     }
 
     public void onEntityDamage(Entity damaged, EntityDamageEvent.DamageCause damageCause, double damage){
+        if (damaged instanceof EnderDragonPart){
+            damaged = ((EnderDragonPart) damaged).getParent();
+        }
         if (!arenaEntities.containsKey(damaged)){
             return;
         }
@@ -237,6 +253,9 @@ public class GameDamageHandler implements Listener {
 
     public void onEntityDamagedByEntity(EntityDamageByEntityEvent event){
         Entity damaged = event.getEntity();
+        if (damaged instanceof EnderDragonPart){
+            damaged = ((EnderDragonPart) damaged).getParent();
+        }
         if (!arenaEntities.containsKey(damaged)){
             return;
         }
@@ -278,6 +297,7 @@ public class GameDamageHandler implements Listener {
         }
         Item playersItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
         Double itemDamage = playersItem.getDamage();
+        if (itemDamage==0) return (5*(1+playerDamage/100))+eventDamage*5;
         if (playersItem.getItemId().equalsIgnoreCase("leeching_staff")){
             arenaPlayers.get(damager).setHealth(arenaPlayers.get(damager).getHealth()+2);
             damager.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, damager.getLocation().add(0, 1, 0), 20, 0.2, 0.6, 0.2, 1);
@@ -348,6 +368,7 @@ public class GameDamageHandler implements Listener {
         double playerDamage = arenaPlayers.get(damager).getDamage();
         Item playerItem = getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand());
         Double itemDamage = playerItem.getDamage();
+        if (itemDamage==0) return (5*(1+playerDamage/100))+5*5;
         if (((Player) damager).getInventory().getItemInMainHand().getItemMeta()==null || armorItemIds.contains(getItemFromPlayer(((Player) damager).getInventory().getItemInMainHand()).getItemId())){
             return 5*(1+playerDamage/100);
         }

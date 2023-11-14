@@ -233,6 +233,7 @@ public abstract class Game {
             if (p!=null){
                 arenaPlayers.remove(p);
                 p.setFireTicks(0);
+                p.setInvulnerable(true);
             }
         }
         if (winners == null || losers == null){
@@ -270,6 +271,7 @@ public abstract class Game {
                         if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
                         else p.setGameMode(GameMode.SURVIVAL);
                         p.setHealth(p.getMaxHealth());
+                        p.setInvulnerable(false);
                         p.setWalkSpeed(0.2f);
                     }
                 }
@@ -288,6 +290,7 @@ public abstract class Game {
             if (p!=null){
                 arenaPlayers.remove(p);
                 p.setFireTicks(0);
+                p.setInvulnerable(true);
             }
         }
         for (Player p : allPlayers){

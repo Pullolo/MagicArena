@@ -80,7 +80,7 @@ public class ItemsDefinitions {
         createKusumibaru();
         createAtomSplitKatana();
         createHyperion();
-        createKunai(); //todo ability
+        createKunai();
         createQuenAxe(); //todo ability
         createTerminator();
         createBactaNade();

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import static net.pullolo.magicarena.MagicArena.debugLog;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.items.ItemsDefinitions.items;
 
 public class UpdateManager {
@@ -19,7 +20,7 @@ public class UpdateManager {
             ItemStack item = p.getInventory().getItem(slot);
             if (item==null) continue;
             if (item.getItemMeta()==null) continue;
-            Item i = new Item(item);
+            Item i = getItemFromPlayer(item);
             if (i.getItemId().equalsIgnoreCase("NULL")) continue;
             p.getInventory().setItem(slot, updatePlayerItem(i).getItem());
             debugLog("Updated " + i.getItemId(), false);
@@ -28,7 +29,7 @@ public class UpdateManager {
             ItemStack item = p.getEnderChest().getItem(slot);
             if (item==null) continue;
             if (item.getItemMeta()==null) continue;
-            Item i = new Item(item);
+            Item i = getItemFromPlayer(item);
             if (i.getItemId().equalsIgnoreCase("NULL")) continue;
             p.getEnderChest().setItem(slot, updatePlayerItem(i).getItem());
             debugLog("Updated " + i.getItemId(), false);

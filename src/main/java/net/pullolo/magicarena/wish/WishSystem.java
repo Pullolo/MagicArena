@@ -153,7 +153,7 @@ public class WishSystem {
         if (itemStack.getItemMeta()==null){
             return null;
         }
-        Item item = new Item(itemStack);
+        Item item = getItemFromPlayer(itemStack);
         if (item.getItemId().equalsIgnoreCase("NULL")){
             return null;
         }
@@ -191,7 +191,7 @@ public class WishSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -217,7 +217,7 @@ public class WishSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -232,7 +232,7 @@ public class WishSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -253,7 +253,7 @@ public class WishSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -287,7 +287,7 @@ public class WishSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 

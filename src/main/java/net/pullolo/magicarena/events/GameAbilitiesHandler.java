@@ -29,6 +29,7 @@ import java.util.*;
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
 import static net.pullolo.magicarena.items.ArmorDefinitions.shadowweaveShroudBoots;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -69,7 +70,7 @@ public class GameAbilitiesHandler implements Listener {
         }
         if (event.getBow()==null) return;
         if (event.getBow().getItemMeta()==null) return;
-        Item item = new Item(event.getBow());
+        Item item = getItemFromPlayer(event.getBow());
         if (item.getItemId().equalsIgnoreCase("terminator")){
             event.setCancelled(true);
         }
@@ -82,7 +83,7 @@ public class GameAbilitiesHandler implements Listener {
         }
         Player p = (Player) event.getEntity().getShooter();
         Projectile projectile = event.getEntity();
-        Item item = new Item(p.getInventory().getItemInMainHand());
+        Item item = getItemFromPlayer(p.getInventory().getItemInMainHand());
         if (projectile instanceof Snowball && !shotCustomProjectile.contains(p)){
             if (item.getItemId().equalsIgnoreCase("bacta_nade")){
                 event.setCancelled(true);
@@ -116,7 +117,7 @@ public class GameAbilitiesHandler implements Listener {
         if (event.getPlayer().getInventory().getItemInMainHand().getItemMeta()==null){
             return;
         }
-        Item item = new Item(event.getPlayer().getInventory().getItemInMainHand());
+        Item item = getItemFromPlayer(event.getPlayer().getInventory().getItemInMainHand());
         if (!itemIds.contains(item.getItemId())){
             return;
         }
@@ -148,7 +149,7 @@ public class GameAbilitiesHandler implements Listener {
             return;
         }
         if (p.getInventory().getBoots()!=null && p.getInventory().getBoots().getItemMeta()!=null){
-            Item boots = new Item(p.getInventory().getBoots());
+            Item boots = getItemFromPlayer(p.getInventory().getBoots());
             if (boots.getItemId().equals(shadowweaveShroudBoots.getItemId())){
                 if (!CooldownApi.isOnCooldown("SSTE", p)){
                     if (arenaPlayers.get(p).getMana() >= calcBaseManaWithBonuses(50, p)) {
@@ -188,7 +189,7 @@ public class GameAbilitiesHandler implements Listener {
         if (event.getItem()==null || event.getItem().getItemMeta()==null){
             return;
         }
-        Item item = new Item(event.getItem());
+        Item item = getItemFromPlayer(event.getItem());
         Player p = event.getPlayer();
         if (!itemIds.contains(item.getItemId())){
             return;
@@ -1010,10 +1011,10 @@ public class GameAbilitiesHandler implements Listener {
             return false;
         }
 
-        Item helmet = new Item(helmetItem);
-        Item chestplate = new Item(chestplateItem);
-        Item leggings = new Item(leggingsItem);
-        Item boots = new Item(bootsItem);
+        Item helmet = getItemFromPlayer(helmetItem);
+        Item chestplate = getItemFromPlayer(chestplateItem);
+        Item leggings = getItemFromPlayer(leggingsItem);
+        Item boots = getItemFromPlayer(bootsItem);
 
         for (Item i : armorItems.get(armorSet)){
             if (i.getItemId().equalsIgnoreCase(helmet.getItemId())

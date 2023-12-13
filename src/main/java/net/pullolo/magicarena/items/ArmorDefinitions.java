@@ -89,7 +89,7 @@ public class ArmorDefinitions {
         lore1.add("&d&lMYTHIC HELMET");
         lore1.add("&8item_id:shadowweave_shroud_helmet");
         ItemStack item1 = createTrimItem(Material.NETHERITE_HELMET, TrimPattern.WARD, TrimMaterial.AMETHYST, name1, lore1);
-        shadowweaveShroudHelmet = new Item(item1);
+        shadowweaveShroudHelmet = new Item(item1, 0);
         armorItemIds.add(shadowweaveShroudHelmet.getItemId());
         pieces.add(shadowweaveShroudHelmet);
 
@@ -113,7 +113,7 @@ public class ArmorDefinitions {
         lore2.add("&d&lMYTHIC CHESTPLATE");
         lore2.add("&8item_id:shadowweave_shroud_chestplate");
         ItemStack item2 = createTrimItem(Material.NETHERITE_CHESTPLATE, TrimPattern.TIDE, TrimMaterial.AMETHYST, name2, lore2);
-        shadowweaveShroudChestplate = new Item(item2);
+        shadowweaveShroudChestplate = new Item(item2, 0);
         armorItemIds.add(shadowweaveShroudChestplate.getItemId());
         pieces.add(shadowweaveShroudChestplate);
 
@@ -137,7 +137,7 @@ public class ArmorDefinitions {
         lore3.add("&d&lMYTHIC LEGGINGS");
         lore3.add("&8item_id:shadowweave_shroud_leggings");
         ItemStack item3 = createTrimItem(Material.NETHERITE_LEGGINGS, TrimPattern.SILENCE, TrimMaterial.AMETHYST, name3, lore3);
-        shadowweaveShroudLeggings = new Item(item3);
+        shadowweaveShroudLeggings = new Item(item3, 0);
         armorItemIds.add(shadowweaveShroudLeggings.getItemId());
         pieces.add(shadowweaveShroudLeggings);
 
@@ -166,7 +166,7 @@ public class ArmorDefinitions {
         lore4.add("&d&lMYTHIC BOOTS");
         lore4.add("&8item_id:shadowweave_shroud_boots");
         ItemStack item4 = createTrimItem(Material.NETHERITE_BOOTS, TrimPattern.COAST, TrimMaterial.AMETHYST, name4, lore4);
-        shadowweaveShroudBoots = new Item(item4);
+        shadowweaveShroudBoots = new Item(item4, 0);
         armorItemIds.add(shadowweaveShroudBoots.getItemId());
         pieces.add(shadowweaveShroudBoots);
 
@@ -194,7 +194,7 @@ public class ArmorDefinitions {
         lore1.add("&6&lLEGENDARY HELMET");
         lore1.add("&8item_id:superior_helmet");
         ItemStack item1 = createSkullItem(name1, lore1, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzU1OGVmYmU2Njk3NjA5OWNmZDYyNzYwZDllMDUxNzBkMmJiOGY1MWU2ODgyOWFiOGEwNTFjNDhjYmM0MTVjYiJ9fX0=");
-        superiorHelmet = new Item(item1);
+        superiorHelmet = new Item(item1, 0);
         armorItemIds.add(superiorHelmet.getItemId());
         pieces.add(superiorHelmet);
 
@@ -217,7 +217,7 @@ public class ArmorDefinitions {
         lore2.add("&6&lLEGENDARY CHESTPLATE");
         lore2.add("&8item_id:superior_chestplate");
         ItemStack item2 = createColoredItem(Material.LEATHER_CHESTPLATE, Color.YELLOW, name2, lore2);
-        superiorChestplate = new Item(item2);
+        superiorChestplate = new Item(item2, 0);
         armorItemIds.add(superiorChestplate.getItemId());
         pieces.add(superiorChestplate);
 
@@ -240,7 +240,7 @@ public class ArmorDefinitions {
         lore3.add("&6&lLEGENDARY LEGGINGS");
         lore3.add("&8item_id:superior_leggings");
         ItemStack item3 = createColoredItem(Material.LEATHER_LEGGINGS, Color.YELLOW, name3, lore3);
-        superiorLeggings = new Item(item3);
+        superiorLeggings = new Item(item3, 0);
         armorItemIds.add(superiorLeggings.getItemId());
         pieces.add(superiorLeggings);
 
@@ -263,7 +263,7 @@ public class ArmorDefinitions {
         lore4.add("&6&lLEGENDARY BOOTS");
         lore4.add("&8item_id:superior_boots");
         ItemStack item4 = createColoredItem(Material.LEATHER_BOOTS, Color.ORANGE, name4, lore4);
-        superiorBoots = new Item(item4);
+        superiorBoots = new Item(item4, 0);
         armorItemIds.add(superiorBoots.getItemId());
         pieces.add(superiorBoots);
 
@@ -288,7 +288,7 @@ public class ArmorDefinitions {
         lore1.add("&5&lEPIC HELMET");
         lore1.add("&8item_id:angel_helmet");
         ItemStack item1 = createSkullItem(name1, lore1, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2ZlNWRjNTEyZGQ1OTFhYjAyZWJkMzcyYzI4NWY0ODFjODc2YjQ5MWNiYWQyMDU2NjUzZGQxMTg5Yzg0ZGVmZiJ9fX0=");
-        angelHelmet = new Item(item1);
+        angelHelmet = new Item(item1, 0);
         armorItemIds.add(angelHelmet.getItemId());
         pieces.add(angelHelmet);
 
@@ -308,7 +308,7 @@ public class ArmorDefinitions {
         lore2.add("&5&lEPIC CHESTPLATE");
         lore2.add("&8item_id:angel_chestplate");
         ItemStack item2 = createItem(Material.GOLDEN_CHESTPLATE, name2, lore2);
-        angelChestplate = new Item(item2);
+        angelChestplate = new Item(item2, 0);
         armorItemIds.add(angelChestplate.getItemId());
         pieces.add(angelChestplate);
 
@@ -328,7 +328,7 @@ public class ArmorDefinitions {
         lore3.add("&5&lEPIC LEGGINGS");
         lore3.add("&8item_id:angel_leggings");
         ItemStack item3 = createColoredItem(Material.LEATHER_LEGGINGS, Color.WHITE, name3, lore3);
-        angelLeggings = new Item(item3);
+        angelLeggings = new Item(item3, 0);
         armorItemIds.add(angelLeggings.getItemId());
         pieces.add(angelLeggings);
 
@@ -348,7 +348,7 @@ public class ArmorDefinitions {
         lore4.add("&5&lEPIC BOOTS");
         lore4.add("&8item_id:angel_boots");
         ItemStack item4 = createColoredItem(Material.LEATHER_BOOTS, Color.WHITE, name4, lore4);
-        angelBoots = new Item(item4);
+        angelBoots = new Item(item4, 0);
         armorItemIds.add(angelBoots.getItemId());
         pieces.add(angelBoots);
 
@@ -367,7 +367,7 @@ public class ArmorDefinitions {
         lore1.add("&9&lRARE HELMET");
         lore1.add("&8item_id:hardened_diamond_helmet");
         ItemStack item1 = createItem(Material.DIAMOND_HELMET, name1, lore1);
-        hardenedDiamondHelmet = new Item(item1);
+        hardenedDiamondHelmet = new Item(item1, 0);
         armorItemIds.add(hardenedDiamondHelmet.getItemId());
         pieces.add(hardenedDiamondHelmet);
 
@@ -382,7 +382,7 @@ public class ArmorDefinitions {
         lore2.add("&9&lRARE CHESTPLATE");
         lore2.add("&8item_id:hardened_diamond_chestplate");
         ItemStack item2 = createItem(Material.DIAMOND_CHESTPLATE, name2, lore2);
-        hardenedDiamondChestplate = new Item(item2);
+        hardenedDiamondChestplate = new Item(item2, 0);
         armorItemIds.add(hardenedDiamondChestplate.getItemId());
         pieces.add(hardenedDiamondChestplate);
 
@@ -397,7 +397,7 @@ public class ArmorDefinitions {
         lore3.add("&9&lRARE LEGGINGS");
         lore3.add("&8item_id:hardened_diamond_leggings");
         ItemStack item3 = createItem(Material.DIAMOND_LEGGINGS, name3, lore3);
-        hardenedDiamondLeggings = new Item(item3);
+        hardenedDiamondLeggings = new Item(item3, 0);
         armorItemIds.add(hardenedDiamondLeggings.getItemId());
         pieces.add(hardenedDiamondLeggings);
 
@@ -411,7 +411,7 @@ public class ArmorDefinitions {
         lore4.add("&9&lRARE BOOTS");
         lore4.add("&8item_id:hardened_diamond_boots");
         ItemStack item4 = createItem(Material.DIAMOND_BOOTS, name4, lore4);
-        hardenedDiamondBoots = new Item(item4);
+        hardenedDiamondBoots = new Item(item4, 0);
         armorItemIds.add(hardenedDiamondBoots.getItemId());
         pieces.add(hardenedDiamondBoots);
 
@@ -429,7 +429,7 @@ public class ArmorDefinitions {
         lore1.add("&a&lUNCOMMON HELMET");
         lore1.add("&8item_id:wanderer_helmet");
         ItemStack item1 = createItem(Material.LEATHER_HELMET, name1, lore1);
-        wandererHelmet = new Item(item1);
+        wandererHelmet = new Item(item1, 0);
         armorItemIds.add("wanderer_helmet");
         pieces.add(wandererHelmet);
 
@@ -443,7 +443,7 @@ public class ArmorDefinitions {
         lore2.add("&a&lUNCOMMON CHESTPLATE");
         lore2.add("&8item_id:wanderer_chestplate");
         ItemStack item2 = createItem(Material.LEATHER_CHESTPLATE, name2, lore2);
-        wandererChestplate = new Item(item2);
+        wandererChestplate = new Item(item2, 0);
         armorItemIds.add("wanderer_chestplate");
         pieces.add(wandererChestplate);
 
@@ -457,7 +457,7 @@ public class ArmorDefinitions {
         lore3.add("&a&lUNCOMMON LEGGINGS");
         lore3.add("&8item_id:wanderer_leggings");
         ItemStack item3 = createItem(Material.LEATHER_LEGGINGS, name3, lore3);
-        wandererLeggings = new Item(item3);
+        wandererLeggings = new Item(item3, 0);
         armorItemIds.add("wanderer_leggings");
         pieces.add(wandererLeggings);
 
@@ -471,7 +471,7 @@ public class ArmorDefinitions {
         lore4.add("&a&lUNCOMMON BOOTS");
         lore4.add("&8item_id:wanderer_boots");
         ItemStack item4 = createItem(Material.LEATHER_BOOTS, name4, lore4);
-        wandererBoots = new Item(item4);
+        wandererBoots = new Item(item4, 0);
         armorItemIds.add("wanderer_boots");
         pieces.add(wandererBoots);
 
@@ -498,7 +498,7 @@ public class ArmorDefinitions {
         lore1.add("&a&lUNCOMMON HELMET");
         lore1.add("&8item_id:test_helmet");
         ItemStack item1 = createItem(Material.IRON_HELMET, name1, lore1);
-        testHelmet = new Item(item1);
+        testHelmet = new Item(item1, 0);
         armorItemIds.add("test_helmet");
         pieces.add(testHelmet);
 
@@ -520,7 +520,7 @@ public class ArmorDefinitions {
         lore2.add("&a&lUNCOMMON CHESTPLATE");
         lore2.add("&8item_id:test_chestplate");
         ItemStack item2 = createItem(Material.IRON_CHESTPLATE, name2, lore2);
-        testChestplate = new Item(item2);
+        testChestplate = new Item(item2, 0);
         armorItemIds.add("test_chestplate");
         pieces.add(testChestplate);
 
@@ -542,7 +542,7 @@ public class ArmorDefinitions {
         lore3.add("&a&lUNCOMMON LEGGINGS");
         lore3.add("&8item_id:test_leggings");
         ItemStack item3 = createItem(Material.IRON_LEGGINGS, name3, lore3);
-        testLeggings = new Item(item3);
+        testLeggings = new Item(item3, 0);
         armorItemIds.add("test_leggings");
         pieces.add(testLeggings);
 
@@ -564,7 +564,7 @@ public class ArmorDefinitions {
         lore4.add("&a&lUNCOMMON BOOTS");
         lore4.add("&8item_id:test_boots");
         ItemStack item4 = createItem(Material.IRON_BOOTS, name4, lore4);
-        testBoots = new Item(item4);
+        testBoots = new Item(item4, 0);
         armorItemIds.add("test_boots");
         pieces.add(testBoots);
 
@@ -583,7 +583,7 @@ public class ArmorDefinitions {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -599,7 +599,7 @@ public class ArmorDefinitions {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -615,7 +615,7 @@ public class ArmorDefinitions {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -631,7 +631,7 @@ public class ArmorDefinitions {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -647,7 +647,7 @@ public class ArmorDefinitions {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 

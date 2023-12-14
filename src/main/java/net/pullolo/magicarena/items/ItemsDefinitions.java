@@ -490,7 +490,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:undead_sword");
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
-        undeadSword = new Item(item, 0);
+        undeadSword = new Item(item, 2);
         itemIds.add(undeadSword.getItemId());
         items.put(undeadSword.getItemId(), undeadSword);
     }
@@ -546,7 +546,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON BOOK");
         lore.add("&8item_id:unstable_tome");
         ItemStack item = createItem(Material.BOOK, name, lore);
-        unstableTome = new Item(item, 0);
+        unstableTome = new Item(item, 1);
         itemIds.add("unstable_tome");
         items.put("unstable_tome", unstableTome);
     }
@@ -578,12 +578,8 @@ public class ItemsDefinitions {
         lore.add("");
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:leeching_staff");
-        ItemStack item = createItem(Material.TIPPED_ARROW, name, lore);
-        PotionMeta im = (PotionMeta) item.getItemMeta();
-        im.clearCustomEffects();
-        im.setColor(Color.LIME);
-        item.setItemMeta(im);
-        leechingStaff = new Item(item, 0);
+        ItemStack item = createItem(Material.ARROW, name, lore);
+        leechingStaff = new Item(item, 1);
         itemIds.add("leeching_staff");
         items.put("leeching_staff", leechingStaff);
     }
@@ -597,7 +593,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:stone_stick");
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
-        stoneStick = new Item(item, 0);
+        stoneStick = new Item(item, 1);
         itemIds.add("stone_stick");
         items.put("stone_stick", stoneStick);
     }

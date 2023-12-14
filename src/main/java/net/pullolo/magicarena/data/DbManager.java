@@ -33,7 +33,7 @@ public class DbManager {
             Class.forName("org.sqlite.JDBC");
             this.conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
             Statement stmt = conn.createStatement();
-            String sql = "create table if not exists plugin_data (name TEXT PRIMARY KEY NOT NULL, level INT NOT NULL, xp TEXT NOT NULL," +
+            String sql = "create table if not exists plugin_data (name TEXT PRIMARY KEY NOT NULL, level INT NOT NULL, hp INT NOT NULL, mana INT NOT NULL, xp TEXT NOT NULL," +
                     " star_essence INT NOT NULL, wishes INT NOT NULL, dungeon_essence INT NOT NULL, updated BOOLEAN NOT NULL);";
             stmt.execute(sql);
             sql = "create table if not exists plugin_quests (name TEXT NOT NULL, goal INT NOT NULL, progress INT NOT NULL, type TEXT NOT NULL);";
@@ -70,12 +70,12 @@ public class DbManager {
         return is;
     }
 
-    public void addPlayer(String name, int level, double xp, int star_essence, int wishes, int dungeon_essence, boolean updated){
+    public void addPlayer(String name, int level, int hp, int mana, double xp, int star_essence, int wishes, int dungeon_essence, boolean updated){
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
-            String insert = "insert into plugin_data (name, level, xp, star_essence, wishes, dungeon_essence, updated) values" +
-                    " (?, " + level + ", \"" + xp +"\", " + star_essence + ", " + wishes + ", " + dungeon_essence + ", " + updated + ");";
+            String insert = "insert into plugin_data (name, level, hp, mana, xp, star_essence, wishes, dungeon_essence, updated) values" +
+                    " (?, " + level + ", " + hp + ", " + mana + ", \"" + xp +"\", " + star_essence + ", " + wishes + ", " + dungeon_essence + ", " + updated + ");";
 
             PreparedStatement stmt = conn.prepareStatement(insert);
             stmt.setString(1, name);
@@ -91,7 +91,7 @@ public class DbManager {
     public PlayerData getPlayerData(String playerName) {
         PlayerData pd = null;
         if (!isPlayerInDb(playerName)){
-            addPlayer(playerName, 1, 0, 0, 10, 0, true);
+            addPlayer(playerName, 1, 100, 100, 0, 0, 10, 0, true);
         }
         try{
             Class.forName("org.sqlite.JDBC");
@@ -100,7 +100,7 @@ public class DbManager {
             stmt.setString(1, playerName);
 
             ResultSet rs = stmt.executeQuery();
-            pd = new PlayerData(playerName, rs.getInt("level"), Double.parseDouble(rs.getString("xp")), rs.getInt("star_essence"), rs.getInt("wishes"), rs.getInt("dungeon_essence"), rs.getBoolean("updated"));
+            pd = new PlayerData(playerName, rs.getInt("level"), rs.getInt("hp"), rs.getInt("mana"), Double.parseDouble(rs.getString("xp")), rs.getInt("star_essence"), rs.getInt("wishes"), rs.getInt("dungeon_essence"), rs.getBoolean("updated"));
 
             stmt.close();
             conn.close();
@@ -110,13 +110,13 @@ public class DbManager {
         return pd;
     }
 
-    public void updatePlayer(String name, int level, double xp, int star_essence, int wishes, int dungeon_essence, boolean updated){
+    public void updatePlayer(String name, int level, int hp, int mana, double xp, int star_essence, int wishes, int dungeon_essence, boolean updated){
         try{
             Class.forName("org.sqlite.JDBC");
             Connection conn = DriverManager.getConnection("jdbc:sqlite:plugins/"+plugin.getDataFolder().getName()+"/data.db");
 
 
-            String update = "update plugin_data set level=" + level + ", xp=\"" + xp + "\", star_essence=" + star_essence + ", wishes=" + wishes + ", dungeon_essence=" + dungeon_essence + ", updated=" + updated + " where name=?;";
+            String update = "update plugin_data set level=" + level + ", hp=" + hp + ", mana=" + mana + ", xp=\"" + xp + "\", star_essence=" + star_essence + ", wishes=" + wishes + ", dungeon_essence=" + dungeon_essence + ", updated=" + updated + " where name=?;";
             PreparedStatement stmt = conn.prepareStatement(update);
             stmt.setString(1, name);
             stmt.execute();

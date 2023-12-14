@@ -45,6 +45,7 @@ public class Kill implements CommandExecutor, TabCompleter {
                     return true;
                 } catch (Exception e){
                     sender.sendMessage(ChatColor.RED + "Something went Wrong!");
+                    return true;
                 }
             }
             try {
@@ -52,8 +53,10 @@ public class Kill implements CommandExecutor, TabCompleter {
                 if (arenaPlayers.containsKey(target)){
                     arenaPlayers.get(target).setHealth(0);
                 } else target.setHealth(0);
+                return true;
             } catch (Exception e){
                 sender.sendMessage(ChatColor.RED + "This player is not online!");
+                return true;
             }
         }
         return true;

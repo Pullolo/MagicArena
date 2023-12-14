@@ -10,12 +10,14 @@ import net.pullolo.magicarena.quests.QuestManager;
 import net.pullolo.magicarena.worlds.WorldManager;
 import org.bukkit.*;
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,12 +64,13 @@ public abstract class Game {
         BukkitRunnable gameClock1t = new BukkitRunnable() {
             @Override
             public void run() {
-                for (Player p : allPlayers){
+
+                for (Player p : new ArrayList<>(allPlayers)){
                     if (p!=null && arenaPlayers.containsKey(p)){
                         updatePlayerItemStats(p, false);
                         float speed = (float) (arenaPlayers.get(p).getSpeed()/500);
                         p.setWalkSpeed(speed);
-                        if (arenaPlayers.get(p).getHealth()<=0 || p.getLocation().getY() < -96){
+                        if (arenaPlayers.get(p).getHealth()<=0 || (p.getWorld().getEnvironment().equals(World.Environment.NORMAL) && p.getLocation().getY() < -96) || (!p.getWorld().getEnvironment().equals(World.Environment.NORMAL) && p.getLocation().getY() < -64)){
                             //totem check
                             if (p.getInventory().getItemInMainHand().getItemMeta()!=null && p.getInventory().getItemInMainHand().getType().equals(Material.TOTEM_OF_UNDYING) && arenaPlayers.get(p).getHealth()<=0){
                                 p.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
@@ -134,6 +137,10 @@ public abstract class Game {
                 }
                 for (Entity en : toDel){
                     allEntities.remove(en);
+                    int timeToDie = 20;
+                    if (en instanceof EnderDragon){
+                        timeToDie = 260;
+                    }
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -141,13 +148,15 @@ public abstract class Game {
                                 en.remove();
                             }
                         }
-                    }.runTaskLater(plugin, 20);
+                    }.runTaskLater(plugin, timeToDie);
                 }
                 update1t();
             }
         };
         gameClock1t.runTaskTimer(MagicArena.plugin, 0, 1);
         this.gameC = gameClock1t;
+
+        Game g = this;
 
         BukkitRunnable gameClock1s = new BukkitRunnable() {
             @Override
@@ -168,6 +177,8 @@ public abstract class Game {
                 }
 
                 update1s();
+
+                if (g instanceof GameWorld) return;
 
                 if (!test){
                     if (!isTeamAlive(team1) && isTeamAlive(team2)){
@@ -320,6 +331,10 @@ public abstract class Game {
     }
 
     public void forceEndGame(){
+        if (this instanceof GameWorld) {
+            saveGameWorld();
+            return;
+        }
         if (startC!=null) startC.cancel();
         gameC.cancel();
         gameCS.cancel();
@@ -357,9 +372,34 @@ public abstract class Game {
     }
 
     public abstract String pickRandomArena();
+    public void saveGameWorld(){};
 
     public void playerDied(Player p){
-        p.sendMessage(ChatColor.RED + "[Arena] You died!");
+        arenaPlayers.get(p).setDead(true);
+        if (this instanceof GameWorld) p.sendMessage(ChatColor.RED + "You died!");
+        else p.sendMessage(ChatColor.RED + "[Arena] You died!");
+        if (this instanceof GameWorld){
+            for (Player player : allPlayers){
+                if (player!=null && !player.equals(p)){
+                    player.sendMessage(ChatColor.RED + "Player " + p.getDisplayName() + " has died!");
+                }
+            }
+            arenaPlayers.get(p).respawn();
+            arenaPlayers.get(p).updateStats();
+            p.setInvulnerable(false);
+            try {
+                p.teleport(p.getBedSpawnLocation());
+            } catch (Exception e){
+                try {
+                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+                } catch (Exception er){
+                    getLog().warning("Player " + p.getName() + " couldn't respawn properly!");
+                }
+            }
+            p.setFallDistance(0);
+            arenaPlayers.get(p).setDead(false);
+            return;
+        }
         arenaPlayers.remove(p);
         p.setGameMode(GameMode.SPECTATOR);
         p.teleport(new Location(p.getWorld(), 0, 65, 0));

@@ -61,6 +61,10 @@ public class Dungeon extends Game{
         int finalLevel = level;
         this.level = finalLevel;
         for (Player p : allPlayers){
+            if (arenaPlayers.containsKey(p)){
+                arenaPlayers.get(p).getGame().getAllPlayers().remove(p);
+                arenaPlayers.remove(p);
+            }
             ArenaPlayer ap = new ArenaPlayer(p, getPlayerData(p).getLevel(), this);
             updatePlayerItemStats(p, false);
             ap.updateStats();

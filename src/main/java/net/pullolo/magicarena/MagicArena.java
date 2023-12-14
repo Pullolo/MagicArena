@@ -7,6 +7,7 @@ import net.pullolo.magicarena.events.GameDamageHandler;
 import net.pullolo.magicarena.data.DbManager;
 import net.pullolo.magicarena.events.GameEventsHandler;
 import net.pullolo.magicarena.game.GameManager;
+import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.guis.AnimationManager;
 import net.pullolo.magicarena.guis.GuiManager;
 import net.pullolo.magicarena.items.ArmorDefinitions;
@@ -14,6 +15,7 @@ import net.pullolo.magicarena.items.ItemsDefinitions;
 import net.pullolo.magicarena.items.MainMenuItemManager;
 import net.pullolo.magicarena.misc.CooldownApi;
 import net.pullolo.magicarena.misc.ParticleApi;
+import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.PartyManager;
 import net.pullolo.magicarena.quests.QuestManager;
 import net.pullolo.magicarena.wish.DungeonChestSystem;
@@ -25,16 +27,21 @@ import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
+import static net.pullolo.magicarena.game.GameWorld.gameWorlds;
+import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
 import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
 import static net.pullolo.magicarena.worlds.WorldManager.*;
 
@@ -104,15 +111,17 @@ public final class MagicArena extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GameDamageHandler(), this);
         getServer().getPluginManager().registerEvents(new GameAbilitiesHandler(), this);
 
+        loadDefaultWorlds();
         loadSavedWorlds();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        deleteActiveTempWorlds();
+        unloadDefaultWorlds();
         savePlayers();
         dbManager.disconnect();
-        deleteActiveTempWorlds();
     }
 
     private void loadSavedWorlds(){
@@ -126,6 +135,33 @@ public final class MagicArena extends JavaPlugin {
                 new WorldCreator(s).createWorld();
                 log.info(prefix + "Loaded world " + s);
             }
+        }
+    }
+
+    private void loadDefaultWorlds(){
+        for (int i = 0; i < 3; i++){
+            new GameWorld(Bukkit.getWorlds().get(i));
+        }
+        for (Player p : Bukkit.getOnlinePlayers()){
+            if (gameWorlds.containsKey(p.getWorld())){
+                GameWorld g = gameWorlds.get(p.getWorld());
+                new ArenaPlayer(p, getPlayerData(p).getLevel(), g);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (arenaPlayers.get(p)==null) return;
+                        arenaPlayers.get(p).updateStats();
+                        arenaPlayers.get(p).setHealth(getPlayerData(p).getHp());
+                        arenaPlayers.get(p).setMana(getPlayerData(p).getMana());
+                    }
+                }.runTaskLater(plugin, 1);
+            }
+        }
+    }
+
+    private void unloadDefaultWorlds(){
+        for (int i = 0; i < gameWorlds.size(); i++){
+            ((GameWorld) gameWorlds.values().toArray()[i]).forceEndGame();
         }
     }
 

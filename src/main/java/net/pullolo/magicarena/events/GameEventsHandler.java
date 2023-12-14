@@ -5,7 +5,10 @@ import net.pullolo.magicarena.MagicArena;
 import net.pullolo.magicarena.data.PlayerData;
 import net.pullolo.magicarena.game.Dungeon;
 import net.pullolo.magicarena.game.Game;
+import net.pullolo.magicarena.game.GameWorld;
 import net.pullolo.magicarena.items.Item;
+import net.pullolo.magicarena.players.ArenaEntity;
+import net.pullolo.magicarena.players.ArenaPlayer;
 import net.pullolo.magicarena.players.DungeonEntity;
 import net.pullolo.magicarena.quests.QuestManager;
 import org.bukkit.Bukkit;
@@ -14,10 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Vex;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -27,25 +27,23 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.data.PlayerData.setPlayerDataFromDb;
 import static net.pullolo.magicarena.game.Game.games;
 import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
+import static net.pullolo.magicarena.game.GameWorld.gameWorlds;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
-import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
-import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
+import static net.pullolo.magicarena.players.ArenaPlayer.*;
 import static net.pullolo.magicarena.players.UpdateManager.updatePlayer;
 import static net.pullolo.magicarena.quests.QuestManager.*;
 import static net.pullolo.magicarena.wish.WishSystem.lastArmorSet;
@@ -54,7 +52,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onChunkUnload(ChunkUnloadEvent event){
-        if (!event.getWorld().getName().contains("temp_")){
+        if (!(event.getWorld().getName().contains("temp_") || gameWorlds.containsKey(event.getChunk().getWorld()))){
             return;
         }
         for (Entity e : event.getChunk().getEntities()){
@@ -62,16 +60,24 @@ public class GameEventsHandler implements Listener {
                 continue;
             }
             arenaEntities.get(e).setLoaded(false);
+            if (e instanceof Monster || e.isDead()){
+                arenaEntities.remove(e);
+            }
         }
     }
 
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event){
-        if (!event.getWorld().getName().contains("temp_")){
+        if (!(event.getWorld().getName().contains("temp_") || gameWorlds.containsKey(event.getChunk().getWorld()))){
             return;
         }
         for (Entity e : event.getChunk().getEntities()){
             if (!arenaEntities.containsKey(e)) {
+                if (gameWorlds.containsKey(e.getWorld()) && e instanceof LivingEntity && !(e instanceof Player)){
+                    GameWorld g = gameWorlds.get(e.getWorld());
+                    int level = g.getWorldLevel();
+                    arenaEntities.put(e, new ArenaEntity(e, level, g, false));
+                }
                 continue;
             }
             arenaEntities.get(e).setLoaded(true);
@@ -85,7 +91,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onMobSpawn(CreatureSpawnEvent event){
-        if (!event.getEntity().getWorld().getName().contains("temp_")){
+        if (!(event.getEntity().getWorld().getName().contains("temp_")) && !gameWorlds.containsKey(event.getEntity().getWorld())){
             return;
         }
         if (event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.SPELL)){
@@ -104,9 +110,21 @@ public class GameEventsHandler implements Listener {
                 int level = 1;
                 if (g instanceof Dungeon){
                     level = ((Dungeon) g).getLevel();
+                } else if (g instanceof GameWorld){
+                    level = ((GameWorld) g).getWorldLevel();
                 }
                 arenaEntities.put(event.getEntity(), new DungeonEntity(event.getEntity(), level, g, false));
             }
+            return;
+        }
+        if (gameWorlds.containsKey(event.getEntity().getWorld()) && !event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.CUSTOM)){
+            if (event.getEntity() instanceof Player || event.getEntity() instanceof ArmorStand || event.getEntity() instanceof EnderDragonPart){
+                return;
+            }
+            GameWorld g = gameWorlds.get(event.getEntity().getWorld());
+            int level = g.getWorldLevel();
+            arenaEntities.put(event.getEntity(), new ArenaEntity(event.getEntity(), level, g, false));
+            return;
         }
     }
 
@@ -137,18 +155,52 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
-        savePlayerQuestsOnLeave(event.getPlayer());
-        PlayerData.savePlayerDataToDb(event.getPlayer(), dbManager);
-        PlayerData.removePlayerData(event.getPlayer());
         partyManager.leaveParty(event.getPlayer());
         if (arenaPlayers.containsKey(event.getPlayer())){
-            arenaPlayers.get(event.getPlayer()).getGame().broadcast("[Arena] Player " + event.getPlayer().getDisplayName() + " has left the game!");
-            arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());
-            event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
+            arenaPlayers.get(event.getPlayer()).getGame().broadcast("Player " + event.getPlayer().getDisplayName() + " has left the game!");
+            if (!(arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+                arenaPlayers.get(event.getPlayer()).getGame().playerDied(event.getPlayer());
+                event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
+            } else{
+                arenaPlayers.get(event.getPlayer()).getGame().getAllPlayers().remove(event.getPlayer());
+            }
+            arenaPlayers.get(event.getPlayer()).preRemove(event.getPlayer());
+            arenaPlayers.remove(event.getPlayer());
         }
 
         MagicArena.gameManager.getQueueManager().removePlayerFromQueue(event.getPlayer());
         lastArmorSet.remove(event.getPlayer());
+        savePlayerQuestsOnLeave(event.getPlayer());
+        PlayerData.savePlayerDataToDb(event.getPlayer(), dbManager);
+        PlayerData.removePlayerData(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerSwapWorld(PlayerChangedWorldEvent event){
+        if (getPlayerData(event.getPlayer())==null){
+            return;
+        }
+        if (arenaPlayers.containsKey(event.getPlayer()) && (arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
+            arenaPlayers.get(event.getPlayer()).preRemove(event.getPlayer());
+            arenaPlayers.remove(event.getPlayer());
+            if (gameWorlds.containsKey(event.getFrom())){
+                gameWorlds.get(event.getFrom()).getAllPlayers().remove(event.getPlayer());
+            }
+        }
+        if (gameWorlds.containsKey(event.getPlayer().getWorld())){
+            new ArenaPlayer(event.getPlayer(), getPlayerData(event.getPlayer()).getLevel(), gameWorlds.get(event.getPlayer().getWorld()));
+            gameWorlds.get(event.getPlayer().getWorld()).getAllPlayers().add(event.getPlayer());
+            Player p = event.getPlayer();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (arenaPlayers.get(p)==null) return;
+                    arenaPlayers.get(p).updateStats();
+                    arenaPlayers.get(p).setHealth(getPlayerData(p).getHp());
+                    arenaPlayers.get(p).setMana(getPlayerData(p).getMana());
+                }
+            }.runTaskLater(plugin, 1);
+        }
     }
 
     @EventHandler
@@ -169,18 +221,32 @@ public class GameEventsHandler implements Listener {
         if (event.getPlayer().getWorld().getName().regionMatches(0, "temp_", 0, 5)){
             event.getPlayer().teleport(Bukkit.getWorld(mainWorld).getSpawnLocation());
         }
+        if (gameWorlds.containsKey(event.getPlayer().getWorld())){
+            ArenaPlayer ap = new ArenaPlayer(event.getPlayer(), getPlayerData(event.getPlayer()).getLevel(), gameWorlds.get(event.getPlayer().getWorld()));
+            Player p = event.getPlayer();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (arenaPlayers.get(p)==null) return;
+                    arenaPlayers.get(p).updateStats();
+                    arenaPlayers.get(p).setHealth(getPlayerData(p).getHp());
+                    arenaPlayers.get(p).setMana(getPlayerData(p).getMana());
+                }
+            }.runTaskLater(plugin, 1);
+            gameWorlds.get(event.getPlayer().getWorld()).getAllPlayers().add(event.getPlayer());
+        }
     }
 
     @EventHandler
     public void onPlayerBuild(BlockPlaceEvent event){
-        if (isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")){
+        if ((isPlayerInMatch(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_"))){
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerBreak(BlockBreakEvent event){
-        if (isPlayerInGame(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_")){
+        if ((isPlayerInMatch(event.getPlayer()) || event.getPlayer().getWorld().getName().contains("temp_"))){
             event.setCancelled(true);
         }
     }
@@ -190,7 +256,7 @@ public class GameEventsHandler implements Listener {
         if (!(event.getRemover() instanceof Player)){
             return;
         }
-        if (!isPlayerInGame((Player) event.getRemover())){
+        if (!isPlayerInGame((Player) event.getRemover()) || (arenaPlayers.get((Player) event.getRemover()).getGame() instanceof GameWorld)){
             return;
         }
         event.setCancelled(true);
@@ -198,7 +264,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onItemFrameInteract(PlayerInteractEntityEvent event){
-        if (!isPlayerInGame(event.getPlayer())){
+        if (!isPlayerInGame(event.getPlayer()) || (arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
             return;
         }
         if (event.getRightClicked() instanceof Hanging){
@@ -209,7 +275,7 @@ public class GameEventsHandler implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
-        if (!isPlayerInGame(event.getPlayer())){
+        if (!isPlayerInGame(event.getPlayer()) || (arenaPlayers.get(event.getPlayer()).getGame() instanceof GameWorld)){
             return;
         }
         if (event.getItem()!=null){

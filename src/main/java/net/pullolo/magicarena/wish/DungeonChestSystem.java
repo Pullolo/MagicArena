@@ -112,7 +112,7 @@ public class DungeonChestSystem {
                     im.setLore(lore);
                     im.setDisplayName(ChatColor.RED + wishRarity.toString() + " not implemented yet");
                     item.setItemMeta(im);
-                    finalItem=new Item(item);
+                    finalItem=getItemFromPlayer(item);
             }
             guiManager.createDungeonChestReward(p, 100*mul+val1+add, new Item(finalItem, stars, q).getItem(), chestType, wishRarity).show(p);
         } else {
@@ -131,7 +131,7 @@ public class DungeonChestSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -146,7 +146,7 @@ public class DungeonChestSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -161,7 +161,7 @@ public class DungeonChestSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -176,7 +176,7 @@ public class DungeonChestSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 
@@ -191,7 +191,7 @@ public class DungeonChestSystem {
                 im.setDisplayName("NULL");
                 im.setLore(new ArrayList<>());
                 nullItem.setItemMeta(im);
-                return new Item(nullItem);
+                return new Item(nullItem, 0);
         }
     }
 }

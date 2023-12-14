@@ -28,6 +28,7 @@ import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.MagicArena.mainWorld;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItemIds;
 import static net.pullolo.magicarena.items.ArmorDefinitions.armorItems;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
 import static net.pullolo.magicarena.players.ArenaPlayer.arenaPlayers;
@@ -244,6 +245,7 @@ public abstract class Game {
             if (p!=null){
                 arenaPlayers.remove(p);
                 p.setFireTicks(0);
+                p.setInvulnerable(true);
             }
         }
         if (winners == null || losers == null){
@@ -281,6 +283,7 @@ public abstract class Game {
                         if (p.isOp()) p.setGameMode(GameMode.CREATIVE);
                         else p.setGameMode(GameMode.SURVIVAL);
                         p.setHealth(p.getMaxHealth());
+                        p.setInvulnerable(false);
                         p.setWalkSpeed(0.2f);
                     }
                 }
@@ -299,6 +302,7 @@ public abstract class Game {
             if (p!=null){
                 arenaPlayers.remove(p);
                 p.setFireTicks(0);
+                p.setInvulnerable(true);
             }
         }
         for (Player p : allPlayers){
@@ -474,7 +478,7 @@ public abstract class Game {
 
         if (helmItemStack != null || chestItemStack != null || legsItemStack != null || bootsItemStack != null){
             if (helmItemStack!=null && helmItemStack.getItemMeta()!=null){
-                Item item = new Item(helmItemStack);
+                Item item = getItemFromPlayer(helmItemStack);
                 if (armorItemIds.contains(item.getItemId())){
                     bonusDefence += item.getDefence();
                     bonusDamage += item.getDamage();
@@ -490,7 +494,7 @@ public abstract class Game {
                 }
             }
             if (chestItemStack!=null && chestItemStack.getItemMeta()!=null){
-                Item item = new Item(chestItemStack);
+                Item item = getItemFromPlayer(chestItemStack);
                 if (armorItemIds.contains(item.getItemId())){
                     bonusDefence += item.getDefence();
                     bonusDamage += item.getDamage();
@@ -506,7 +510,7 @@ public abstract class Game {
                 }
             }
             if (legsItemStack!=null && legsItemStack.getItemMeta()!=null){
-                Item item = new Item(legsItemStack);
+                Item item = getItemFromPlayer(legsItemStack);
                 if (armorItemIds.contains(item.getItemId())){
                     bonusDefence += item.getDefence();
                     bonusDamage += item.getDamage();
@@ -522,7 +526,7 @@ public abstract class Game {
                 }
             }
             if (bootsItemStack!=null && bootsItemStack.getItemMeta()!=null){
-                Item item = new Item(bootsItemStack);
+                Item item = getItemFromPlayer(bootsItemStack);
                 if (armorItemIds.contains(item.getItemId())){
                     bonusDefence += item.getDefence();
                     bonusDamage += item.getDamage();
@@ -630,10 +634,10 @@ public abstract class Game {
             prevBonusHp = player.getBonusMaxHealth().get(key);
         } else prevBonusHp = 0;
 
-        if (heldItem.getItemMeta() != null && itemIds.contains(new Item(heldItem).getItemId())){
+        if (heldItem.getItemMeta() != null && itemIds.contains(getItemFromPlayer(heldItem).getItemId())){
             //item calcs
 
-            if (new Item(heldItem).getItemId().equalsIgnoreCase("considered_judgment")){ //bron navii
+            if (getItemFromPlayer(heldItem).getItemId().equalsIgnoreCase("considered_judgment")){ //bron navii
                 if (player.getBonusDamage().containsKey(cjKey)){
                     player.getBonusDamage().remove(cjKey);
                     double val = player.getDamage()*0.2;
@@ -645,56 +649,56 @@ public abstract class Game {
             } else player.getBonusDamage().remove(cjKey);
             //rest of the calcs
             if (player.getBonusDefence().containsKey(key)){
-                player.getBonusDefence().replace(key, new Item(heldItem).getDefence());
+                player.getBonusDefence().replace(key, getItemFromPlayer(heldItem).getDefence());
             }else {
-                player.getBonusDefence().put(key, new Item(heldItem).getDefence());
+                player.getBonusDefence().put(key, getItemFromPlayer(heldItem).getDefence());
             }
             if (player.getBonusMaxMana().containsKey(key)){
-                player.getBonusMaxMana().replace(key, new Item(heldItem).getIntelligence());
+                player.getBonusMaxMana().replace(key, getItemFromPlayer(heldItem).getIntelligence());
             }else {
-                player.getBonusMaxMana().put(key, new Item(heldItem).getIntelligence());
+                player.getBonusMaxMana().put(key, getItemFromPlayer(heldItem).getIntelligence());
             }
             newBonusMana = player.getBonusMaxMana().get(key);
             if (player.getBonusSpeed().containsKey(key)){
-                player.getBonusSpeed().replace(key, new Item(heldItem).getSpeed());
+                player.getBonusSpeed().replace(key, getItemFromPlayer(heldItem).getSpeed());
             }else {
-                player.getBonusSpeed().put(key, new Item(heldItem).getSpeed());
+                player.getBonusSpeed().put(key, getItemFromPlayer(heldItem).getSpeed());
             }
             if (player.getBonusCritDamage().containsKey(key)){
-                player.getBonusCritDamage().replace(key, new Item(heldItem).getCritDamage());
+                player.getBonusCritDamage().replace(key, getItemFromPlayer(heldItem).getCritDamage());
             }else {
-                player.getBonusCritDamage().put(key, new Item(heldItem).getCritDamage());
+                player.getBonusCritDamage().put(key, getItemFromPlayer(heldItem).getCritDamage());
             }
             if (player.getBonusCritChance().containsKey(key)){
-                player.getBonusCritChance().replace(key, new Item(heldItem).getCritChance());
+                player.getBonusCritChance().replace(key, getItemFromPlayer(heldItem).getCritChance());
             }else {
-                player.getBonusCritChance().put(key, new Item(heldItem).getCritChance());
+                player.getBonusCritChance().put(key, getItemFromPlayer(heldItem).getCritChance());
             }
             if (player.getBonusMaxHealth().containsKey(key)){
-                player.getBonusMaxHealth().replace(key, new Item(heldItem).getHealth());
+                player.getBonusMaxHealth().replace(key, getItemFromPlayer(heldItem).getHealth());
             }else {
-                player.getBonusMaxHealth().put(key, new Item(heldItem).getHealth());
+                player.getBonusMaxHealth().put(key, getItemFromPlayer(heldItem).getHealth());
             }
             newBonusHp = player.getBonusMaxHealth().get(key);
             if (player.getBonusMagicDamage().containsKey(key)){
-                player.getBonusMagicDamage().replace(key, new Item(heldItem).getAbilityPower());
+                player.getBonusMagicDamage().replace(key, getItemFromPlayer(heldItem).getAbilityPower());
             }else {
-                player.getBonusMagicDamage().put(key, new Item(heldItem).getAbilityPower());
+                player.getBonusMagicDamage().put(key, getItemFromPlayer(heldItem).getAbilityPower());
             }
             if (player.getBonusMagicDefence().containsKey(key)){
-                player.getBonusMagicDefence().replace(key, new Item(heldItem).getResistance());
+                player.getBonusMagicDefence().replace(key, getItemFromPlayer(heldItem).getResistance());
             }else {
-                player.getBonusMagicDefence().put(key, new Item(heldItem).getResistance());
+                player.getBonusMagicDefence().put(key, getItemFromPlayer(heldItem).getResistance());
             }
             if (player.getBonusManaRegen().containsKey(key)){
-                player.getBonusManaRegen().replace(key, new Item(heldItem).getManaRegen());
+                player.getBonusManaRegen().replace(key, getItemFromPlayer(heldItem).getManaRegen());
             }else {
-                player.getBonusManaRegen().put(key, new Item(heldItem).getManaRegen());
+                player.getBonusManaRegen().put(key, getItemFromPlayer(heldItem).getManaRegen());
             }
             if (player.getBonusHpRegen().containsKey(key)){
-                player.getBonusHpRegen().replace(key, new Item(heldItem).getHealthRegen());
+                player.getBonusHpRegen().replace(key, getItemFromPlayer(heldItem).getHealthRegen());
             }else {
-                player.getBonusHpRegen().put(key, new Item(heldItem).getHealthRegen());
+                player.getBonusHpRegen().put(key, getItemFromPlayer(heldItem).getHealthRegen());
             }
         } else {
             player.getBonusDamage().remove(cjKey);
@@ -820,10 +824,10 @@ public abstract class Game {
             return false;
         }
 
-        Item helmet = new Item(helmetItem);
-        Item chestplate = new Item(chestplateItem);
-        Item leggings = new Item(leggingsItem);
-        Item boots = new Item(bootsItem);
+        Item helmet = getItemFromPlayer(helmetItem);
+        Item chestplate = getItemFromPlayer(chestplateItem);
+        Item leggings = getItemFromPlayer(leggingsItem);
+        Item boots = getItemFromPlayer(bootsItem);
 
         for (Item i : armorItems.get(armorSet)){
             if (i.getItemId().equalsIgnoreCase(helmet.getItemId())

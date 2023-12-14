@@ -416,10 +416,10 @@ public class GameDamageHandler implements Listener {
             return false;
         }
 
-        Item helmet = new Item(helmetItem);
-        Item chestplate = new Item(chestplateItem);
-        Item leggings = new Item(leggingsItem);
-        Item boots = new Item(bootsItem);
+        Item helmet = getItemFromPlayer(helmetItem);
+        Item chestplate = getItemFromPlayer(chestplateItem);
+        Item leggings = getItemFromPlayer(leggingsItem);
+        Item boots = getItemFromPlayer(bootsItem);
 
         for (Item i : armorItems.get(armorSet)){
             if (i.getItemId().equalsIgnoreCase(helmet.getItemId())

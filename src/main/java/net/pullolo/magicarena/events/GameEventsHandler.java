@@ -39,6 +39,7 @@ import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
 import static net.pullolo.magicarena.data.PlayerData.setPlayerDataFromDb;
 import static net.pullolo.magicarena.game.Game.games;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
 import static net.pullolo.magicarena.game.GameWorld.gameWorlds;
 import static net.pullolo.magicarena.items.ItemsDefinitions.itemIds;
 import static net.pullolo.magicarena.players.ArenaEntity.arenaEntities;
@@ -138,7 +139,7 @@ public class GameEventsHandler implements Listener {
         if (!(event.getEntity() instanceof Player)){
             return;
         }
-        if (itemIds.contains(new Item(event.getConsumable()).getItemId())){
+        if (itemIds.contains(getItemFromPlayer(event.getConsumable()).getItemId())){
             event.setCancelled(true);
             return;
         }

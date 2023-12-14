@@ -35,6 +35,8 @@ import java.util.Locale;
 
 import static net.pullolo.magicarena.MagicArena.*;
 import static net.pullolo.magicarena.data.PlayerData.getPlayerData;
+import static net.pullolo.magicarena.items.ItemsDefinitions.getItemFromPlayer;
+import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInGame;
 import static net.pullolo.magicarena.players.ArenaPlayer.isPlayerInMatch;
 import static net.pullolo.magicarena.wish.WishSystem.getRarityColorChar;
 import static net.pullolo.magicarena.wish.WishSystem.getWishRarityAsInt;
@@ -862,7 +864,7 @@ public class GuiManager {
     }
 
     private int convertItemToEssence(ItemStack itemStack, WishSystem.WishRarity wishRarity){
-        Item item = new Item(itemStack);
+        Item item = getItemFromPlayer(itemStack);
 
         double essence = (0.8+(item.getQuality()/100))*(0.6+((double) item.getStars()/5));
         essence*=getWishRarityAsInt(wishRarity)*20;

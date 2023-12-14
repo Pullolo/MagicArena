@@ -14,11 +14,13 @@ public class Item {
     private final ItemStack item;
     private String itemId = "NULL";
     private int stars;
+    private final int model;
     private double quality;
 
     private Double damage, intelligence, health, defence, abilityPower, critDamage, critChance, resistance, speed, manaRegen, healthRegen;
 
-    public Item(ItemStack item) {
+    public Item(ItemStack item, int model) {
+        this.model=model;
         this.item = item.clone();
         this.damage = 0.0;
         this.intelligence = 0.0;
@@ -104,11 +106,11 @@ public class Item {
 
             setStars(stars);
             setQuality((float) quality);
-
         }
     }
 
     public Item(Item item, int stars, float quality){
+        this.model = item.getModel();
         this.item = item.getItem().clone();
         this.damage = item.getDamage();
         this.intelligence = item.getIntelligence();
@@ -165,7 +167,13 @@ public class Item {
     }
 
     public ItemStack getItem() {
-        return item.clone();
+        ItemStack i = item.clone();
+        ItemMeta im = item.getItemMeta();
+        if (im != null) {
+            im.setCustomModelData(model);
+        }
+        i.setItemMeta(im);
+        return i;
     }
 
     public String getItemId() {
@@ -348,5 +356,9 @@ public class Item {
 
     public Double getHealthRegen() {
         return healthRegen;
+    }
+
+    public int getModel() {
+        return model;
     }
 }

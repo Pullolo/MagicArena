@@ -79,7 +79,7 @@ public class ItemsDefinitions {
         createKusumibaru();
         createAtomSplitKatana();
         createHyperion();
-        createKunai(); //todo ability
+        createKunai();
         createQuenAxe(); //todo ability
         createTerminator();
         createBactaNade();
@@ -107,7 +107,7 @@ public class ItemsDefinitions {
         lore.add("&6&lLEGENDARY AXE");
         lore.add("&8item_id:considered_judgment");
         ItemStack item = createItem(Material.GOLDEN_AXE, name, lore);
-        consideredJudgment = new Item(item);
+        consideredJudgment = new Item(item, 1);
         itemIds.add(consideredJudgment.getItemId());
         items.put(consideredJudgment.getItemId(), consideredJudgment);
     }
@@ -126,7 +126,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC HEAL GRENADE");
         lore.add("&8item_id:bacta_nade");
         ItemStack item = createItem(Material.SNOWBALL, name, lore);
-        bactaNade = new Item(item);
+        bactaNade = new Item(item, 0);
         itemIds.add(bactaNade.getItemId());
         items.put(bactaNade.getItemId(), bactaNade);
     }
@@ -145,7 +145,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC SHORTBOW");
         lore.add("&8item_id:terminator");
         ItemStack item = createItem(Material.BOW, name, lore);
-        terminator = new Item(item);
+        terminator = new Item(item, 0);
         itemIds.add(terminator.getItemId());
         items.put(terminator.getItemId(), terminator);
     }
@@ -168,7 +168,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC AXE");
         lore.add("&8item_id:quen_axe");
         ItemStack item = createItem(Material.GOLDEN_AXE, name, lore);
-        quenAxe = new Item(item);
+        quenAxe = new Item(item, 0);
         itemIds.add(quenAxe.getItemId());
         items.put(quenAxe.getItemId(), quenAxe);
     }
@@ -189,7 +189,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC DAGGER");
         lore.add("&8item_id:kunai");
         ItemStack item = createItem(Material.GHAST_TEAR, name, lore);
-        kunai = new Item(item);
+        kunai = new Item(item, 0);
         itemIds.add(kunai.getItemId());
         items.put(kunai.getItemId(), kunai);
     }
@@ -213,7 +213,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC SWORD");
         lore.add("&8item_id:hyperion");
         ItemStack item = createItem(Material.IRON_SWORD, name, lore);
-        hyperion = new Item(item);
+        hyperion = new Item(item, 0);
         itemIds.add(hyperion.getItemId());
         items.put(hyperion.getItemId(), hyperion);
     }
@@ -237,7 +237,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC KATANA");
         lore.add("&8item_id:atom_split_katana");
         ItemStack item = createItem(Material.DIAMOND_SWORD, name, lore);
-        atomSplitKatana = new Item(item);
+        atomSplitKatana = new Item(item, 1);
         itemIds.add(atomSplitKatana.getItemId());
         items.put(atomSplitKatana.getItemId(), atomSplitKatana);
     }
@@ -259,7 +259,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC DUNGEON WHIP");
         lore.add("&8item_id:scorpion_chain_dart");
         ItemStack item = createItem(Material.FISHING_ROD, name, lore);
-        scorpionChainDart = new Item(item);
+        scorpionChainDart = new Item(item, 0);
         itemIds.add(scorpionChainDart.getItemId());
         items.put(scorpionChainDart.getItemId(), scorpionChainDart);
     }
@@ -279,7 +279,7 @@ public class ItemsDefinitions {
         lore.add("&6&lLEGENDARY DUNGEON DAGGER");
         lore.add("&8item_id:priscillas_dagger");
         ItemStack item = createItem(Material.IRON_SWORD, name, lore);
-        priscillasDagger = new Item(item);
+        priscillasDagger = new Item(item, 0);
         itemIds.add(priscillasDagger.getItemId());
         items.put(priscillasDagger.getItemId(), priscillasDagger);
     }
@@ -300,7 +300,7 @@ public class ItemsDefinitions {
         lore.add("&5&lEPIC DUNGEON ROD");
         lore.add("&8item_id:rod_of_chaos");
         ItemStack item = createItem(Material.AMETHYST_SHARD, name, lore);
-        rodOfChaos = new Item(item);
+        rodOfChaos = new Item(item, 0);
         itemIds.add(rodOfChaos.getItemId());
         items.put(rodOfChaos.getItemId(), rodOfChaos);
     }
@@ -321,7 +321,7 @@ public class ItemsDefinitions {
         lore.add("&d&lMYTHIC SWORD");
         lore.add("&8item_id:kusumibaru");
         ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
-        kusumibaru = new Item(item);
+        kusumibaru = new Item(item, 1);
         itemIds.add(kusumibaru.getItemId());
         items.put(kusumibaru.getItemId(), kusumibaru);
     }
@@ -346,7 +346,7 @@ public class ItemsDefinitions {
         lore.add("&6&lLEGENDARY STAFF");
         lore.add("&8item_id:aurora_staff");
         ItemStack item = createItem(Material.BLAZE_ROD, name, lore);
-        auroraStaff = new Item(item);
+        auroraStaff = new Item(item, 1);
         itemIds.add(auroraStaff.getItemId());
         items.put(auroraStaff.getItemId(), auroraStaff);
     }
@@ -368,7 +368,7 @@ public class ItemsDefinitions {
         lore.add("&5&lEPIC SWORD");
         lore.add("&8item_id:leaping_sword");
         ItemStack item = createItem(Material.IRON_SWORD, name, lore);
-        leapingSword = new Item(item);
+        leapingSword = new Item(item, 0);
         itemIds.add(leapingSword.getItemId());
         items.put(leapingSword.getItemId(), leapingSword);
     }
@@ -388,7 +388,7 @@ public class ItemsDefinitions {
         lore.add("&9&lRARE DUNGEON AXE");
         lore.add("&8item_id:brutality_blade");
         ItemStack item = createItem(Material.NETHERITE_AXE, name, lore);
-        brutalityBlade = new Item(item);
+        brutalityBlade = new Item(item, 0);
         itemIds.add(brutalityBlade.getItemId());
         items.put(brutalityBlade.getItemId(), brutalityBlade);
     }
@@ -407,7 +407,7 @@ public class ItemsDefinitions {
         lore.add("&9&lRARE BOW");
         lore.add("&8item_id:flaming_bow");
         ItemStack item = createItem(Material.BOW, name, lore);
-        flamingBow = new Item(item);
+        flamingBow = new Item(item, 0);
         itemIds.add(flamingBow.getItemId());
         items.put(flamingBow.getItemId(), flamingBow);
     }
@@ -428,7 +428,7 @@ public class ItemsDefinitions {
         lore.add("&9&lRARE SWORD");
         lore.add("&8item_id:aspect_of_the_end");
         ItemStack item = createItem(Material.DIAMOND_SWORD, name, lore);
-        aspectOfTheEnd = new Item(item);
+        aspectOfTheEnd = new Item(item, 0);
         itemIds.add(aspectOfTheEnd.getItemId());
         items.put(aspectOfTheEnd.getItemId(), aspectOfTheEnd);
     }
@@ -451,7 +451,7 @@ public class ItemsDefinitions {
         lore.add("&9&lRARE SWORD");
         lore.add("&8item_id:golem_sword");
         ItemStack item = createItem(Material.IRON_SWORD, name, lore);
-        golemSword = new Item(item);
+        golemSword = new Item(item, 0);
         itemIds.add(golemSword.getItemId());
         items.put(golemSword.getItemId(), golemSword);
     }
@@ -471,7 +471,7 @@ public class ItemsDefinitions {
         lore.add("&9&lRARE STAFF");
         lore.add("&8item_id:healing_staff");
         ItemStack item = createItem(Material.STICK, name, lore);
-        healingStaff = new Item(item);
+        healingStaff = new Item(item, 0);
         itemIds.add(healingStaff.getItemId());
         items.put(healingStaff.getItemId(), healingStaff);
     }
@@ -489,7 +489,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:undead_sword");
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
-        undeadSword = new Item(item);
+        undeadSword = new Item(item, 2);
         itemIds.add(undeadSword.getItemId());
         items.put(undeadSword.getItemId(), undeadSword);
     }
@@ -509,7 +509,7 @@ public class ItemsDefinitions {
         lore.add("&9&lRARE GREAT SWORD");
         lore.add("&8item_id:storm_ruler");
         ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
-        stormRuler = new Item(item);
+        stormRuler = new Item(item, 0);
         itemIds.add("storm_ruler");
         items.put("storm_ruler", stormRuler);
     }
@@ -523,7 +523,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON BOW");
         lore.add("&8item_id:long_bow");
         ItemStack item = createItem(Material.BOW, name, lore);
-        longBow = new Item(item);
+        longBow = new Item(item, 0);
         itemIds.add("long_bow");
         items.put("long_bow", longBow);
     }
@@ -545,7 +545,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON BOOK");
         lore.add("&8item_id:unstable_tome");
         ItemStack item = createItem(Material.BOOK, name, lore);
-        unstableTome = new Item(item);
+        unstableTome = new Item(item, 1);
         itemIds.add("unstable_tome");
         items.put("unstable_tome", unstableTome);
     }
@@ -561,7 +561,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON AXE");
         lore.add("&8item_id:solid_stone_axe");
         ItemStack item = createItem(Material.STONE_AXE, name, lore);
-        solidStoneAxe = new Item(item);
+        solidStoneAxe = new Item(item, 0);
         itemIds.add("solid_stone_axe");
         items.put("solid_stone_axe", solidStoneAxe);
     }
@@ -577,12 +577,8 @@ public class ItemsDefinitions {
         lore.add("");
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:leeching_staff");
-        ItemStack item = createItem(Material.TIPPED_ARROW, name, lore);
-        PotionMeta im = (PotionMeta) item.getItemMeta();
-        im.clearCustomEffects();
-        im.setColor(Color.LIME);
-        item.setItemMeta(im);
-        leechingStaff = new Item(item);
+        ItemStack item = createItem(Material.ARROW, name, lore);
+        leechingStaff = new Item(item, 1);
         itemIds.add("leeching_staff");
         items.put("leeching_staff", leechingStaff);
     }
@@ -596,7 +592,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:stone_stick");
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
-        stoneStick = new Item(item);
+        stoneStick = new Item(item, 1);
         itemIds.add("stone_stick");
         items.put("stone_stick", stoneStick);
     }
@@ -610,7 +606,7 @@ public class ItemsDefinitions {
         lore.add("&a&lUNCOMMON SWORD");
         lore.add("&8item_id:basic_sword");
         ItemStack item = createItem(Material.WOODEN_SWORD, name, lore);
-        basicSword = new Item(item);
+        basicSword = new Item(item, 0);
         itemIds.add("basic_sword");
         items.put("basic_sword", basicSword);
     }
@@ -633,7 +629,7 @@ public class ItemsDefinitions {
         lore.add("&8item_id:test_item");
 
         ItemStack item = createItem(Material.STONE_SWORD, name, lore);
-        testItem = new Item(item);
+        testItem = new Item(item, 0);
         itemIds.add("test_item");
         items.put("test_item", testItem);
     }
@@ -650,7 +646,7 @@ public class ItemsDefinitions {
         lore.add("&8item_id:blade_of_the_universe");
 
         ItemStack item = createItem(Material.NETHERITE_SWORD, name, lore);
-        bladeOfTheUniverse = new Item(new Item(item), 5, 100);
+        bladeOfTheUniverse = new Item(new Item(item, 0), 5, 100);
         itemIds.add("blade_of_the_universe");
         items.put("blade_of_the_universe", bladeOfTheUniverse);
     }
@@ -676,6 +672,9 @@ public class ItemsDefinitions {
     }
 
     public static Item getItemFromPlayer(ItemStack item){
-        return new Item(item);
+        if (item.getItemMeta()!=null && item.getItemMeta().hasCustomModelData()){
+            return new Item(item, item.getItemMeta().getCustomModelData());
+        }
+        return new Item(item, 0);
     }
 }

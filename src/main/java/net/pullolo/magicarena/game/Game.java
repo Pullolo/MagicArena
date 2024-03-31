@@ -48,7 +48,13 @@ public abstract class Game {
     private boolean started = false;
 
     public World createWorld(){
-        String arenaName = pickRandomArena().split("_")[1];
+        String arenaName = "";
+        try{
+            arenaName = pickRandomArena().split("_")[1];
+        } catch (Exception e){
+            broadcast(ChatColor.RED + "No arenas found!");
+            throw new RuntimeException("No arenas found!");
+        }
         String newArenaName = arenaName;
         while (doesArenaExist(newArenaName)){
             newArenaName+="-";
